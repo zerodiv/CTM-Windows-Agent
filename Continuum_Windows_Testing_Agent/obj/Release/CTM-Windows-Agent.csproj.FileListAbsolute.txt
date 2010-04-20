@@ -1,0 +1,8 @@
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Release\Continuum_Windows_Testing_Agent.exe
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Release\Continuum_Windows_Testing_Agent.pdb
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\Continuum_Windows_Testing_Agent.Main.resources
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\Continuum_Windows_Testing_Agent.Properties.Resources.resources
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\CTM-Windows-Agent.csproj.GenerateResource.Cache
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\Continuum_Windows_Testing_Agent.exe
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\Continuum_Windows_Testing_Agent.pdb

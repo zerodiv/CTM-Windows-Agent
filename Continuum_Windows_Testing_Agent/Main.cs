@@ -1,0 +1,187 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.Net;
+
+
+namespace Continuum_Windows_Testing_Agent
+{
+    public partial class Main : Form
+    {
+        private PhoneHomeAgent et;
+
+        public Main()
+        {
+            InitializeComponent();
+            this.et = new PhoneHomeAgent();
+        }
+
+        private Boolean _setHostname(String host)
+        {
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
+
+            key.SetValue("hostname", host);
+
+            return true;
+
+        }
+
+        private String _getHostname()
+        {
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
+
+            if (key.GetValue("hostname") != null)
+            {
+                return key.GetValue("hostname").ToString();
+            }
+
+            return "";
+
+        }
+
+        private String _getGuid()
+        {
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
+            if (key.GetValue("guid") != null)
+            {
+                return key.GetValue("guid").ToString();
+            }
+
+            String guid = System.Guid.NewGuid().ToString();
+
+            if (guid.Length > 0)
+            {
+                key.SetValue("guid", guid);
+            }
+
+            key.Close();
+            return guid;
+        }
+
+        private String _getIp()
+        {
+            // try to load this from the registry.
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
+
+            if (key.GetValue("host_ip") != null)
+            {
+                return key.GetValue("host_ip").ToString();
+            }
+
+            String ip = "";
+
+            IPAddress[] localIps = Dns.GetHostAddresses(Dns.GetHostName());
+
+            foreach (IPAddress hostIp in localIps)
+            {
+                if (!IPAddress.IsLoopback(hostIp))
+                {
+                    ip = hostIp.ToString();
+                }
+            }
+
+            if (ip.Length > 0)
+            {
+                key.SetValue("host_ip", ip);
+            }
+
+            return ip;
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.ipBox.Text = this._getIp();
+            this.hostnameBox.Text = this._getHostname();
+            this.ieVersionBox.Text = et.ie.getVersion();
+            this.chromeVersionBox.Text = et.chrome.getVersion();
+            this.firefoxVersionBox.Text = et.firefox.getVersion();
+            this.safariVersionBox.Text = et.safari.getVersion();
+            this.osVersionBox.Text = et.determineWindowsVersion();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private String createUrlFromTextBox()
+        {
+            String url = "";
+            url = "http://" + this.hostnameBox.Text + "/et/phone/home/1.0/";
+            return url;
+        }
+
+        private void configSaveSettingsBtn_Click(object sender, EventArgs e)
+        {
+
+            this._setHostname(this.hostnameBox.Text);
+
+            String guid = this._getGuid();
+
+            if (this.et.registerHost(guid, this.createUrlFromTextBox(), this.ipBox.Text) == true)
+            {
+                DateTime now = DateTime.Now;
+                this.ctmStatusLabel.Text = "Last check in: " + String.Format( "{0:r}", now );
+            }
+            else
+            {
+                this.ctmStatusLabel.Text = "failed to contact master";
+            }
+
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripStatusLabel1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            //if (this.hostnameBox.TextLength > 0 && this.ipBox.TextLength > 0)
+            //{
+                String guid = this._getGuid();
+
+                if (this.et.registerHost(guid, this.createUrlFromTextBox(), this.ipBox.Text) == true)
+                {
+                    DateTime now = DateTime.Now;
+                    this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
+                }
+                else
+                {
+                    this.ctmStatusLabel.Text = "failed to contact master";
+                }
+            //}
+        }
+    }
+}

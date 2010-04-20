@@ -1,0 +1,16 @@
+C:\Documents and Settings\adicioadmin\Local Settings\Application Data\Temporary Projects\Continuum_Windows_Testing_Agent\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\adicioadmin\Local Settings\Application Data\Temporary Projects\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.Main.resources
+C:\Documents and Settings\adicioadmin\Local Settings\Application Data\Temporary Projects\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.Properties.Resources.resources
+C:\Documents and Settings\adicioadmin\Local Settings\Application Data\Temporary Projects\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.csproj.GenerateResource.Cache
+C:\Documents and Settings\adicioadmin\Local Settings\Application Data\Temporary Projects\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.exe
+C:\Documents and Settings\adicioadmin\Local Settings\Application Data\Temporary Projects\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.pdb
+C:\Documents and Settings\adicioadmin\Local Settings\Application Data\Temporary Projects\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.exe
+C:\Documents and Settings\adicioadmin\Local Settings\Application Data\Temporary Projects\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.pdb
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\Continuum_Windows_Testing_Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.exe
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\Continuum_Windows_Testing_Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.pdb
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\Continuum_Windows_Testing_Agent\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.exe
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\Continuum_Windows_Testing_Agent\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.pdb
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\Continuum_Windows_Testing_Agent\Continuum_Windows_Testing_Agent\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\Continuum_Windows_Testing_Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.Main.resources
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\Continuum_Windows_Testing_Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.Properties.Resources.resources
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\Continuum_Windows_Testing_Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.csproj.GenerateResource.Cache
