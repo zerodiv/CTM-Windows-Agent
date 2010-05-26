@@ -99,7 +99,7 @@ namespace Continuum_Windows_Testing_Agent
             this.ipBox.Text = this._getIp();
             this.hostnameBox.Text = this._getHostname();
             this.ieVersionBox.Text = et.ie.getVersion();
-            this.chromeVersionBox.Text = et.chrome.getVersion();
+            this.chromeVersionBox.Text = et.googlechrome.getVersion();
             this.firefoxVersionBox.Text = et.firefox.getVersion();
             this.safariVersionBox.Text = et.safari.getVersion();
             this.osVersionBox.Text = et.determineWindowsVersion();
@@ -125,29 +125,29 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
-        private String createUrlFromTextBox()
+        private void activePolling()
         {
-            String url = "";
-            url = "http://" + this.hostnameBox.Text + "/et/phone/home/1.0/";
-            return url;
+            String guid = this._getGuid();
+
+            if (this.et.registerHost(guid, this.hostnameBox.Text, this.ipBox.Text) == true)
+            {
+                // ask for work if any is available.
+                this.et.requestWork(guid, this.hostnameBox.Text);
+
+                DateTime now = DateTime.Now;
+                this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
+            }
+            else
+            {
+                this.ctmStatusLabel.Text = "failed to contact master";
+            }
         }
 
         private void configSaveSettingsBtn_Click(object sender, EventArgs e)
         {
 
             this._setHostname(this.hostnameBox.Text);
-
-            String guid = this._getGuid();
-
-            if (this.et.registerHost(guid, this.createUrlFromTextBox(), this.ipBox.Text) == true)
-            {
-                DateTime now = DateTime.Now;
-                this.ctmStatusLabel.Text = "Last check in: " + String.Format( "{0:r}", now );
-            }
-            else
-            {
-                this.ctmStatusLabel.Text = "failed to contact master";
-            }
+            this.activePolling();           
 
         }
 
@@ -168,20 +168,7 @@ namespace Continuum_Windows_Testing_Agent
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //if (this.hostnameBox.TextLength > 0 && this.ipBox.TextLength > 0)
-            //{
-                String guid = this._getGuid();
-
-                if (this.et.registerHost(guid, this.createUrlFromTextBox(), this.ipBox.Text) == true)
-                {
-                    DateTime now = DateTime.Now;
-                    this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
-                }
-                else
-                {
-                    this.ctmStatusLabel.Text = "failed to contact master";
-                }
-            //}
+            this.activePolling();
         }
     }
 }

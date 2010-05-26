@@ -8,6 +8,8 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Collections.Specialized;
+using System.Xml;
+using Ionic.Zip;
 
 namespace Continuum_Windows_Testing_Agent
 {
@@ -40,7 +42,7 @@ namespace Continuum_Windows_Testing_Agent
 
     class PhoneHomeAgent
     {
-        public LocalWebBrowser chrome;
+        public LocalWebBrowser googlechrome;
         public LocalWebBrowser firefox;
         public LocalWebBrowser ie;
         public LocalWebBrowser safari;
@@ -48,13 +50,13 @@ namespace Continuum_Windows_Testing_Agent
         public PhoneHomeAgent()
         {
             // init the various browsers
-            this.chrome = new LocalWebBrowser();
+            this.googlechrome = new LocalWebBrowser();
             this.firefox = new LocalWebBrowser();
             this.ie = new LocalWebBrowser();
             this.safari = new LocalWebBrowser();
 
             this.findIEBrowser();
-            this.findChromeBrowser();
+            this.findGoogleChromeBrowser();
             this.findFirefoxBrowser();
             this.findSafariBrowser();
 
@@ -67,14 +69,14 @@ namespace Continuum_Windows_Testing_Agent
             return windowsVersion;
         }
 
-        public Boolean registerHost( String guid, String masterUrl, String localIp ) {
+        public Boolean registerHost( String guid, String masterHostname, String localIp ) {
             // hostname
             // ip - port
             // os
             // browser => yes
             // browser_version => xyz
 
-            if (masterUrl.Length == 0)
+            if (masterHostname.Length == 0)
             {
                 return false;
             }
@@ -101,10 +103,10 @@ namespace Continuum_Windows_Testing_Agent
                 postValues.Add("ie_version", this.ie.getVersion());
             }
 
-            if (this.chrome.exists == true)
+            if (this.googlechrome.exists == true)
             {
-                postValues.Add("chrome", "yes");
-                postValues.Add("chrome_version", this.chrome.getVersion());
+                postValues.Add("googlechrome", "yes");
+                postValues.Add("googlechrome_version", this.googlechrome.getVersion());
             }
 
             if (this.firefox.exists == true)
@@ -121,7 +123,8 @@ namespace Continuum_Windows_Testing_Agent
 
             try
             {
-                masterClient.UploadValues(masterUrl, postValues);
+                String registerUrl = "http://" + masterHostname + "/et/phone/home/1.0/";
+                masterClient.UploadValues(registerUrl, postValues);
             }
             catch (WebException e)
             {
@@ -132,6 +135,78 @@ namespace Continuum_Windows_Testing_Agent
                 return false;
             }
             return true;
+        }
+
+        public Boolean requestWork(String guid, String masterHostname)
+        {
+
+            WebClient masterClient = new WebClient();
+
+            NameValueCollection postValues = new NameValueCollection();
+
+            postValues.Add("guid", guid);
+
+            try
+            {
+                String pollUrl = "http://" + masterHostname + "/et/poll/1.0/";
+                byte[] response = masterClient.UploadValues(pollUrl, postValues);
+                String stringResponse = Encoding.ASCII.GetString(response);
+
+                System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+                    xmlDoc.LoadXml(stringResponse);
+
+                if (xmlDoc.SelectSingleNode("/etResponse/status").InnerText.Equals("OK") )
+                {
+                    // we have work to do lets get the party started!
+                    UInt64 testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
+                    String testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
+
+                    // fetch the zip file from the remote server.
+                    String tempZipfile = Environment.GetEnvironmentVariable("TEMP");
+                    tempZipfile += "\\ctmTestRun_" + testRunBrowserId + ".zip";
+
+                    if (File.Exists(tempZipfile) == false)
+                    {
+                        // download the file.
+                        masterClient.DownloadFile(testDownloadUrl, tempZipfile);
+                    }
+
+                    // unzip the file into a target dir.
+                    String tempTestDir = Environment.GetEnvironmentVariable("TEMP");
+                    tempTestDir += "\\ctmTestRun_" + testRunBrowserId;
+
+                    if (Directory.Exists(tempTestDir) == false)
+                    {
+                        Directory.CreateDirectory(tempTestDir);
+                        using (ZipFile zip = ZipFile.Read(tempZipfile))
+                        {
+                            foreach (ZipEntry e in zip)
+                            {
+                                e.Extract(tempTestDir);
+                            }
+                        }
+                    }
+                                        
+                    // run the test against the harness with the logging on.
+
+                    // push the log back up to the server.
+
+                  
+                }
+
+                return true;
+
+            }
+            catch (WebException e)
+            {
+                if (e.Message.Equals(""))
+                {
+                    return false;
+                }
+
+            }
+            
+            return false;
         }
 
         public void findSafariBrowser()
@@ -155,7 +230,7 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
-        public void findChromeBrowser()
+        public void findGoogleChromeBrowser()
         {
             DirectoryInfo di = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\Application");
             DirectoryInfo[] dirs = di.GetDirectories("*.*.*.*");
@@ -166,17 +241,17 @@ namespace Continuum_Windows_Testing_Agent
                Match versionMatch = versionRegex.Match(diNext.Name);
                if (versionMatch != null)
                {
-                   if (this.chrome.exists == true)
+                   if (this.googlechrome.exists == true)
                    {
                        // TODO: Need to bring the version logic in.
                        
                    }
                    else
                    {
-                       this.chrome.exists = true;
-                       this.chrome.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
-                       this.chrome.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
-                       this.chrome.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
+                       this.googlechrome.exists = true;
+                       this.googlechrome.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
+                       this.googlechrome.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
+                       this.googlechrome.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
                    }
                }
             }
