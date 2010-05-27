@@ -160,6 +160,7 @@ namespace Continuum_Windows_Testing_Agent
                     // we have work to do lets get the party started!
                     UInt64 testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
                     String testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
+                    String testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
 
                     // fetch the zip file from the remote server.
                     String tempZipfile = Environment.GetEnvironmentVariable("TEMP");
@@ -175,6 +176,8 @@ namespace Continuum_Windows_Testing_Agent
                     String tempTestDir = Environment.GetEnvironmentVariable("TEMP");
                     tempTestDir += "\\ctmTestRun_" + testRunBrowserId;
 
+                    String tempLogFile = tempTestDir + "\\test.log";
+
                     if (Directory.Exists(tempTestDir) == false)
                     {
                         Directory.CreateDirectory(tempTestDir);
@@ -186,12 +189,79 @@ namespace Continuum_Windows_Testing_Agent
                             }
                         }
                     }
+
+                    // find the index.html associated with this test run
+                    String testRunIndexHtml = "";
+
+                    String[] subDirs = Directory.GetDirectories(tempTestDir);
+
+                    foreach (String sDir in subDirs)
+                    {
+                        testRunIndexHtml = sDir + "\\index.html";
+                        if (File.Exists(testRunIndexHtml))
+                        {
+                            // we are done.
+                            break;
+                        }
+                    }
                                         
                     // run the test against the harness with the logging on.
+                    String sServerArgs = "";
+                    // sServerArgs += "-jar '" + Directory.GetCurrentDirectory() + "\\selenium-server.jar' "; // jeo - we may need to make this configurable.
+                    sServerArgs += "-jar C:\\selenium-server.jar "; // jeo - we may need to make this configurable.
+                    sServerArgs += "-multiwindow ";
+                    sServerArgs += "-htmlSuite ";
+                    // sServerArgs += "\"*" + testBrowser + "\" ";
+                    sServerArgs += "\"*firefox\" ";
+                    sServerArgs += "\"http://www.adicio.com/\" ";
+                    sServerArgs += "\"" + testRunIndexHtml + "\" ";
+                    sServerArgs += "\"" + tempLogFile + "\"";
+                    
+                    System.Diagnostics.Process seleniumServer = new System.Diagnostics.Process();
+                    seleniumServer.EnableRaisingEvents = false;
+                    seleniumServer.StartInfo.UseShellExecute = false;
+                    seleniumServer.StartInfo.FileName = "java";
+                    seleniumServer.StartInfo.Arguments = sServerArgs;
+                    seleniumServer.StartInfo.RedirectStandardError = true;
+                    // seleniumServer.StartInfo.RedirectStandardOutput = true;
 
+                     seleniumServer.Start();
+
+                    // seleniumServer.BeginOutputReadLine();
+                     String stdErr = seleniumServer.StandardError.ReadToEnd();
+
+                    seleniumServer.WaitForExit();
+
+                    
                     // push the log back up to the server.
+                    long timeElapsed = 
+                        seleniumServer.ExitTime.ToFileTimeUtc() -
+                        seleniumServer.StartTime.ToFileTimeUtc();
 
-                  
+                    int testStatus = 0;
+                    if (seleniumServer.ExitCode == 0)
+                    {
+                        testStatus = 1;
+                    }
+                    else
+                    {
+                        testStatus = 0;
+                    }
+
+                    seleniumServer.Close();
+                                        
+                    String logData = "";
+                    logData = File.ReadAllText(tempLogFile);
+
+                    NameValueCollection resultPostValues = new NameValueCollection();
+                    resultPostValues.Add("testRunBrowserId", testRunBrowserId.ToString() );
+                    resultPostValues.Add("testDuration", timeElapsed.ToString());
+                    resultPostValues.Add("testStatus", testStatus.ToString());
+                    resultPostValues.Add("logData", logData );
+
+                    String logUrl = "http://" + masterHostname + "/et/log/";
+                    masterClient.UploadValues(logUrl, resultPostValues);
+
                 }
 
                 return true;
