@@ -13,20 +13,23 @@ using Ionic.Zip;
 
 namespace Continuum_Windows_Testing_Agent
 {
-    class LocalWebBrowser {
+    class LocalWebBrowser
+    {
         public Boolean exists;
         public int major;
         public int minor;
         public int patch;
 
-        public LocalWebBrowser() {
+        public LocalWebBrowser()
+        {
             this.exists = false;
             this.major = 0;
             this.minor = 0;
             this.patch = 0;
         }
 
-        public String getVersion() {
+        public String getVersion()
+        {
             if (this.exists)
             {
                 String version = "";
@@ -69,7 +72,8 @@ namespace Continuum_Windows_Testing_Agent
             return windowsVersion;
         }
 
-        public Boolean registerHost( String guid, String masterHostname, String localIp ) {
+        public Boolean registerHost(String guid, String masterHostname, String localIp)
+        {
             // hostname
             // ip - port
             // os
@@ -92,10 +96,10 @@ namespace Continuum_Windows_Testing_Agent
 
             postValues.Add("guid", guid);
 
-            postValues.Add("ip", localIp );
+            postValues.Add("ip", localIp);
 
-            postValues.Add("os", this.determineWindowsVersion() );
-            
+            postValues.Add("os", this.determineWindowsVersion());
+
             // add the browsers into our post params
             if (this.ie.exists == true)
             {
@@ -129,7 +133,8 @@ namespace Continuum_Windows_Testing_Agent
             catch (WebException e)
             {
                 // We should do something with e
-                if ( e.Message.Equals( "" ) ) {
+                if (e.Message.Equals(""))
+                {
                     return false;
                 }
                 return false;
@@ -153,18 +158,19 @@ namespace Continuum_Windows_Testing_Agent
                 String stringResponse = Encoding.ASCII.GetString(response);
 
                 System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
-                    xmlDoc.LoadXml(stringResponse);
+                xmlDoc.LoadXml(stringResponse);
 
-                if (xmlDoc.SelectSingleNode("/etResponse/status").InnerText.Equals("OK") )
+                if (xmlDoc.SelectSingleNode("/etResponse/status").InnerText.Equals("OK"))
                 {
                     // we have work to do lets get the party started!
+                    UInt64 testRunId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunId").InnerText);
                     UInt64 testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
                     String testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
                     String testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
 
                     // fetch the zip file from the remote server.
                     String tempZipfile = Environment.GetEnvironmentVariable("TEMP");
-                    tempZipfile += "\\ctmTestRun_" + testRunBrowserId + ".zip";
+                    tempZipfile += "\\ctmTestRun_" + testRunId + ".zip";
 
                     if (File.Exists(tempZipfile) == false)
                     {
@@ -174,21 +180,26 @@ namespace Continuum_Windows_Testing_Agent
 
                     // unzip the file into a target dir.
                     String tempTestDir = Environment.GetEnvironmentVariable("TEMP");
-                    tempTestDir += "\\ctmTestRun_" + testRunBrowserId;
+                    tempTestDir += "\\ctmTestRun_" + testRunId;
 
                     String tempLogFile = tempTestDir + "\\test.log";
 
-                    if (Directory.Exists(tempTestDir) == false)
+
+                    if (Directory.Exists(tempTestDir) == true)
                     {
-                        Directory.CreateDirectory(tempTestDir);
-                        using (ZipFile zip = ZipFile.Read(tempZipfile))
+                        Directory.Delete(tempTestDir, true);
+                    }
+                    
+                    Directory.CreateDirectory(tempTestDir);
+
+                    using (ZipFile zip = ZipFile.Read(tempZipfile))
+                    {
+                        foreach (ZipEntry e in zip)
                         {
-                            foreach (ZipEntry e in zip)
-                            {
-                                e.Extract(tempTestDir);
-                            }
+                            e.Extract(tempTestDir);
                         }
                     }
+                    
 
                     // find the index.html associated with this test run
                     String testRunIndexHtml = "";
@@ -204,7 +215,7 @@ namespace Continuum_Windows_Testing_Agent
                             break;
                         }
                     }
-                                        
+
                     // run the test against the harness with the logging on.
                     String sServerArgs = "";
                     // sServerArgs += "-jar '" + Directory.GetCurrentDirectory() + "\\selenium-server.jar' "; // jeo - we may need to make this configurable.
@@ -216,7 +227,7 @@ namespace Continuum_Windows_Testing_Agent
                     sServerArgs += "\"http://www.adicio.com/\" ";
                     sServerArgs += "\"" + testRunIndexHtml + "\" ";
                     sServerArgs += "\"" + tempLogFile + "\"";
-                    
+
                     System.Diagnostics.Process seleniumServer = new System.Diagnostics.Process();
                     seleniumServer.EnableRaisingEvents = false;
                     seleniumServer.StartInfo.UseShellExecute = false;
@@ -225,16 +236,16 @@ namespace Continuum_Windows_Testing_Agent
                     seleniumServer.StartInfo.RedirectStandardError = true;
                     // seleniumServer.StartInfo.RedirectStandardOutput = true;
 
-                     seleniumServer.Start();
+                    seleniumServer.Start();
 
                     // seleniumServer.BeginOutputReadLine();
-                     String stdErr = seleniumServer.StandardError.ReadToEnd();
+                    String stdErr = seleniumServer.StandardError.ReadToEnd();
 
                     seleniumServer.WaitForExit();
 
-                    
+
                     // push the log back up to the server.
-                    long timeElapsed = 
+                    long timeElapsed =
                         seleniumServer.ExitTime.ToFileTimeUtc() -
                         seleniumServer.StartTime.ToFileTimeUtc();
 
@@ -249,15 +260,15 @@ namespace Continuum_Windows_Testing_Agent
                     }
 
                     seleniumServer.Close();
-                                        
+
                     String logData = "";
                     logData = File.ReadAllText(tempLogFile);
 
                     NameValueCollection resultPostValues = new NameValueCollection();
-                    resultPostValues.Add("testRunBrowserId", testRunBrowserId.ToString() );
+                    resultPostValues.Add("testRunBrowserId", testRunBrowserId.ToString());
                     resultPostValues.Add("testDuration", timeElapsed.ToString());
                     resultPostValues.Add("testStatus", testStatus.ToString());
-                    resultPostValues.Add("logData", logData );
+                    resultPostValues.Add("logData", logData);
 
                     String logUrl = "http://" + masterHostname + "/et/log/";
                     masterClient.UploadValues(logUrl, resultPostValues);
@@ -275,7 +286,7 @@ namespace Continuum_Windows_Testing_Agent
                 }
 
             }
-            
+
             return false;
         }
 
@@ -305,25 +316,25 @@ namespace Continuum_Windows_Testing_Agent
             DirectoryInfo di = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\Application");
             DirectoryInfo[] dirs = di.GetDirectories("*.*.*.*");
             Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.\d+");
-                    
+
             foreach (DirectoryInfo diNext in dirs)
             {
-               Match versionMatch = versionRegex.Match(diNext.Name);
-               if (versionMatch != null)
-               {
-                   if (this.googlechrome.exists == true)
-                   {
-                       // TODO: Need to bring the version logic in.
-                       
-                   }
-                   else
-                   {
-                       this.googlechrome.exists = true;
-                       this.googlechrome.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
-                       this.googlechrome.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
-                       this.googlechrome.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
-                   }
-               }
+                Match versionMatch = versionRegex.Match(diNext.Name);
+                if (versionMatch != null)
+                {
+                    if (this.googlechrome.exists == true)
+                    {
+                        // TODO: Need to bring the version logic in.
+
+                    }
+                    else
+                    {
+                        this.googlechrome.exists = true;
+                        this.googlechrome.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
+                        this.googlechrome.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
+                        this.googlechrome.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
+                    }
+                }
             }
         }
 
@@ -350,16 +361,17 @@ namespace Continuum_Windows_Testing_Agent
 
         public void findIEBrowser()
         {
-            
+
             RegistryKey dkey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Internet Explorer");
             if (dkey != null)
             {
                 string bVersion = dkey.GetValue("Version").ToString();
                 if (bVersion != null)
                 {
-                    Regex versionRegex = new Regex( @"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)" );
+                    Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)");
                     Match versionMatch = versionRegex.Match(bVersion);
-                    if ( versionMatch != null ) {
+                    if (versionMatch != null)
+                    {
                         this.ie.exists = true;
                         this.ie.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
                         this.ie.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
