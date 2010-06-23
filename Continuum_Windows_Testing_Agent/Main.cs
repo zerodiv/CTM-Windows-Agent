@@ -133,9 +133,11 @@ namespace Continuum_Windows_Testing_Agent
             {
                 // ask for work if any is available.
                 this.et.requestWork(guid, this.hostnameBox.Text);
+                this.lastRunLogBox.Text = this.et.log.getLog();
 
                 DateTime now = DateTime.Now;
                 this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
+
             }
             else
             {
@@ -147,7 +149,7 @@ namespace Continuum_Windows_Testing_Agent
         {
 
             this._setHostname(this.hostnameBox.Text);
-            this.activePolling();           
+            this.activePolling();
 
         }
 
@@ -169,6 +171,11 @@ namespace Continuum_Windows_Testing_Agent
         private void timer1_Tick(object sender, EventArgs e)
         {
             this.activePolling();
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

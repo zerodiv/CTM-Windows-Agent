@@ -13,35 +13,6 @@ using Ionic.Zip;
 
 namespace Continuum_Windows_Testing_Agent
 {
-    class LocalWebBrowser
-    {
-        public Boolean exists;
-        public int major;
-        public int minor;
-        public int patch;
-
-        public LocalWebBrowser()
-        {
-            this.exists = false;
-            this.major = 0;
-            this.minor = 0;
-            this.patch = 0;
-        }
-
-        public String getVersion()
-        {
-            if (this.exists)
-            {
-                String version = "";
-                version += this.major;
-                version += "." + this.minor;
-                version += "." + this.patch;
-                return version;
-            }
-            return "Not Available";
-        }
-
-    }
 
     class PhoneHomeAgent
     {
@@ -49,19 +20,20 @@ namespace Continuum_Windows_Testing_Agent
         public LocalWebBrowser firefox;
         public LocalWebBrowser ie;
         public LocalWebBrowser safari;
+        public Boolean hasSeleniumServerJarFile;
+        public AgentLog log;
 
         public PhoneHomeAgent()
         {
-            // init the various browsers
-            this.googlechrome = new LocalWebBrowser();
-            this.firefox = new LocalWebBrowser();
-            this.ie = new LocalWebBrowser();
-            this.safari = new LocalWebBrowser();
 
-            this.findIEBrowser();
-            this.findGoogleChromeBrowser();
-            this.findFirefoxBrowser();
-            this.findSafariBrowser();
+            // initalize the logging for the phone home agent.
+            this.log = new AgentLog();
+
+            // init the various browsers
+            this.googlechrome = new LocalWebBrowser( "googlechrome" );
+            this.firefox = new LocalWebBrowser( "firefox" );
+            this.ie = new LocalWebBrowser( "ie" );
+            this.safari = new LocalWebBrowser( "safari" );
 
         }
 
@@ -142,8 +114,15 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
+
+
+
+
+
         public Boolean requestWork(String guid, String masterHostname)
         {
+
+            this.log.reset();
 
             WebClient masterClient = new WebClient();
 
@@ -151,235 +130,79 @@ namespace Continuum_Windows_Testing_Agent
 
             postValues.Add("guid", guid);
 
+            String stringResponse = "";
             try
             {
+
                 String pollUrl = "http://" + masterHostname + "/et/poll/1.0/";
+                this.log.message("requesting from: " + pollUrl);
+
                 byte[] response = masterClient.UploadValues(pollUrl, postValues);
-                String stringResponse = Encoding.ASCII.GetString(response);
-
-                System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
-                xmlDoc.LoadXml(stringResponse);
-
-                if (xmlDoc.SelectSingleNode("/etResponse/status").InnerText.Equals("OK"))
-                {
-                    // we have work to do lets get the party started!
-                    UInt64 testRunId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunId").InnerText);
-                    UInt64 testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
-                    String testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
-                    String testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
-
-                    // fetch the zip file from the remote server.
-                    String tempZipfile = Environment.GetEnvironmentVariable("TEMP");
-                    tempZipfile += "\\ctmTestRun_" + testRunId + ".zip";
-
-                    if (File.Exists(tempZipfile) == false)
-                    {
-                        // download the file.
-                        masterClient.DownloadFile(testDownloadUrl, tempZipfile);
-                    }
-
-                    // unzip the file into a target dir.
-                    String tempTestDir = Environment.GetEnvironmentVariable("TEMP");
-                    tempTestDir += "\\ctmTestRun_" + testRunId;
-
-                    String tempLogFile = tempTestDir + "\\test.log";
-
-
-                    if (Directory.Exists(tempTestDir) == true)
-                    {
-                        Directory.Delete(tempTestDir, true);
-                    }
-                    
-                    Directory.CreateDirectory(tempTestDir);
-
-                    using (ZipFile zip = ZipFile.Read(tempZipfile))
-                    {
-                        foreach (ZipEntry e in zip)
-                        {
-                            e.Extract(tempTestDir);
-                        }
-                    }
-                    
-
-                    // find the index.html associated with this test run
-                    String testRunIndexHtml = "";
-
-                    String[] subDirs = Directory.GetDirectories(tempTestDir);
-
-                    foreach (String sDir in subDirs)
-                    {
-                        testRunIndexHtml = sDir + "\\index.html";
-                        if (File.Exists(testRunIndexHtml))
-                        {
-                            // we are done.
-                            break;
-                        }
-                    }
-
-                    // run the test against the harness with the logging on.
-                    String sServerArgs = "";
-                    // sServerArgs += "-jar '" + Directory.GetCurrentDirectory() + "\\selenium-server.jar' "; // jeo - we may need to make this configurable.
-                    sServerArgs += "-jar C:\\selenium-server.jar "; // jeo - we may need to make this configurable.
-                    sServerArgs += "-multiwindow ";
-                    sServerArgs += "-htmlSuite ";
-                    // sServerArgs += "\"*" + testBrowser + "\" ";
-                    sServerArgs += "\"*firefox\" ";
-                    sServerArgs += "\"http://www.adicio.com/\" ";
-                    sServerArgs += "\"" + testRunIndexHtml + "\" ";
-                    sServerArgs += "\"" + tempLogFile + "\"";
-
-                    System.Diagnostics.Process seleniumServer = new System.Diagnostics.Process();
-                    seleniumServer.EnableRaisingEvents = false;
-                    seleniumServer.StartInfo.UseShellExecute = false;
-                    seleniumServer.StartInfo.FileName = "java";
-                    seleniumServer.StartInfo.Arguments = sServerArgs;
-                    seleniumServer.StartInfo.RedirectStandardError = true;
-                    // seleniumServer.StartInfo.RedirectStandardOutput = true;
-
-                    seleniumServer.Start();
-
-                    // seleniumServer.BeginOutputReadLine();
-                    String stdErr = seleniumServer.StandardError.ReadToEnd();
-
-                    seleniumServer.WaitForExit();
-
-
-                    // push the log back up to the server.
-                    long timeElapsed =
-                        seleniumServer.ExitTime.ToFileTimeUtc() -
-                        seleniumServer.StartTime.ToFileTimeUtc();
-
-                    int testStatus = 0;
-                    if (seleniumServer.ExitCode == 0)
-                    {
-                        testStatus = 1;
-                    }
-                    else
-                    {
-                        testStatus = 0;
-                    }
-
-                    seleniumServer.Close();
-
-                    String logData = "";
-                    logData = File.ReadAllText(tempLogFile);
-
-                    NameValueCollection resultPostValues = new NameValueCollection();
-                    resultPostValues.Add("testRunBrowserId", testRunBrowserId.ToString());
-                    resultPostValues.Add("testDuration", timeElapsed.ToString());
-                    resultPostValues.Add("testStatus", testStatus.ToString());
-                    resultPostValues.Add("logData", logData);
-
-                    String logUrl = "http://" + masterHostname + "/et/log/";
-                    masterClient.UploadValues(logUrl, resultPostValues);
-
-                }
-
-                return true;
-
+                stringResponse = Encoding.ASCII.GetString(response);
             }
             catch (WebException e)
             {
-                if (e.Message.Equals(""))
-                {
-                    return false;
-                }
-
+                this.log.message("Failed to do request for work: " + e.Message);
             }
 
-            return false;
-        }
+            System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
 
-        public void findSafariBrowser()
-        {
-            RegistryKey dkey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Apple Computer, Inc.\\Safari");
-            if (dkey != null)
+            try
             {
-                string bVersion = dkey.GetValue("Version").ToString();
-                if (bVersion != null)
-                {
-                    Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.\d+");
-                    Match versionMatch = versionRegex.Match(bVersion);
-                    if (versionMatch != null)
-                    {
-                        this.safari.exists = true;
-                        this.safari.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
-                        this.safari.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
-                        this.safari.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
-                    }
-                }
+                xmlDoc.LoadXml(stringResponse);
             }
-        }
-
-        public void findGoogleChromeBrowser()
-        {
-            DirectoryInfo di = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\Application");
-            DirectoryInfo[] dirs = di.GetDirectories("*.*.*.*");
-            Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.\d+");
-
-            foreach (DirectoryInfo diNext in dirs)
+            catch (Exception e)
             {
-                Match versionMatch = versionRegex.Match(diNext.Name);
-                if (versionMatch != null)
-                {
-                    if (this.googlechrome.exists == true)
-                    {
-                        // TODO: Need to bring the version logic in.
-
-                    }
-                    else
-                    {
-                        this.googlechrome.exists = true;
-                        this.googlechrome.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
-                        this.googlechrome.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
-                        this.googlechrome.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
-                    }
-                }
+                return false;
             }
-        }
-
-        public void findFirefoxBrowser()
-        {
-            RegistryKey dkey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Mozilla\\Mozilla Firefox");
-            if (dkey != null)
+            
+            if (xmlDoc.SelectSingleNode("/etResponse/status").InnerText.Equals("OK"))
             {
-                string bVersion = dkey.GetValue("CurrentVersion").ToString();
-                if (bVersion != null)
-                {
-                    Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)");
-                    Match versionMatch = versionRegex.Match(bVersion);
-                    if (versionMatch != null)
-                    {
-                        this.firefox.exists = true;
-                        this.firefox.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
-                        this.firefox.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
-                        this.firefox.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
-                    }
-                }
+
+                this.log.message("we have work todo");
+
+                // we have work to do lets get the party started!
+                // init the work runner obj with the test run data.
+                WorkRunner workRunnerObj = new WorkRunner(this.log);                       
+           
+                workRunnerObj.testRunId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunId").InnerText);
+                workRunnerObj.testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
+                workRunnerObj.testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
+                workRunnerObj.testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
+                workRunnerObj.testBaseurl = xmlDoc.SelectSingleNode("/etResponse/testBaseurl").InnerText;
+                                
+                this.log.message(" testRunId: " + workRunnerObj.testRunId.ToString());
+                this.log.message(" testRunBrowserId: " + workRunnerObj.testRunBrowserId.ToString());
+                this.log.message(" testDownloadUrl: " + workRunnerObj.testDownloadUrl);
+                this.log.message(" testBrowser: " + workRunnerObj.testBrowser);
+                this.log.message(" testBaseurl: " + workRunnerObj.testBaseurl);
+
+                workRunnerObj.runWork();
+                workRunnerObj.cleanup();
+                
+                NameValueCollection resultPostValues = new NameValueCollection();
+                resultPostValues.Add("testRunBrowserId", workRunnerObj.testRunBrowserId.ToString());
+                resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
+                resultPostValues.Add("testStatus", workRunnerObj.testStatus.ToString());
+                resultPostValues.Add("logData", workRunnerObj.testLog );
+
+                String logUrl = "http://" + masterHostname + "/et/log/";
+                masterClient.UploadValues(logUrl, resultPostValues);
+
             }
-        }
-
-        public void findIEBrowser()
-        {
-
-            RegistryKey dkey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Internet Explorer");
-            if (dkey != null)
+            else
             {
-                string bVersion = dkey.GetValue("Version").ToString();
-                if (bVersion != null)
-                {
-                    Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)");
-                    Match versionMatch = versionRegex.Match(bVersion);
-                    if (versionMatch != null)
-                    {
-                        this.ie.exists = true;
-                        this.ie.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
-                        this.ie.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
-                        this.ie.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
-                    }
-                }
+                this.log.message("no work for us");
             }
+
+            return true;
         }
+
+
+
+       
+
+
 
     }
 

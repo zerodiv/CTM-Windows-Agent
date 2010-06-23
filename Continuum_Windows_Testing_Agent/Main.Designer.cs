@@ -49,6 +49,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.osVersionBox = new System.Windows.Forms.TextBox();
             this.callHomeTimer = new System.Windows.Forms.Timer(this.components);
+            this.lastRunLogBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.ctmStatusBar.SuspendLayout();
@@ -147,14 +149,16 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.ipBox);
+            this.groupBox2.Controls.Add(this.osVersionBox);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.configSaveSettingsBtn);
             this.groupBox2.Controls.Add(this.hostnameBox);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Location = new System.Drawing.Point(222, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(280, 139);
+            this.groupBox2.Size = new System.Drawing.Size(407, 139);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Config";
@@ -207,9 +211,9 @@
             // 
             this.ctmStatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctmStatusLabel});
-            this.ctmStatusBar.Location = new System.Drawing.Point(0, 185);
+            this.ctmStatusBar.Location = new System.Drawing.Point(0, 518);
             this.ctmStatusBar.Name = "ctmStatusBar";
-            this.ctmStatusBar.Size = new System.Drawing.Size(516, 22);
+            this.ctmStatusBar.Size = new System.Drawing.Size(639, 22);
             this.ctmStatusBar.TabIndex = 3;
             this.ctmStatusBar.Text = "statusStrip1";
             // 
@@ -223,7 +227,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(36, 160);
+            this.label4.Location = new System.Drawing.Point(6, 110);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(23, 13);
             this.label4.TabIndex = 5;
@@ -231,7 +235,7 @@
             // 
             // osVersionBox
             // 
-            this.osVersionBox.Location = new System.Drawing.Point(74, 157);
+            this.osVersionBox.Location = new System.Drawing.Point(50, 107);
             this.osVersionBox.Name = "osVersionBox";
             this.osVersionBox.ReadOnly = true;
             this.osVersionBox.Size = new System.Drawing.Size(351, 20);
@@ -243,13 +247,32 @@
             this.callHomeTimer.Interval = 30000;
             this.callHomeTimer.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // lastRunLogBox
+            // 
+            this.lastRunLogBox.Location = new System.Drawing.Point(12, 182);
+            this.lastRunLogBox.Multiline = true;
+            this.lastRunLogBox.Name = "lastRunLogBox";
+            this.lastRunLogBox.ReadOnly = true;
+            this.lastRunLogBox.Size = new System.Drawing.Size(617, 321);
+            this.lastRunLogBox.TabIndex = 4;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 164);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(75, 13);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Last Test Log:";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(516, 207);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.osVersionBox);
+            this.ClientSize = new System.Drawing.Size(639, 540);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.lastRunLogBox);
             this.Controls.Add(this.ctmStatusBar);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -289,6 +312,8 @@
         private System.Windows.Forms.TextBox osVersionBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Timer callHomeTimer;
+        private System.Windows.Forms.TextBox lastRunLogBox;
+        private System.Windows.Forms.Label label8;
     }
 }
 

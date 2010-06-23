@@ -8,3 +8,7 @@ C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\C
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.Main.resources
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.Properties.Resources.resources
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Debug\CTM-Windows-Agent.csproj.GenerateResource.Cache
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.exe.manifest
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.application
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.exe.manifest
+C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.application
