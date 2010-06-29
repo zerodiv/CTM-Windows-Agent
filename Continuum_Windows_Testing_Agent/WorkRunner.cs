@@ -22,6 +22,7 @@ namespace Continuum_Windows_Testing_Agent
         public long timeElapsed;
         public String seleniumStdout;
         public String seleniumStderr;
+        public String seleniumLog;
 
         private String tempTestDir;
         private String tempZipFile;
@@ -71,7 +72,8 @@ namespace Continuum_Windows_Testing_Agent
             if (File.Exists(this.tempZipFile) == false)
             {
                 File.Delete(this.tempZipFile);
-                if ( File.Exists(this.tempZipFile) == true ) {
+                if (File.Exists(this.tempZipFile) == true)
+                {
                     this.log.message("failed to remove tempZipFile: " + this.tempZipFile);
                     return false;
                 }
@@ -102,7 +104,7 @@ namespace Continuum_Windows_Testing_Agent
 
             return true;
 
-         }
+        }
 
         private Boolean initLogFile()
         {
@@ -155,10 +157,9 @@ namespace Continuum_Windows_Testing_Agent
             // JEO - Duane claims that this is not needed.
             // this.seleniumCommandLine += "-multiwindow ";
 
-
             // suprise suprise IE is special and needs the singleWindow param 
             if (this.testBrowser == "iexplore")
-            {   
+            {
                 this.seleniumCommandLine += "-singleWindow ";
             }
 
@@ -166,7 +167,7 @@ namespace Continuum_Windows_Testing_Agent
             this.seleniumCommandLine += "-htmlSuite ";
 
             // add the test browser information
-            String IE_Path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + 
+            String IE_Path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) +
                 "\\Internet Explorer\\iexplore.exe";
             if (testBrowser == "iexplore" && File.Exists(IE_Path))
             {
@@ -226,7 +227,6 @@ namespace Continuum_Windows_Testing_Agent
 
             seleniumServer.Close();
 
-            String logData = "";
             if (this.testStatus == 0)
             {
                 this.testLog += "<pre>\n";
@@ -236,15 +236,12 @@ namespace Continuum_Windows_Testing_Agent
                 this.testLog += this.seleniumStderr;
                 this.testLog += "</pre>\n";
             }
-            else
+
+            if (File.Exists(this.tempLogFile))
             {
-
-                if (File.Exists(this.tempLogFile))
-                {
-                    logData = File.ReadAllText(this.tempLogFile);
-                }
-
+                this.seleniumLog = File.ReadAllText(this.tempLogFile);
             }
+
             return true;
         }
 
@@ -282,7 +279,8 @@ namespace Continuum_Windows_Testing_Agent
                 }
 
                 // find the selenium jar file
-                if (this.findSeleniumServerJarFile() == false) {
+                if (this.findSeleniumServerJarFile() == false)
+                {
                     this.cleanup();
                     return false;
                 }
@@ -313,7 +311,8 @@ namespace Continuum_Windows_Testing_Agent
             {
                 Directory.Delete(this.tempTestDir, true);
             }
-            if (File.Exists(this.tempZipFile) == true ) {
+            if (File.Exists(this.tempZipFile) == true)
+            {
                 File.Delete(this.tempZipFile);
             }
         }

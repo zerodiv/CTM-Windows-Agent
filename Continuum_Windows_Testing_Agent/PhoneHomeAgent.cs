@@ -72,6 +72,8 @@ namespace Continuum_Windows_Testing_Agent
 
             postValues.Add("os", this.determineWindowsVersion());
 
+            postValues.Add("machine_name", Environment.MachineName);
+
             // add the browsers into our post params
             if (this.ie.exists == true)
             {
@@ -184,8 +186,8 @@ namespace Continuum_Windows_Testing_Agent
                 resultPostValues.Add("testRunBrowserId", workRunnerObj.testRunBrowserId.ToString());
                 resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
                 resultPostValues.Add("testStatus", workRunnerObj.testStatus.ToString());
-                resultPostValues.Add("logData", workRunnerObj.testLog );
-
+                resultPostValues.Add("runLog", workRunnerObj.testLog );
+                resultPostValues.Add("seleniumLog", workRunnerObj.seleniumLog);
                 String logUrl = "http://" + masterHostname + "/et/log/";
                 masterClient.UploadValues(logUrl, resultPostValues);
 
