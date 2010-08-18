@@ -159,6 +159,7 @@ namespace Continuum_Windows_Testing_Agent
             }
             catch (Exception e)
             {
+                this.log.message( "Failed to load xml from response: " + e.Message );
                 return false;
             }
 

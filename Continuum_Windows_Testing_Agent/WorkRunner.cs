@@ -102,7 +102,7 @@ namespace Continuum_Windows_Testing_Agent
             }
             catch (Exception e)
             {
-                this.log.message("Failed to unzip");
+                this.log.message("Failed to unzip message: " + e.Message );
                 return false;
             }
 
@@ -385,6 +385,7 @@ namespace Continuum_Windows_Testing_Agent
             }
             catch (Exception e)
             {
+                this.log.message("Failed to run test suite message: " + e.Message);
                 this.cleanup();
                 return false;
             }
