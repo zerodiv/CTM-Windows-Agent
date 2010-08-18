@@ -31,6 +31,27 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
+        private Boolean _setMachineName(String machineName)
+        {
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
+
+            key.SetValue("machineName", machineName);
+
+            return true;
+
+        }
+
+        private Boolean _setHostIp(String hostIp)
+        {
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
+
+            key.SetValue("host_ip", hostIp);
+
+            return true;
+
+        }
+
+
         private String _getHostname()
         {
             Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
@@ -42,6 +63,26 @@ namespace Continuum_Windows_Testing_Agent
 
             return "";
 
+        }
+
+        private String _getMachineName()
+        {
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
+            if (key.GetValue("machineName") != null)
+            {
+                return key.GetValue("machineName").ToString();
+            }
+
+            String machineName = Environment.MachineName;
+
+            if (machineName.Length > 0)
+            {
+                key.SetValue("machineName", machineName);
+            }
+
+            key.Close();
+            return machineName;
+        
         }
 
         private String _getGuid()
@@ -96,13 +137,16 @@ namespace Continuum_Windows_Testing_Agent
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             this.ipBox.Text = this._getIp();
             this.hostnameBox.Text = this._getHostname();
+            this.machineNameBox.Text = this._getMachineName();
             this.ieVersionBox.Text = et.ie.getVersion();
             this.chromeVersionBox.Text = et.googlechrome.getVersion();
             this.firefoxVersionBox.Text = et.firefox.getVersion();
             this.safariVersionBox.Text = et.safari.getVersion();
             this.osVersionBox.Text = et.determineWindowsVersion();
+            
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -129,7 +173,7 @@ namespace Continuum_Windows_Testing_Agent
         {
             String guid = this._getGuid();
 
-            if (this.et.registerHost(guid, this.hostnameBox.Text, this.ipBox.Text) == true)
+            if (this.et.registerHost(guid, this.hostnameBox.Text, this.ipBox.Text, this.machineNameBox.Text) == true)
             {
                 // ask for work if any is available.
                 this.et.requestWork(guid, this.hostnameBox.Text);
@@ -143,12 +187,15 @@ namespace Continuum_Windows_Testing_Agent
             {
                 this.ctmStatusLabel.Text = "failed to contact master";
             }
+            
         }
 
         private void configSaveSettingsBtn_Click(object sender, EventArgs e)
         {
 
             this._setHostname(this.hostnameBox.Text);
+            this._setHostIp(this.ipBox.Text);
+            this._setMachineName(this.machineNameBox.Text);
             this.activePolling();
 
         }

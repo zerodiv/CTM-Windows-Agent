@@ -81,22 +81,33 @@ namespace Continuum_Windows_Testing_Agent
 
         private void findGoogleChromeBrowser()
         {
-            DirectoryInfo di = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\Application");
-            DirectoryInfo[] dirs = di.GetDirectories("*.*.*.*");
-            Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.\d+");
-
-            foreach (DirectoryInfo diNext in dirs)
+            try
             {
-                Match versionMatch = versionRegex.Match(diNext.Name);
-                if (versionMatch.Success )
-                {
-                    this.exists = true;
-                    this.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
-                    this.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
-                    this.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
 
+                DirectoryInfo di = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\Application");
+
+                DirectoryInfo[] dirs = di.GetDirectories("*.*.*.*");
+
+                Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.\d+");
+
+                foreach (DirectoryInfo diNext in dirs)
+                {
+                    Match versionMatch = versionRegex.Match(diNext.Name);
+                    if (versionMatch.Success)
+                    {
+                        this.exists = true;
+                        this.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
+                        this.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
+                        this.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
+
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                this.exists = false;
+            }
+
         }
 
         private void findFirefoxBrowser()

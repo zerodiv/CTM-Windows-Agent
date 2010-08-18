@@ -20,7 +20,6 @@ namespace Continuum_Windows_Testing_Agent
         public LocalWebBrowser firefox;
         public LocalWebBrowser ie;
         public LocalWebBrowser safari;
-        public Boolean hasSeleniumServerJarFile;
         public AgentLog log;
 
         public PhoneHomeAgent()
@@ -30,10 +29,10 @@ namespace Continuum_Windows_Testing_Agent
             this.log = new AgentLog();
 
             // init the various browsers
-            this.googlechrome = new LocalWebBrowser( "googlechrome" );
-            this.firefox = new LocalWebBrowser( "firefox" );
-            this.ie = new LocalWebBrowser( "ie" );
-            this.safari = new LocalWebBrowser( "safari" );
+            this.googlechrome = new LocalWebBrowser("googlechrome");
+            this.firefox = new LocalWebBrowser("firefox");
+            this.ie = new LocalWebBrowser("ie");
+            this.safari = new LocalWebBrowser("safari");
 
         }
 
@@ -44,7 +43,7 @@ namespace Continuum_Windows_Testing_Agent
             return windowsVersion;
         }
 
-        public Boolean registerHost(String guid, String masterHostname, String localIp)
+        public Boolean registerHost(String guid, String masterHostname, String localIp, String machineName )
         {
             // hostname
             // ip - port
@@ -62,6 +61,11 @@ namespace Continuum_Windows_Testing_Agent
                 return false;
             }
 
+            if (machineName.Length == 0)
+            {
+                return false;
+            }
+
             WebClient masterClient = new WebClient();
 
             NameValueCollection postValues = new NameValueCollection();
@@ -72,7 +76,7 @@ namespace Continuum_Windows_Testing_Agent
 
             postValues.Add("os", this.determineWindowsVersion());
 
-            postValues.Add("machine_name", Environment.MachineName);
+            postValues.Add("machine_name", machineName);
 
             // add the browsers into our post params
             if (this.ie.exists == true)
@@ -157,7 +161,7 @@ namespace Continuum_Windows_Testing_Agent
             {
                 return false;
             }
-            
+
             if (xmlDoc.SelectSingleNode("/etResponse/status").InnerText.Equals("OK"))
             {
 
@@ -165,14 +169,14 @@ namespace Continuum_Windows_Testing_Agent
 
                 // we have work to do lets get the party started!
                 // init the work runner obj with the test run data.
-                WorkRunner workRunnerObj = new WorkRunner(this.log);                       
-           
+                WorkRunner workRunnerObj = new WorkRunner(this.log);
+
                 workRunnerObj.testRunId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunId").InnerText);
                 workRunnerObj.testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
                 workRunnerObj.testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
                 workRunnerObj.testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
                 workRunnerObj.testBaseurl = xmlDoc.SelectSingleNode("/etResponse/testBaseurl").InnerText;
-                                
+
                 this.log.message(" testRunId: " + workRunnerObj.testRunId.ToString());
                 this.log.message(" testRunBrowserId: " + workRunnerObj.testRunBrowserId.ToString());
                 this.log.message(" testDownloadUrl: " + workRunnerObj.testDownloadUrl);
@@ -180,13 +184,13 @@ namespace Continuum_Windows_Testing_Agent
                 this.log.message(" testBaseurl: " + workRunnerObj.testBaseurl);
 
                 workRunnerObj.runWork();
-                workRunnerObj.cleanup();
-                
+                // workRunnerObj.cleanup();
+
                 NameValueCollection resultPostValues = new NameValueCollection();
                 resultPostValues.Add("testRunBrowserId", workRunnerObj.testRunBrowserId.ToString());
                 resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
                 resultPostValues.Add("testStatus", workRunnerObj.testStatus.ToString());
-                resultPostValues.Add("runLog", workRunnerObj.testLog );
+                resultPostValues.Add("runLog", workRunnerObj.testLog);
                 resultPostValues.Add("seleniumLog", workRunnerObj.seleniumLog);
                 String logUrl = "http://" + masterHostname + "/et/log/";
                 masterClient.UploadValues(logUrl, resultPostValues);
@@ -202,7 +206,7 @@ namespace Continuum_Windows_Testing_Agent
 
 
 
-       
+
 
 
 

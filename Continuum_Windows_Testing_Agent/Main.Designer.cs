@@ -39,18 +39,20 @@
             this.ieVersionBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.ipBox = new System.Windows.Forms.TextBox();
+            this.osVersionBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.configSaveSettingsBtn = new System.Windows.Forms.Button();
             this.hostnameBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.ctmStatusBar = new System.Windows.Forms.StatusStrip();
             this.ctmStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.osVersionBox = new System.Windows.Forms.TextBox();
             this.callHomeTimer = new System.Windows.Forms.Timer(this.components);
             this.lastRunLogBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.machineNameBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.ctmStatusBar.SuspendLayout();
@@ -149,6 +151,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.machineNameBox);
+            this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.ipBox);
             this.groupBox2.Controls.Add(this.osVersionBox);
@@ -164,27 +168,44 @@
             this.groupBox2.Text = "Config";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 110);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(23, 13);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Os:";
+            // 
             // ipBox
             // 
-            this.ipBox.Location = new System.Drawing.Point(70, 53);
+            this.ipBox.Location = new System.Drawing.Point(95, 48);
             this.ipBox.Name = "ipBox";
             this.ipBox.Size = new System.Drawing.Size(185, 20);
             this.ipBox.TabIndex = 4;
             // 
+            // osVersionBox
+            // 
+            this.osVersionBox.Location = new System.Drawing.Point(50, 107);
+            this.osVersionBox.Name = "osVersionBox";
+            this.osVersionBox.ReadOnly = true;
+            this.osVersionBox.Size = new System.Drawing.Size(351, 20);
+            this.osVersionBox.TabIndex = 6;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 56);
+            this.label3.Location = new System.Drawing.Point(6, 51);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(20, 13);
+            this.label3.Size = new System.Drawing.Size(37, 13);
             this.label3.TabIndex = 3;
-            this.label3.Text = "IP:";
+            this.label3.Text = "My IP:";
             // 
             // configSaveSettingsBtn
             // 
-            this.configSaveSettingsBtn.Location = new System.Drawing.Point(109, 82);
+            this.configSaveSettingsBtn.Location = new System.Drawing.Point(297, 33);
             this.configSaveSettingsBtn.Name = "configSaveSettingsBtn";
-            this.configSaveSettingsBtn.Size = new System.Drawing.Size(83, 19);
+            this.configSaveSettingsBtn.Size = new System.Drawing.Size(83, 52);
             this.configSaveSettingsBtn.TabIndex = 2;
             this.configSaveSettingsBtn.Text = "Save Settings";
             this.configSaveSettingsBtn.UseVisualStyleBackColor = true;
@@ -192,7 +213,7 @@
             // 
             // hostnameBox
             // 
-            this.hostnameBox.Location = new System.Drawing.Point(70, 22);
+            this.hostnameBox.Location = new System.Drawing.Point(95, 22);
             this.hostnameBox.Name = "hostnameBox";
             this.hostnameBox.Size = new System.Drawing.Size(185, 20);
             this.hostnameBox.TabIndex = 1;
@@ -202,9 +223,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 25);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 13);
+            this.label2.Size = new System.Drawing.Size(67, 13);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Hostname:";
+            this.label2.Text = "CTM Server:";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // ctmStatusBar
@@ -223,23 +244,6 @@
             this.ctmStatusLabel.Size = new System.Drawing.Size(51, 17);
             this.ctmStatusLabel.Text = "Started..";
             this.ctmStatusLabel.Click += new System.EventHandler(this.toolStripStatusLabel1_Click_1);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 110);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(23, 13);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Os:";
-            // 
-            // osVersionBox
-            // 
-            this.osVersionBox.Location = new System.Drawing.Point(50, 107);
-            this.osVersionBox.Name = "osVersionBox";
-            this.osVersionBox.ReadOnly = true;
-            this.osVersionBox.Size = new System.Drawing.Size(351, 20);
-            this.osVersionBox.TabIndex = 6;
             // 
             // callHomeTimer
             // 
@@ -265,6 +269,22 @@
             this.label8.TabIndex = 5;
             this.label8.Text = "Last Test Log:";
             this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 77);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(80, 13);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Machine name:";
+            // 
+            // machineNameBox
+            // 
+            this.machineNameBox.Location = new System.Drawing.Point(95, 74);
+            this.machineNameBox.Name = "machineNameBox";
+            this.machineNameBox.Size = new System.Drawing.Size(185, 20);
+            this.machineNameBox.TabIndex = 8;
             // 
             // Main
             // 
@@ -314,6 +334,8 @@
         private System.Windows.Forms.Timer callHomeTimer;
         private System.Windows.Forms.TextBox lastRunLogBox;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox machineNameBox;
+        private System.Windows.Forms.Label label9;
     }
 }
 

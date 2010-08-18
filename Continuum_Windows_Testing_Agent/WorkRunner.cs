@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net;
 using Ionic.Zip;
+// using Selenium;
 
 namespace Continuum_Windows_Testing_Agent
 {
@@ -24,12 +25,15 @@ namespace Continuum_Windows_Testing_Agent
         public String seleniumStderr;
         public String seleniumLog;
 
+        private String proxyFile;
         private String tempTestDir;
         private String tempZipFile;
         private String tempLogFile;
         private String testRunIndexHtml;
         private String seleniumJarFile;
         private String seleniumCommandLine;
+
+        private System.Diagnostics.Process seleniumServer;
 
         public WorkRunner(AgentLog log)
         {
@@ -146,10 +150,42 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
+        private Boolean createProxyFile()
+        {
+
+            this.proxyFile = Environment.GetEnvironmentVariable("TEMP");
+            this.proxyFile += "\\ctmProxy.pac";
+
+            this.log.message("proxyFile: " + this.proxyFile);
+
+            if (File.Exists(this.proxyFile))
+            {
+                return true;
+            }
+
+            using (StreamWriter sw = new StreamWriter(this.proxyFile, false, Encoding.Default))
+            {
+                sw.WriteLine("function FindProxyForURL(url, host) {");
+                sw.WriteLine("        return 'PROXY localhost:4444; DIRECT';");
+                sw.WriteLine("}");
+                sw.Close();
+
+                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings");
+                key.SetValue("AutoConfigUrl", "file://" + this.proxyFile.Replace("\\", "/"));
+
+                return true;
+            }
+
+
+        }
+
         private Boolean createTestRunCommandLine()
         {
             // run the test against the harness with the logging on.
             this.seleniumCommandLine = "";
+
+            this.seleniumCommandLine += "-Dhttp.proxyHost=localhost ";
+            this.seleniumCommandLine += "-Dhttp.proxyPort=4444 ";
 
             // point to the selenium-server.jar file.
             this.seleniumCommandLine += "-jar \"" + this.seleniumJarFile + "\" ";
@@ -161,12 +197,19 @@ namespace Continuum_Windows_Testing_Agent
             if (this.testBrowser == "iexplore")
             {
                 this.seleniumCommandLine += "-singleWindow ";
+                // this.seleniumCommandLine += "-avoidProxy ";
             }
-
             // We are running a htmlSuite
             this.seleniumCommandLine += "-htmlSuite ";
 
             // add the test browser information
+            /*
+            if (testBrowser == "iexplore")
+            {
+               testBrowser = "iexploreproxy";
+            }
+            */
+
             String IE_Path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) +
                 "\\Internet Explorer\\iexplore.exe";
             if (testBrowser == "iexplore" && File.Exists(IE_Path))
@@ -175,8 +218,8 @@ namespace Continuum_Windows_Testing_Agent
             }
             else
             {
-                this.log.message("internet explorer requested but not found at: " + IE_Path + " falling back to *iexplore");
                 this.seleniumCommandLine += "\"*" + this.testBrowser + "\" ";
+
             }
 
             this.seleniumCommandLine += "\"" + testBaseurl + "\" ";
@@ -245,6 +288,31 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
+        private Boolean startSeleniumServer()
+        {
+            this.seleniumServer = new System.Diagnostics.Process();
+            this.seleniumServer.EnableRaisingEvents = false;
+            this.seleniumServer.StartInfo.UseShellExecute = false;
+            this.seleniumServer.StartInfo.FileName = "java";
+            this.seleniumServer.StartInfo.Arguments = "-jar \"" + this.seleniumJarFile + "\" ";
+            this.seleniumServer.StartInfo.RedirectStandardError = true;
+            this.seleniumServer.StartInfo.RedirectStandardOutput = true;
+            // this.seleniumServer.StartInfo.CreateNoWindow = true;            
+            return this.seleniumServer.Start();
+        }
+
+        private Boolean sendWorkToServer()
+        {
+            /*
+            DefaultSelenium se = new DefaultSelenium("localhost", 4444, "*" + this.testBrowser, this.testBaseurl);
+            se.Start();
+            // se.RunScript(File.ReadAllText(@"c:\1.html"));
+            System.Threading.Thread.Sleep(2000);
+            se.Stop();
+            */
+            return true;
+        }
+
         public Boolean runWork()
         {
             try
@@ -284,6 +352,23 @@ namespace Continuum_Windows_Testing_Agent
                     this.cleanup();
                     return false;
                 }
+
+                if (this.createProxyFile() == false)
+                {
+                    this.cleanup();
+                    return false;
+                }
+
+                /*
+                // jeo - temp
+                if (this.startSeleniumServer() == true)
+                {
+                    this.sendWorkToServer();
+                    System.Threading.Thread.Sleep(2000);
+                }
+                this.cleanup();
+                return false;
+                */
 
                 // create the commandline 
                 if (this.createTestRunCommandLine() == false)
