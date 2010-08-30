@@ -4,14 +4,22 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Net;
+// using System.Xml;
+// using System.Xml.XPath;
+using HtmlAgilityPack;
 using Ionic.Zip;
-// using Selenium;
+using OpenQA.Selenium;
+using Selenium;
+using System.Collections;
 
 namespace Continuum_Windows_Testing_Agent
 {
+
     class WorkRunner
     {
-        public AgentLog log;
+        public AgentLog agentLog;
+        public AgentLog testLog;
+
         public UInt64 testRunId;
         public UInt64 testRunBrowserId;
         public String testDownloadUrl;
@@ -19,11 +27,12 @@ namespace Continuum_Windows_Testing_Agent
         public String testBaseurl;
 
         public int testStatus;
-        public String testLog;
         public long timeElapsed;
         public String seleniumStdout;
         public String seleniumStderr;
         public String seleniumLog;
+        public String seleniumLogFile;
+        public Selenium_Test_Log seleniumTestLog;
 
         private String proxyFile;
         private String tempTestDir;
@@ -33,23 +42,23 @@ namespace Continuum_Windows_Testing_Agent
         private String seleniumJarFile;
         private String seleniumCommandLine;
 
-        private System.Diagnostics.Process seleniumServer;
-
-        public WorkRunner(AgentLog log)
+        public WorkRunner(AgentLog agentLog)
         {
-            this.log = log;
+            this.agentLog = agentLog;           
         }
 
         private Boolean initTestingDirectory()
         {
+            this.agentLog.message("initalize testing directories");
+
             this.tempTestDir = Environment.GetEnvironmentVariable("TEMP");
             this.tempTestDir += "\\ctmTestRun_" + this.testRunId;
 
-            this.log.message("tempTestDir: " + this.tempTestDir);
+            this.agentLog.message("tempTestDir: " + this.tempTestDir);
 
             if (Directory.Exists(this.tempTestDir) == true)
             {
-                this.log.message("temp dir was already there cleaning up from previous run");
+                this.agentLog.message("temp dir was already there cleaning up from previous run");
                 Directory.Delete(this.tempTestDir, true);
             }
 
@@ -57,7 +66,7 @@ namespace Continuum_Windows_Testing_Agent
 
             if (Directory.Exists(this.tempTestDir) == false)
             {
-                this.log.message("failed to create temp dir: " + this.tempTestDir);
+                this.agentLog.message("failed to create temp dir: " + this.tempTestDir);
                 return false;
             }
 
@@ -71,23 +80,23 @@ namespace Continuum_Windows_Testing_Agent
             this.tempZipFile = Environment.GetEnvironmentVariable("TEMP");
             this.tempZipFile += "\\ctmTestRun_" + this.testRunId + ".zip";
 
-            this.log.message(" tempZipFile: " + this.tempZipFile);
+            this.testLog.message(" tempZipFile: " + this.tempZipFile);
 
             if (File.Exists(this.tempZipFile) == false)
             {
                 File.Delete(this.tempZipFile);
                 if (File.Exists(this.tempZipFile) == true)
                 {
-                    this.log.message("failed to remove tempZipFile: " + this.tempZipFile);
+                    this.testLog.message("failed to remove tempZipFile: " + this.tempZipFile);
                     return false;
                 }
             }
 
             // download the file.
-            this.log.message("downloading zip file");
+            this.testLog.message("downloading zip file");
             WebClient masterClient = new WebClient();
             masterClient.DownloadFile(this.testDownloadUrl, this.tempZipFile);
-            this.log.message("zip file downloaded");
+            this.testLog.message("zip file downloaded");
 
             // unzip the file into the temp directory.
             try
@@ -102,7 +111,7 @@ namespace Continuum_Windows_Testing_Agent
             }
             catch (Exception e)
             {
-                this.log.message("Failed to unzip message: " + e.Message );
+                this.testLog.message("Failed to unzip message: " + e.Message );
                 return false;
             }
 
@@ -110,11 +119,19 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
-        private Boolean initLogFile()
+        private Boolean initLogFiles()
         {
-            this.tempLogFile = tempTestDir + "\\test.log";
 
-            this.log.message("tempLogFile: " + this.tempLogFile);
+            this.tempLogFile = this.tempTestDir + "\\test.log";
+            this.agentLog.message("init testLogFile: " + this.tempLogFile);
+
+            this.testLog = new AgentLog(this.tempLogFile);
+
+
+            this.seleniumLogFile = this.tempTestDir + "\\selenium.html";
+            this.agentLog.message("init seleniumLogFile: " + this.seleniumLogFile);
+            this.seleniumTestLog = new Selenium_Test_Log(this.seleniumLogFile);
+
             return true;
         }
 
@@ -136,11 +153,11 @@ namespace Continuum_Windows_Testing_Agent
 
             if (File.Exists(this.testRunIndexHtml) == false)
             {
-                this.log.message("failed to find test run index.html file");
+                this.testLog.message("failed to find test run index.html file");
                 return false;
             }
 
-            this.log.message("testRunIndexHtml: " + this.testRunIndexHtml);
+            this.testLog.message("testRunIndexHtml: " + this.testRunIndexHtml);
             return true;
         }
 
@@ -156,7 +173,7 @@ namespace Continuum_Windows_Testing_Agent
             this.proxyFile = Environment.GetEnvironmentVariable("TEMP");
             this.proxyFile += "\\ctmProxy.pac";
 
-            this.log.message("proxyFile: " + this.proxyFile);
+            this.testLog.message("proxyFile: " + this.proxyFile);
 
             if (File.Exists(this.proxyFile))
             {
@@ -199,6 +216,11 @@ namespace Continuum_Windows_Testing_Agent
                 this.seleniumCommandLine += "-singleWindow ";
                 // this.seleniumCommandLine += "-avoidProxy ";
             }
+
+            // JEO - 08/19/2010
+            // We trust all SSL certs otherwise you break shit.
+            this.seleniumCommandLine += "-trustAllSSLCertificates ";
+
             // We are running a htmlSuite
             this.seleniumCommandLine += "-htmlSuite ";
 
@@ -226,7 +248,7 @@ namespace Continuum_Windows_Testing_Agent
             this.seleniumCommandLine += "\"" + testRunIndexHtml + "\" ";
             this.seleniumCommandLine += "\"" + tempLogFile + "\" ";
 
-            this.log.message("seleniumCommandline:\n" + this.seleniumCommandLine);
+            this.testLog.message("seleniumCommandline:\n" + this.seleniumCommandLine);
 
             return true;
         }
@@ -260,24 +282,30 @@ namespace Continuum_Windows_Testing_Agent
             if (seleniumServer.ExitCode == 0)
             {
                 this.testStatus = 1;
-                this.log.message("ran test");
+                this.testLog.message("ran test");
+                this.agentLog.message("ran test");
             }
             else
             {
                 this.testStatus = 0;
-                this.log.message("failed to run test");
+                this.testLog.message("failed to run test");
+                this.agentLog.message("failed to run test");
             }
 
             seleniumServer.Close();
 
             if (this.testStatus == 0)
             {
+                /*
+                 * TODO: jeo remove me
+                 * 
                 this.testLog += "<pre>\n";
                 this.testLog += "Stdout:\n";
                 this.testLog += this.seleniumStdout;
                 this.testLog += "Stderr:\n";
                 this.testLog += this.seleniumStderr;
                 this.testLog += "</pre>\n";
+                 */
             }
 
             if (File.Exists(this.tempLogFile))
@@ -290,27 +318,222 @@ namespace Continuum_Windows_Testing_Agent
 
         private Boolean startSeleniumServer()
         {
-            this.seleniumServer = new System.Diagnostics.Process();
-            this.seleniumServer.EnableRaisingEvents = false;
-            this.seleniumServer.StartInfo.UseShellExecute = false;
-            this.seleniumServer.StartInfo.FileName = "java";
-            this.seleniumServer.StartInfo.Arguments = "-jar \"" + this.seleniumJarFile + "\" ";
-            this.seleniumServer.StartInfo.RedirectStandardError = true;
-            this.seleniumServer.StartInfo.RedirectStandardOutput = true;
-            // this.seleniumServer.StartInfo.CreateNoWindow = true;            
-            return this.seleniumServer.Start();
+            return true;
+            /*
+            if (this.seleniumServer == null)
+            {
+
+                this.seleniumServer = new System.Diagnostics.Process();
+                this.seleniumServer.EnableRaisingEvents = false;
+                this.seleniumServer.StartInfo.UseShellExecute = false;
+                this.seleniumServer.StartInfo.FileName = "java";
+                this.seleniumServer.StartInfo.Arguments = "-jar \"" + this.seleniumJarFile + "\" -log \"jeo.log\" ";
+                this.seleniumServer.StartInfo.RedirectStandardError = true;
+                this.seleniumServer.StartInfo.RedirectStandardOutput = true;
+                // this.seleniumServer.StartInfo.CreateNoWindow = true;            
+                return this.seleniumServer.Start();
+
+            }
+
+            return true;
+            */
+        }
+
+
+        public ArrayList getTestsFromTestSuite()
+        {
+            // slurp through the html file.
+            /* Example:
+             * <html>
+             * <head>
+             * <title>Checkout</title>
+             * </head>
+             * <body>
+             * <table>
+             * <tr><td><b>Checkout</b></td></tr>
+             * <tr><td><a href="./1.html">Checkout</a></td></tr>
+             * </table>
+             * </body>
+             * </html>
+             */
+            ArrayList tests = new ArrayList();
+
+            try
+            {
+
+                HtmlDocument doc = new HtmlDocument();
+
+                doc.OptionFixNestedTags = true;
+
+                doc.Load(this.testRunIndexHtml);
+
+                if (doc.ParseErrors != null && doc.ParseErrors.Count() > 0)
+                {
+                    foreach (HtmlParseError htmlError in doc.ParseErrors)
+                    {
+                        Console.WriteLine("error parsing file: " + htmlError.SourceText);
+                    }
+                    return tests;
+                }
+
+                foreach (HtmlNode testRow in doc.DocumentNode.SelectNodes("/html/body/table/tr/td/a[@href]"))
+                {
+                    tests.Add(testRow.Attributes["href"].Value.Replace("./", ""));
+                }
+
+            }
+            catch (Exception e)
+            {
+                this.testLog.message("Failed to parse testSuiteHtml: " + this.testRunIndexHtml + " errorMessage: " + e.Message);
+            }
+
+            this.testLog.message("Found: " + tests.Count + " tests in your test suite.");
+
+            return tests;
+
+        }
+
+
+        public ArrayList getTestCommands(String testFile)
+        {
+            ArrayList testCommands = new ArrayList();
+
+            // this.testLog.message("testFile: " + testFile);
+
+            HtmlDocument doc = new HtmlDocument();
+
+            doc.OptionFixNestedTags = true;
+            
+            doc.Load(testFile);
+
+            if (doc.ParseErrors != null && doc.ParseErrors.Count() > 0)
+            {
+                foreach (HtmlParseError htmlError in doc.ParseErrors)
+                {
+                    this.testLog.message("testFile: " + testFile);
+                    this.testLog.message("error parsing file: " + htmlError.SourceText);
+                }
+                return testCommands;
+            }
+
+            foreach (HtmlNode testCommandRow in doc.DocumentNode.SelectNodes("/html/body/table/tbody/*"))
+            {
+                Selenium_Test_Trinome triNome = new Selenium_Test_Trinome();
+
+                int tri = 0;
+                foreach (HtmlNode testTrinome in testCommandRow.SelectNodes("td"))
+                {
+                    tri++;
+                    switch( tri ) {
+                        case 1: 
+                            triNome.command = testTrinome.InnerHtml;
+                            break;
+                        case 2:
+                            triNome.target = testTrinome.InnerHtml;
+                            break;
+                        case 3:
+                            triNome.value = testTrinome.InnerHtml;
+                            break;
+                    }
+                    
+                }
+
+                triNome.target = System.Web.HttpUtility.HtmlDecode(triNome.target);
+                triNome.value = System.Web.HttpUtility.HtmlDecode(triNome.value);
+
+                this.testLog.message("testCommand: " + triNome.command);
+                testCommands.Add(triNome);
+            }
+
+            this.testLog.message("found: " + testCommands.Count + " testCommands in test file");
+            return testCommands;
+
         }
 
         private Boolean sendWorkToServer()
         {
-            /*
-            DefaultSelenium se = new DefaultSelenium("localhost", 4444, "*" + this.testBrowser, this.testBaseurl);
-            se.Start();
-            // se.RunScript(File.ReadAllText(@"c:\1.html"));
-            System.Threading.Thread.Sleep(2000);
-            se.Stop();
-            */
-            return true;
+            // Parse up the suite and start sending it over to the server.
+            try
+            {
+                
+                ArrayList tests = this.getTestsFromTestSuite();
+
+                // start up the requested browser.
+                this.testLog.message("starting up browser: " + this.testBrowser);
+
+                IWebDriver webDriver;
+
+                switch ( this.testBrowser ) {
+                    case "chrome":
+                        webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                        break;
+                    case "firefox":
+                        webDriver = new OpenQA.Selenium.Firefox.FirefoxDriver();
+                        break;
+                    case "googlechrome":
+                        webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                        break;
+                    case "iexplore":
+                        webDriver = new OpenQA.Selenium.IE.InternetExplorerDriver();
+                        break;
+                    default:
+                        this.agentLog.message("Invalid browser specificed: " + this.testBrowser);
+                        return false;
+                }
+
+                // JEO: This is a ghetto hack to help prevent issues where IE does not allow you to 
+                // click on non-visibile elements. This can crop up pretty often and hopefully will
+                // be fixed in later versions of Web Driver.
+                webDriver.Navigate().GoToUrl("http://www.google.com");
+
+                OpenQA.Selenium.IJavaScriptExecutor jsExecutor = (OpenQA.Selenium.IJavaScriptExecutor) webDriver;
+                jsExecutor.ExecuteScript("if(window.screen){window.moveTo(0,0);window.resizeTo(window.screen.availWidth, window.screen.availHeight);};");
+                
+                // loop across all the tests and run them.
+                String testBasedir = Path.GetDirectoryName(this.testRunIndexHtml);
+
+                foreach (String test in tests)
+                {
+                    String testFile = testBasedir + "\\" + test;
+
+                    this.testLog.message("running test: " + testFile);
+
+                    ArrayList testCommands = this.getTestCommands(testFile);
+
+                    Selenium_Test seTest = new Selenium_Test(webDriver, this.seleniumTestLog);
+
+                    int commandId = 0;
+                    foreach (Selenium_Test_Trinome testCommand in testCommands)
+                    {
+                        commandId++;
+                        this.testLog.message("debug - testCommand[" + commandId + " of " + testCommands.Count + "]: " + testCommand.command);
+                    }
+
+                    commandId = 0;
+                    foreach (Selenium_Test_Trinome testCommand in testCommands)
+                    {
+                        commandId++;
+                        this.testLog.message("testCommand[" + commandId +" of " +testCommands.Count + "]: '" + testCommand.command + "'");
+                        seTest.processSelenese(testCommand);
+                        this.testLog.message("testCommand finished");
+                    }
+
+                    this.testLog.message("finished test: " + testFile);
+                }
+
+                this.testLog.message("shutting down selenium");
+
+                webDriver.Quit();
+
+                this.testLog.message("completed running suite");
+                return true;
+            }
+            catch (Exception e)
+            {
+                this.testLog.message("Failed running test: " + e.Message);
+            }
+
+            return false;
         }
 
         public Boolean runWork()
@@ -321,6 +544,15 @@ namespace Continuum_Windows_Testing_Agent
                 // init testing directory.
                 if (this.initTestingDirectory() == false)
                 {
+                    this.agentLog.message("Failed to init testing directories");
+                    this.cleanup();
+                    return false;
+                }
+
+                // setup the log file
+                if (this.initLogFiles() == false)
+                {
+                    this.agentLog.message("Failed to init log files");
                     this.cleanup();
                     return false;
                 }
@@ -328,13 +560,7 @@ namespace Continuum_Windows_Testing_Agent
                 // download zip file.
                 if (this.fetchZipFile() == false)
                 {
-                    this.cleanup();
-                    return false;
-                }
-
-                // setup the log file
-                if (this.initLogFile() == false)
-                {
+                    this.agentLog.message("Failed to download zip file");
                     this.cleanup();
                     return false;
                 }
@@ -342,6 +568,7 @@ namespace Continuum_Windows_Testing_Agent
                 // find the index.html file
                 if (this.findTestIndexFile() == false)
                 {
+                    this.agentLog.message("Failed to find test index file");
                     this.cleanup();
                     return false;
                 }
@@ -349,28 +576,36 @@ namespace Continuum_Windows_Testing_Agent
                 // find the selenium jar file
                 if (this.findSeleniumServerJarFile() == false)
                 {
+                    this.agentLog.message("Failed to find selenium jar file");
                     this.cleanup();
                     return false;
                 }
 
+                // Create a self pointing proxy file for IE (if needed).
                 if (this.createProxyFile() == false)
                 {
+                    this.agentLog.message("Failed to create proxy file");
                     this.cleanup();
                     return false;
                 }
 
-                /*
-                // jeo - temp
+                // jeo - prototyping the exclusion of the commandline batch runner.
+                // The big thing we want is control over timing and the logging.
                 if (this.startSeleniumServer() == true)
                 {
+
                     this.sendWorkToServer();
-                    System.Threading.Thread.Sleep(2000);
+
+                    this.seleniumTestLog.closeLogFile();
+
+                    return true;
                 }
+
                 this.cleanup();
                 return false;
-                */
 
                 // create the commandline 
+                /*
                 if (this.createTestRunCommandLine() == false)
                 {
                     this.cleanup();
@@ -381,11 +616,12 @@ namespace Continuum_Windows_Testing_Agent
                 this.execTestSuite();
 
                 return true;
-
+                */
             }
             catch (Exception e)
             {
-                this.log.message("Failed to run test suite message: " + e.Message);
+                this.testLog.message("failed to run test suite message: " + e.Message);
+                this.agentLog.message("Failed to run test suite message: " + e.Message);
                 this.cleanup();
                 return false;
             }

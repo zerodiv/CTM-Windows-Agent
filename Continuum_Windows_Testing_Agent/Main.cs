@@ -177,7 +177,7 @@ namespace Continuum_Windows_Testing_Agent
             {
                 // ask for work if any is available.
                 this.et.requestWork(guid, this.hostnameBox.Text);
-                this.lastRunLogBox.Text = this.et.log.getLog();
+                this.lastRunLogBox.Text = this.et.log.getLogContents();
 
                 DateTime now = DateTime.Now;
                 this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);

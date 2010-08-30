@@ -120,15 +120,8 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
-
-
-
-
-
         public Boolean requestWork(String guid, String masterHostname)
         {
-
-            this.log.reset();
 
             WebClient masterClient = new WebClient();
 
@@ -191,8 +184,9 @@ namespace Continuum_Windows_Testing_Agent
                 resultPostValues.Add("testRunBrowserId", workRunnerObj.testRunBrowserId.ToString());
                 resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
                 resultPostValues.Add("testStatus", workRunnerObj.testStatus.ToString());
-                resultPostValues.Add("runLog", workRunnerObj.testLog);
-                resultPostValues.Add("seleniumLog", workRunnerObj.seleniumLog);
+                resultPostValues.Add("runLog", workRunnerObj.testLog.getLogContents());
+                resultPostValues.Add("seleniumLog", workRunnerObj.seleniumTestLog.getLogContents());
+
                 String logUrl = "http://" + masterHostname + "/et/log/";
                 masterClient.UploadValues(logUrl, resultPostValues);
 

@@ -103,7 +103,7 @@ namespace Continuum_Windows_Testing_Agent
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 this.exists = false;
             }

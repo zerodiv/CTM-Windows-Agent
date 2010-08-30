@@ -8,7 +8,7 @@ namespace Continuum_Windows_Testing_Agent
 {
     class AgentLog
     {
-        private String log;
+        private StreamWriter fh;
         private Boolean useLogFile;
         private String logFile;
 
@@ -16,32 +16,65 @@ namespace Continuum_Windows_Testing_Agent
         {
             this.useLogFile = true;
             this.logFile = Environment.GetEnvironmentVariable("TEMP") + "\\ctm_agent.log";
+            this.initLog();
         }
 
-        public void reset()
+        public AgentLog(String logFile)
         {
-            this.log = "";
+            this.useLogFile = true;
+            this.logFile = logFile;
+            this.initLog();
+        }
+
+        private void initLog()
+        {
+            if (this.useLogFile != true)
+            {
+                return;
+            }
+
+            if (this.fh != null)
+            {
+                return;
+            }
+
+            try
+            {
+                this.fh = new StreamWriter(this.logFile);
+            }
+            catch
+            {
+                this.useLogFile = false;
+                this.logFile = "";
+            }
         }
 
         public void message(String message)
         {
+            this.initLog();
+
             String ts = System.DateTime.Now.ToString();
 
             if (this.useLogFile == true)
             {
-                using (StreamWriter sw = File.AppendText(this.logFile))
-                {
-                    sw.WriteLine(ts + " - " + message);
-                }  
-                
+                this.fh.WriteLine(ts + " - " + message);
+                this.fh.Flush();
             }
 
-            this.log += ts + " - " + message + "\r\n";
         }
 
-        public String getLog()
+        public String getLogContents()
         {
-            return this.log;
+            if (this.useLogFile != true)
+            {
+                return "";
+            }
+            if (this.fh != null)
+            {
+                this.fh.Close();
+                this.fh = null;
+            }
+            return File.ReadAllText(this.logFile);
         }
 
     }
