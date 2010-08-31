@@ -631,7 +631,7 @@ namespace Continuum_Windows_Testing_Agent
         {
             if (Directory.Exists(this.tempTestDir) == true)
             {
-                Directory.Delete(this.tempTestDir, true);
+                // Directory.Delete(this.tempTestDir, true);
             }
             if (File.Exists(this.tempZipFile) == true)
             {

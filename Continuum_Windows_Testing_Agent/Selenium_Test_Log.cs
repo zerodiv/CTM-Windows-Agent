@@ -73,18 +73,40 @@ namespace Continuum_Windows_Testing_Agent
         {
             try
             {
+                if (this.fh == null)
+                {
+                    return true;
+                }
+
                 this.stopTest = System.DateTime.UtcNow;
 
                 // write header 
+                String cssFile = "http://jorcutt-desktop/css/common.css";
+
                 this.fh.WriteLine("<html>");
                 this.fh.WriteLine("<head>");
                 this.fh.WriteLine("<title>CTM - Test Run Log</title>");
+                this.fh.WriteLine("<link href=\"" + cssFile + "\" type=\"text/css\" rel=\"stylesheet\"/>");
                 this.fh.WriteLine("</head>");
                 this.fh.WriteLine("<body>");
-                this.fh.WriteLine("<table>");
+
+                this.fh.WriteLine("<div class=\"aiTableContainer aiFullWidth\">");
+                this.fh.WriteLine("<table class=\"ctmTable aiFullWidth\">");
                 
+                // put out the colum headers.
+                this.fh.WriteLine("<tr>");
+                this.fh.WriteLine("<th>#</th>");
+                this.fh.WriteLine("<th>Command:</th>");
+                this.fh.WriteLine("<th>Target:</th>");
+                this.fh.WriteLine("<th>Value:</th>");
+                this.fh.WriteLine("<th>Start:</th>");
+                this.fh.WriteLine("<th>Stop:</th>");
+                this.fh.WriteLine("<th>Elapsed:</th>");
+                this.fh.WriteLine("</tr>");
+
                 // chunk in body
                 this.bodyFh.Close();
+                this.bodyFh = null;
                 
                 StreamReader readBodyFh = new StreamReader(this.bodyFile);
                 while (readBodyFh.EndOfStream != true)
@@ -92,18 +114,23 @@ namespace Continuum_Windows_Testing_Agent
                     String line = readBodyFh.ReadLine();
                     this.fh.WriteLine(line);
                 }
-                readBodyFh.Close();
 
+                readBodyFh.Close();
+                
                 // cleanup from the body.
                 File.Delete(this.bodyFile);
                 this.bodyFile = "";
 
                 // write footer
                 this.fh.WriteLine("</table>");
+                this.fh.WriteLine("</div>");
+
                 this.fh.WriteLine("</body>");
                 this.fh.WriteLine("</html>");
 
                 this.fh.Close();
+                this.fh = null;
+
             }
             catch (Exception e)
             {
@@ -137,7 +164,14 @@ namespace Continuum_Windows_Testing_Agent
 
         public String getLogContents()
         {
-            return File.ReadAllText(this.logFile);
+            try
+            {
+                return File.ReadAllText(this.logFile);
+            }
+            catch (Exception e)
+            {
+                return "Failed to read log file: " + e.Message;
+            }
         }
 
         public void logTrinome(Selenium_Test_Trinome triNome, Boolean sucessful, String message )
@@ -154,6 +188,7 @@ namespace Continuum_Windows_Testing_Agent
             this.totalCommands++;
             
             this.bodyFh.WriteLine("<tr class=\"" + cssClass + "\">");
+            this.bodyFh.WriteLine("<td>" + this.totalCommands + "</td>");
             this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.command) + "</td>");
             this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.target) + "</td>");
             this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.value) + "</td>");

@@ -296,22 +296,8 @@ namespace Continuum_Windows_Testing_Agent
 
         public Boolean seleneseWaitForPageToLoad(Selenium_Test_Trinome testCommand)
         {
-            this.log.logFailure(testCommand, "This command is not supported for now");
-            return false;
-            /*
-            this.log.startTimer();
-            try
-            {
-                this.se.WaitForPageToLoad(testCommand.value);
-                this.log.logSuccess(testCommand, "");
-                return true;
-            }
-            catch (Exception e)
-            {
-                this.log.logFailure(testCommand, e.Message);
-            }
-            return false;
-            */
+            this.log.logSuccess(testCommand, "*WARNING* This command means nothing now under webDriver, you are safe in removing this command.");
+            return true;
         }
 
         public Boolean seleneseSelect(Selenium_Test_Trinome testCommand)
