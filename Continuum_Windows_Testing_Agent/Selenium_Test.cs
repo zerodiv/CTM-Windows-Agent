@@ -31,8 +31,8 @@ namespace Continuum_Windows_Testing_Agent
         }
 
         public Boolean processSelenese(Selenium_Test_Trinome testCommand)
-        
         {
+            
             // Special exception for cleaning up / interpolating the testCommand into the new values.
             if (testCommand.command != "store")
             {
@@ -82,6 +82,9 @@ namespace Continuum_Windows_Testing_Agent
             this.log.startTimer();
             try
             {
+                // If the value is javascript fix up the target / values.
+                testCommand.target = this.runJavascriptValue(testCommand.target);
+
                 this.testVariables.consumeTrinome(testCommand);
                 this.log.stopTimer();
                 this.log.logSuccess(testCommand, "");
@@ -262,8 +265,38 @@ namespace Continuum_Windows_Testing_Agent
 
         public Boolean seleneseClickAndWait(Selenium_Test_Trinome testCommand )
         {
-            // same action as a click now since page loads actually block.
-            return this.seleneseClick(testCommand);
+            this.log.startTimer();
+            try
+            {
+                IWebElement element = this.webDriver.FindElement(this.convertSelenseLocatorString(testCommand.target));
+
+                // Click is a blocking operand on most browsers.
+                element.Click();
+
+                this.log.logSuccess(testCommand, "" );
+                /*
+                int testWait = 3000;
+
+                if (testCommand.value != "")
+                {
+                    testWait = Convert.ToInt32(testCommand.value);
+                }
+
+                    if (testWait > 0)
+                    {
+                        System.Threading.Thread.Sleep(testWait);
+                    }
+                
+
+                this.log.logSuccess(testCommand, "waited: " + testWait);
+                */
+                return true;
+            }
+            catch (Exception e)
+            {
+                this.log.logFailure(testCommand, e.Message);
+            }
+            return false;
         }
 
         public Boolean seleneseClick(Selenium_Test_Trinome testCommand)
@@ -273,17 +306,7 @@ namespace Continuum_Windows_Testing_Agent
             {
                 IWebElement element = this.webDriver.FindElement(this.convertSelenseLocatorString(testCommand.target));
 
-                
-                if (element.GetAttribute("type") == "checkbox")
-                {
-                    // element.Select();
                     element.Click();
-                    // element.Toggle();
-                }
-                else
-                {
-                    element.Click();
-                }
                 this.log.logSuccess(testCommand, "");
                 return true;
             }
@@ -296,7 +319,7 @@ namespace Continuum_Windows_Testing_Agent
 
         public Boolean seleneseWaitForPageToLoad(Selenium_Test_Trinome testCommand)
         {
-            this.log.logSuccess(testCommand, "*WARNING* This command means nothing now under webDriver, you are safe in removing this command.");
+            this.log.logSuccess(testCommand, "");
             return true;
         }
 

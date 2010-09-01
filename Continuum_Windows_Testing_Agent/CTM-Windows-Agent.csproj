@@ -107,7 +107,7 @@
   <ItemGroup>
     <Compile Include="LocalWebBrowser.cs" />
     <Compile Include="OSInfo.cs" />
-    <Compile Include="PhoneHomeAgent.cs" />
+    <Compile Include="CTM_Agent.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,12 +138,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="AgentLog.cs" />
+    <Compile Include="CTM_Agent_Log.cs" />
     <Compile Include="Selenium_Test.cs" />
     <Compile Include="Selenium_Test_Suite_Variables.cs" />
     <Compile Include="Selenium_Test_Trinome.cs" />
     <Compile Include="Selenium_Test_Log.cs" />
-    <Compile Include="WorkRunner.cs" />
+    <Compile Include="CTM_Work_Runner.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

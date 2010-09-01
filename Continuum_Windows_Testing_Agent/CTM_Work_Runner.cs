@@ -11,14 +11,16 @@ using Ionic.Zip;
 using OpenQA.Selenium;
 using Selenium;
 using System.Collections;
+using System.ComponentModel;
 
 namespace Continuum_Windows_Testing_Agent
 {
 
-    class WorkRunner
+    class CTM_Work_Runner
     {
-        public AgentLog agentLog;
-        public AgentLog testLog;
+        
+        public CTM_Agent_Log agentLog;
+        public CTM_Agent_Log testLog;
 
         public UInt64 testRunId;
         public UInt64 testRunBrowserId;
@@ -27,10 +29,6 @@ namespace Continuum_Windows_Testing_Agent
         public String testBaseurl;
 
         public int testStatus;
-        public long timeElapsed;
-        public String seleniumStdout;
-        public String seleniumStderr;
-        public String seleniumLog;
         public String seleniumLogFile;
         public Selenium_Test_Log seleniumTestLog;
 
@@ -39,12 +37,10 @@ namespace Continuum_Windows_Testing_Agent
         private String tempZipFile;
         private String tempLogFile;
         private String testRunIndexHtml;
-        private String seleniumJarFile;
-        private String seleniumCommandLine;
 
-        public WorkRunner(AgentLog agentLog)
+        public CTM_Work_Runner(CTM_Agent_Log agentLog)
         {
-            this.agentLog = agentLog;           
+            this.agentLog = agentLog;
         }
 
         private Boolean initTestingDirectory()
@@ -111,7 +107,7 @@ namespace Continuum_Windows_Testing_Agent
             }
             catch (Exception e)
             {
-                this.testLog.message("Failed to unzip message: " + e.Message );
+                this.testLog.message("Failed to unzip message: " + e.Message);
                 return false;
             }
 
@@ -125,7 +121,7 @@ namespace Continuum_Windows_Testing_Agent
             this.tempLogFile = this.tempTestDir + "\\test.log";
             this.agentLog.message("init testLogFile: " + this.tempLogFile);
 
-            this.testLog = new AgentLog(this.tempLogFile);
+            this.testLog = new CTM_Agent_Log(this.tempLogFile);
 
 
             this.seleniumLogFile = this.tempTestDir + "\\selenium.html";
@@ -161,12 +157,6 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
-        private Boolean findSeleniumServerJarFile()
-        {
-            this.seleniumJarFile = Directory.GetCurrentDirectory() + "\\selenium-server.jar";
-            return true;
-        }
-
         private Boolean createProxyFile()
         {
 
@@ -195,150 +185,6 @@ namespace Continuum_Windows_Testing_Agent
 
 
         }
-
-        private Boolean createTestRunCommandLine()
-        {
-            // run the test against the harness with the logging on.
-            this.seleniumCommandLine = "";
-
-            this.seleniumCommandLine += "-Dhttp.proxyHost=localhost ";
-            this.seleniumCommandLine += "-Dhttp.proxyPort=4444 ";
-
-            // point to the selenium-server.jar file.
-            this.seleniumCommandLine += "-jar \"" + this.seleniumJarFile + "\" ";
-
-            // JEO - Duane claims that this is not needed.
-            // this.seleniumCommandLine += "-multiwindow ";
-
-            // suprise suprise IE is special and needs the singleWindow param 
-            if (this.testBrowser == "iexplore")
-            {
-                this.seleniumCommandLine += "-singleWindow ";
-                // this.seleniumCommandLine += "-avoidProxy ";
-            }
-
-            // JEO - 08/19/2010
-            // We trust all SSL certs otherwise you break shit.
-            this.seleniumCommandLine += "-trustAllSSLCertificates ";
-
-            // We are running a htmlSuite
-            this.seleniumCommandLine += "-htmlSuite ";
-
-            // add the test browser information
-            /*
-            if (testBrowser == "iexplore")
-            {
-               testBrowser = "iexploreproxy";
-            }
-            */
-
-            String IE_Path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) +
-                "\\Internet Explorer\\iexplore.exe";
-            if (testBrowser == "iexplore" && File.Exists(IE_Path))
-            {
-                this.seleniumCommandLine += "\"*custom " + IE_Path + "\" ";
-            }
-            else
-            {
-                this.seleniumCommandLine += "\"*" + this.testBrowser + "\" ";
-
-            }
-
-            this.seleniumCommandLine += "\"" + testBaseurl + "\" ";
-            this.seleniumCommandLine += "\"" + testRunIndexHtml + "\" ";
-            this.seleniumCommandLine += "\"" + tempLogFile + "\" ";
-
-            this.testLog.message("seleniumCommandline:\n" + this.seleniumCommandLine);
-
-            return true;
-        }
-
-        private Boolean execTestSuite()
-        {
-
-
-            System.Diagnostics.Process seleniumServer = new System.Diagnostics.Process();
-            seleniumServer.EnableRaisingEvents = false;
-            seleniumServer.StartInfo.UseShellExecute = false;
-            seleniumServer.StartInfo.FileName = "java";
-            seleniumServer.StartInfo.Arguments = this.seleniumCommandLine;
-            seleniumServer.StartInfo.RedirectStandardError = true;
-            seleniumServer.StartInfo.RedirectStandardOutput = true;
-
-            seleniumServer.Start();
-
-            // seleniumServer.BeginOutputReadLine();
-            this.seleniumStdout = seleniumServer.StandardOutput.ReadToEnd();
-            this.seleniumStderr = seleniumServer.StandardError.ReadToEnd();
-
-            seleniumServer.WaitForExit();
-
-            // push the log back up to the server.
-            this.timeElapsed =
-                seleniumServer.ExitTime.ToFileTimeUtc() -
-                seleniumServer.StartTime.ToFileTimeUtc();
-
-            this.testStatus = 0;
-            if (seleniumServer.ExitCode == 0)
-            {
-                this.testStatus = 1;
-                this.testLog.message("ran test");
-                this.agentLog.message("ran test");
-            }
-            else
-            {
-                this.testStatus = 0;
-                this.testLog.message("failed to run test");
-                this.agentLog.message("failed to run test");
-            }
-
-            seleniumServer.Close();
-
-            if (this.testStatus == 0)
-            {
-                /*
-                 * TODO: jeo remove me
-                 * 
-                this.testLog += "<pre>\n";
-                this.testLog += "Stdout:\n";
-                this.testLog += this.seleniumStdout;
-                this.testLog += "Stderr:\n";
-                this.testLog += this.seleniumStderr;
-                this.testLog += "</pre>\n";
-                 */
-            }
-
-            if (File.Exists(this.tempLogFile))
-            {
-                this.seleniumLog = File.ReadAllText(this.tempLogFile);
-            }
-
-            return true;
-        }
-
-        private Boolean startSeleniumServer()
-        {
-            return true;
-            /*
-            if (this.seleniumServer == null)
-            {
-
-                this.seleniumServer = new System.Diagnostics.Process();
-                this.seleniumServer.EnableRaisingEvents = false;
-                this.seleniumServer.StartInfo.UseShellExecute = false;
-                this.seleniumServer.StartInfo.FileName = "java";
-                this.seleniumServer.StartInfo.Arguments = "-jar \"" + this.seleniumJarFile + "\" -log \"jeo.log\" ";
-                this.seleniumServer.StartInfo.RedirectStandardError = true;
-                this.seleniumServer.StartInfo.RedirectStandardOutput = true;
-                // this.seleniumServer.StartInfo.CreateNoWindow = true;            
-                return this.seleniumServer.Start();
-
-            }
-
-            return true;
-            */
-        }
-
 
         public ArrayList getTestsFromTestSuite()
         {
@@ -393,7 +239,6 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
-
         public ArrayList getTestCommands(String testFile)
         {
             ArrayList testCommands = new ArrayList();
@@ -403,7 +248,7 @@ namespace Continuum_Windows_Testing_Agent
             HtmlDocument doc = new HtmlDocument();
 
             doc.OptionFixNestedTags = true;
-            
+
             doc.Load(testFile);
 
             if (doc.ParseErrors != null && doc.ParseErrors.Count() > 0)
@@ -424,8 +269,9 @@ namespace Continuum_Windows_Testing_Agent
                 foreach (HtmlNode testTrinome in testCommandRow.SelectNodes("td"))
                 {
                     tri++;
-                    switch( tri ) {
-                        case 1: 
+                    switch (tri)
+                    {
+                        case 1:
                             triNome.command = testTrinome.InnerHtml;
                             break;
                         case 2:
@@ -435,7 +281,7 @@ namespace Continuum_Windows_Testing_Agent
                             triNome.value = testTrinome.InnerHtml;
                             break;
                     }
-                    
+
                 }
 
                 triNome.target = System.Web.HttpUtility.HtmlDecode(triNome.target);
@@ -450,12 +296,12 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
-        private Boolean sendWorkToServer()
+        private Boolean runTestSuite()
         {
             // Parse up the suite and start sending it over to the server.
             try
             {
-                
+
                 ArrayList tests = this.getTestsFromTestSuite();
 
                 // start up the requested browser.
@@ -463,7 +309,8 @@ namespace Continuum_Windows_Testing_Agent
 
                 IWebDriver webDriver;
 
-                switch ( this.testBrowser ) {
+                switch (this.testBrowser)
+                {
                     case "chrome":
                         webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
                         break;
@@ -486,9 +333,12 @@ namespace Continuum_Windows_Testing_Agent
                 // be fixed in later versions of Web Driver.
                 webDriver.Navigate().GoToUrl("http://www.google.com");
 
-                OpenQA.Selenium.IJavaScriptExecutor jsExecutor = (OpenQA.Selenium.IJavaScriptExecutor) webDriver;
+                // ImplicityWait() change
+                webDriver.Manage().Timeouts().ImplicitlyWait(new TimeSpan(0, 1, 0));
+
+                OpenQA.Selenium.IJavaScriptExecutor jsExecutor = (OpenQA.Selenium.IJavaScriptExecutor)webDriver;
                 jsExecutor.ExecuteScript("if(window.screen){window.moveTo(0,0);window.resizeTo(window.screen.availWidth, window.screen.availHeight);};");
-                
+
                 // loop across all the tests and run them.
                 String testBasedir = Path.GetDirectoryName(this.testRunIndexHtml);
 
@@ -506,14 +356,25 @@ namespace Continuum_Windows_Testing_Agent
                     foreach (Selenium_Test_Trinome testCommand in testCommands)
                     {
                         commandId++;
-                        this.testLog.message("debug - testCommand[" + commandId + " of " + testCommands.Count + "]: " + testCommand.command);
+                        /*
+                        this.testLog.message(
+                            "debug - testCommand[" + commandId + " of " + testCommands.Count + "] " +
+                            "command: " + testCommand.command + " " +
+                            "target: " + testCommand.target + " " +
+                            "value: " + testCommand.value );
+                        */
                     }
 
                     commandId = 0;
                     foreach (Selenium_Test_Trinome testCommand in testCommands)
                     {
                         commandId++;
-                        this.testLog.message("testCommand[" + commandId +" of " +testCommands.Count + "]: '" + testCommand.command + "'");
+                        this.testLog.message(
+                            "testCommand[" + commandId + " of " + testCommands.Count + "] " +
+                            "command: " + testCommand.command + " " +
+                            "target: " + testCommand.target + " " +
+                            "value: " + testCommand.value);
+                        // this.testLog.message("testCommand[" + commandId + " of " + testCommands.Count + "]: '" + testCommand.command + "'");
                         seTest.processSelenese(testCommand);
                         this.testLog.message("testCommand finished");
                     }
@@ -538,6 +399,7 @@ namespace Continuum_Windows_Testing_Agent
 
         public Boolean runWork()
         {
+
             try
             {
 
@@ -573,14 +435,6 @@ namespace Continuum_Windows_Testing_Agent
                     return false;
                 }
 
-                // find the selenium jar file
-                if (this.findSeleniumServerJarFile() == false)
-                {
-                    this.agentLog.message("Failed to find selenium jar file");
-                    this.cleanup();
-                    return false;
-                }
-
                 // Create a self pointing proxy file for IE (if needed).
                 if (this.createProxyFile() == false)
                 {
@@ -591,36 +445,25 @@ namespace Continuum_Windows_Testing_Agent
 
                 // jeo - prototyping the exclusion of the commandline batch runner.
                 // The big thing we want is control over timing and the logging.
-                if (this.startSeleniumServer() == true)
+
+                // run the tests.
+                if (this.runTestSuite() == true)
                 {
-
-                    this.sendWorkToServer();
-
-                    this.seleniumTestLog.closeLogFile();
-
-                    return true;
+                    this.testStatus = 1;
+                }
+                else
+                {
+                    this.testStatus = 0;
                 }
 
-                this.cleanup();
-                return false;
-
-                // create the commandline 
-                /*
-                if (this.createTestRunCommandLine() == false)
-                {
-                    this.cleanup();
-                    return false;
-                }
-
-                // execute the selenium test suite
-                this.execTestSuite();
+                this.seleniumTestLog.closeLogFile();
 
                 return true;
-                */
+
             }
             catch (Exception e)
             {
-                this.testLog.message("failed to run test suite message: " + e.Message);
+                // this.testLog.message("failed to run test suite message: " + e.Message);
                 this.agentLog.message("Failed to run test suite message: " + e.Message);
                 this.cleanup();
                 return false;
@@ -629,6 +472,7 @@ namespace Continuum_Windows_Testing_Agent
 
         public void cleanup()
         {
+            /*
             if (Directory.Exists(this.tempTestDir) == true)
             {
                 // Directory.Delete(this.tempTestDir, true);
@@ -637,6 +481,22 @@ namespace Continuum_Windows_Testing_Agent
             {
                 File.Delete(this.tempZipFile);
             }
+
+            // Flush all the variables pertaining to this run.
+            this.seleniumLogFile = null;
+            this.seleniumTestLog = null;
+            this.tempLogFile = null;
+            this.tempTestDir = null;
+            this.tempZipFile = null;
+            this.testBaseurl = null;
+            this.testBrowser = null;
+            this.testDownloadUrl = null;
+            this.testLog = null;
+            this.testRunBrowserId = 0;
+            this.testRunId = 0;
+            this.testRunIndexHtml = null;
+            this.testStatus = 0;
+            */
         }
 
     }

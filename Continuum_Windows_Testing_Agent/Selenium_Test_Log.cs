@@ -21,6 +21,8 @@ namespace Continuum_Windows_Testing_Agent
         private DateTime stopTest;
 
         private long totalCommands;
+        private long totalSuccessfulCommands;
+        private long totalFailedCommands;
 
         public Selenium_Test_Log(String logFile ) {
             try
@@ -45,6 +47,8 @@ namespace Continuum_Windows_Testing_Agent
                 this.stopTime = System.DateTime.UtcNow;
 
                 this.totalCommands = 0;
+                this.totalFailedCommands = 0;
+                this.totalSuccessfulCommands = 0;
 
                 this.initLogFile();
                 
@@ -92,8 +96,23 @@ namespace Continuum_Windows_Testing_Agent
 
                 this.fh.WriteLine("<div class=\"aiTableContainer aiFullWidth\">");
                 this.fh.WriteLine("<table class=\"ctmTable aiFullWidth\">");
+                this.fh.WriteLine("<tr>");
+                this.fh.WriteLine("<th>Total Commands:</th>");
+                this.fh.WriteLine("<th>Successful:</th>");
+                this.fh.WriteLine("<th>Failed:</th>");
+                this.fh.WriteLine("</tr>");
+
+                this.fh.WriteLine("<tr class=\"odd\">");
+                this.fh.WriteLine("<td><center>" + this.totalCommands + "</center></td>");
+                this.fh.WriteLine("<td><center>" + this.totalSuccessfulCommands + "</center></td>");
+                this.fh.WriteLine("<td><center>" + this.totalFailedCommands + "</center></td>");
+                this.fh.WriteLine("</tr>");
+
+                this.fh.WriteLine("</table>");
+                this.fh.WriteLine("<table class=\"ctmTable aiFullWidth\">");
                 
                 // put out the colum headers.
+               
                 this.fh.WriteLine("<tr>");
                 this.fh.WriteLine("<th>#</th>");
                 this.fh.WriteLine("<th>Command:</th>");
@@ -102,6 +121,7 @@ namespace Continuum_Windows_Testing_Agent
                 this.fh.WriteLine("<th>Start:</th>");
                 this.fh.WriteLine("<th>Stop:</th>");
                 this.fh.WriteLine("<th>Elapsed:</th>");
+                this.fh.WriteLine("<th>Message:</th>");
                 this.fh.WriteLine("</tr>");
 
                 // chunk in body
@@ -181,8 +201,14 @@ namespace Continuum_Windows_Testing_Agent
 
             String cssClass = "failure";
 
-            if ( sucessful == true ) {
+            if (sucessful == true)
+            {
                 cssClass = "successful";
+                this.totalSuccessfulCommands++;
+            }
+            else
+            {
+                this.totalFailedCommands++;
             }
 
             this.totalCommands++;

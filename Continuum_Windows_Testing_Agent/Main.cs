@@ -13,12 +13,12 @@ namespace Continuum_Windows_Testing_Agent
 {
     public partial class Main : Form
     {
-        private PhoneHomeAgent et;
+        private CTM_Agent et;
 
         public Main()
         {
             InitializeComponent();
-            this.et = new PhoneHomeAgent();
+            this.et = new CTM_Agent();
         }
 
         private Boolean _setHostname(String host)
@@ -171,22 +171,20 @@ namespace Continuum_Windows_Testing_Agent
 
         private void activePolling()
         {
-            String guid = this._getGuid();
+            this.et.setGuid(this._getGuid());
+            this.et.setCTMHostname(this.hostnameBox.Text);
+            this.et.setLocalIp(this.ipBox.Text);
+            this.et.setMachineName(this.machineNameBox.Text);
 
-            if (this.et.registerHost(guid, this.hostnameBox.Text, this.ipBox.Text, this.machineNameBox.Text) == true)
+            this.et.run();
+
+            if (this.et.getIsRegistered() == true)
             {
-                // ask for work if any is available.
-                this.et.requestWork(guid, this.hostnameBox.Text);
-                this.lastRunLogBox.Text = this.et.log.getLogContents();
-
                 DateTime now = DateTime.Now;
                 this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
-
             }
-            else
-            {
-                this.ctmStatusLabel.Text = "failed to contact master";
-            }
+            
+            this.lastRunLogBox.Text = this.et.log.getLogContents();
             
         }
 
