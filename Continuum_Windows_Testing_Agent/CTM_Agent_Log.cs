@@ -3,56 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Collections;
 
 namespace Continuum_Windows_Testing_Agent
 {
     class CTM_Agent_Log
     {
-        private Boolean useLogFile;
-        private String logFile;
-
+        private ArrayList lastLogLines;
+        
         public CTM_Agent_Log()
         {
-            this.useLogFile = true;
-            this.logFile = Environment.GetEnvironmentVariable("TEMP") + "\\ctm_agent.log";
-            if (File.Exists(this.logFile))
-            {
-                File.Delete(this.logFile);
-            }
-        }
-
-        public CTM_Agent_Log(String logFile)
-        {
-            this.useLogFile = true;
-            this.logFile = logFile;
+            this.lastLogLines = new ArrayList();
         }
 
         public void message(String message)
         {
-            String ts = System.DateTime.Now.ToString();
-
-            if (this.useLogFile == true)
-            {
-                using (StreamWriter fh = new StreamWriter(this.logFile, true))
-                {
-                    fh.WriteLine(ts + " - " + message);
-                    fh.Flush();
-                    fh.Close();
+            return;
+            
+                // Manage the arraylist.
+                int maxEntries = 255;
+                if ( this.lastLogLines.Count > maxEntries ) {
+                    this.lastLogLines.RemoveRange(0, 1);
                 }
+                String logLine = System.DateTime.Now.ToString() + " - " + message;
+                this.lastLogLines.Add(logLine + "\r\n");
             }
-        }
 
-        public String getLogContents()
+        public String getLastLogLines()
         {
-            if (this.useLogFile != true)
+            String lastLogLines = "";
+            foreach (String logLine in this.lastLogLines)
             {
-                return "";
+                lastLogLines += logLine;
             }
-            if (File.Exists(this.logFile))
-            {
-                return File.ReadAllText(this.logFile);
-            }
-            return "";
+            return lastLogLines;
         }
 
     }

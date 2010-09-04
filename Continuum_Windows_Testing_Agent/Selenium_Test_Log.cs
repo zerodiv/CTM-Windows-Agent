@@ -194,6 +194,13 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
+        public void message(String message)
+        {
+            this.bodyFh.WriteLine("<tr class=\"odd\">");
+            this.bodyFh.WriteLine("<td colspan=\"8\">" + System.DateTime.Now.ToString() + " - " + System.Web.HttpUtility.HtmlEncode(message) + "</td>");
+            this.bodyFh.WriteLine("</tr>");
+        }
+
         public void logTrinome(Selenium_Test_Trinome triNome, Boolean sucessful, String message )
         {
             // yes, I trust you the programmer to engage stop time.

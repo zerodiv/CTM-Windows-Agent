@@ -26,8 +26,7 @@ namespace Continuum_Windows_Testing_Agent
 
         private WebClient ctmClient;
         private BackgroundWorker ctmBgWorker;
-        private CTM_Work_Runner ctmWorkRunner;
-
+   
         public LocalWebBrowser googlechrome;
         public LocalWebBrowser firefox;
         public LocalWebBrowser ie;
@@ -241,7 +240,7 @@ namespace Continuum_Windows_Testing_Agent
                         // TODO: JEO - We might not need this.
                         // this.ctmBgWorker.WorkerSupportsCancellation = true;
 
-                        this.ctmBgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(ctmBgWorker_RunWorkerCompleted);
+                        // this.ctmBgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(ctmBgWorker_RunWorkerCompleted);
                         this.ctmBgWorker.DoWork += new DoWorkEventHandler(ctmBgWorker_DoWork);
 
 
@@ -251,21 +250,21 @@ namespace Continuum_Windows_Testing_Agent
                         // init the work runner obj with the test run data.
 
 
-                       this.ctmWorkRunner = new CTM_Work_Runner(this.log);
+                       CTM_Work_Runner ctmWorkRunner = new CTM_Work_Runner();
 
-                        this.ctmWorkRunner.testRunId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunId").InnerText);
-                        this.ctmWorkRunner.testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
-                        this.ctmWorkRunner.testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
-                        this.ctmWorkRunner.testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
-                        this.ctmWorkRunner.testBaseurl = xmlDoc.SelectSingleNode("/etResponse/testBaseurl").InnerText;
+                       ctmWorkRunner.testRunId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunId").InnerText);
+                       ctmWorkRunner.testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
+                       ctmWorkRunner.testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
+                       ctmWorkRunner.testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
+                       ctmWorkRunner.testBaseurl = xmlDoc.SelectSingleNode("/etResponse/testBaseurl").InnerText;
 
-                        this.log.message(" testRunId: " + this.ctmWorkRunner.testRunId.ToString());
-                        this.log.message(" testRunBrowserId: " + this.ctmWorkRunner.testRunBrowserId.ToString());
-                        this.log.message(" testDownloadUrl: " + this.ctmWorkRunner.testDownloadUrl);
-                        this.log.message(" testBrowser: " + this.ctmWorkRunner.testBrowser);
-                        this.log.message(" testBaseurl: " + this.ctmWorkRunner.testBaseurl);
+                        this.log.message(" testRunId: " + ctmWorkRunner.testRunId.ToString());
+                        this.log.message(" testRunBrowserId: " + ctmWorkRunner.testRunBrowserId.ToString());
+                        this.log.message(" testDownloadUrl: " + ctmWorkRunner.testDownloadUrl);
+                        this.log.message(" testBrowser: " + ctmWorkRunner.testBrowser);
+                        this.log.message(" testBaseurl: " + ctmWorkRunner.testBaseurl);
 
-                        this.ctmBgWorker.RunWorkerAsync();
+                        this.ctmBgWorker.RunWorkerAsync(ctmWorkRunner);
 
                     }
                     else
@@ -285,43 +284,35 @@ namespace Continuum_Windows_Testing_Agent
 
         void ctmBgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            try
-            {
-                this.ctmWorkRunner.runWork();
-            }
-            catch (Exception ex)
-            {
-                this.log.message("uncaught run work exception message: " + ex.Message);
-            }
-        }
+            
+            CTM_Work_Runner ctmWorkRunner = (CTM_Work_Runner)e.Argument;
 
-        void ctmBgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
             try
             {
+                
+                ctmWorkRunner.runWork();
 
                 NameValueCollection resultPostValues = new NameValueCollection();
-                resultPostValues.Add("testRunBrowserId", this.ctmWorkRunner.testRunBrowserId.ToString());
+                resultPostValues.Add("testRunBrowserId", ctmWorkRunner.testRunBrowserId.ToString());
                 // TODO: jeo - we need to make a better timeElapsed tracker.
                 // resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
-                resultPostValues.Add("testStatus", this.ctmWorkRunner.testStatus.ToString());
-                resultPostValues.Add("runLog", this.ctmWorkRunner.testLog.getLogContents());
-                resultPostValues.Add("seleniumLog", this.ctmWorkRunner.seleniumTestLog.getLogContents());
+                resultPostValues.Add("testStatus", ctmWorkRunner.testStatus.ToString());
+                resultPostValues.Add("runLog", "");
+                resultPostValues.Add("seleniumLog", ctmWorkRunner.seleniumTestLog.getLogContents());
 
                 String logUrl = "http://" + this.ctmHostname + "/et/log/";
                 WebClient resultClient = new WebClient();
                 resultClient.UploadValues(logUrl, resultPostValues);
 
-                this.log.message("Completed test run: " + this.ctmWorkRunner.testRunId);
-
+                this.log.message("Completed test run: " + ctmWorkRunner.testRunId);
             }
             catch (Exception ex)
             {
-                this.log.message("uncaught run worker completion message: " + ex.Message);
+                this.log.message("uncaught run work exception message: " + ex.Message);
             }
             finally
             {
-                this.ctmWorkRunner.cleanup();
+                ctmWorkRunner.cleanup();
             }
         }
 

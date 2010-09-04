@@ -184,7 +184,7 @@ namespace Continuum_Windows_Testing_Agent
                 this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
             }
             
-            this.lastRunLogBox.Text = this.et.log.getLogContents();
+            this.lastRunLogBox.Text = this.et.log.getLastLogLines();
             
         }
 

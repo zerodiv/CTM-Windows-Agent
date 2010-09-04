@@ -32,7 +32,6 @@ namespace Continuum_Windows_Testing_Agent
 
         public Boolean processSelenese(Selenium_Test_Trinome testCommand)
         {
-            
             // Special exception for cleaning up / interpolating the testCommand into the new values.
             if (testCommand.command != "store")
             {
@@ -129,33 +128,6 @@ namespace Continuum_Windows_Testing_Agent
 
             return value;
 
-            /*
-            if (this.webDriver.GetType() == typeof(InternetExplorerDriver) )
-            {
-                if ( ((InternetExplorerDriver)this.webDriver).IsJavaScriptEnabled == true ) 
-                {
-                    Object ret = ((InternetExplorerDriver)this.webDriver).ExecuteScript(javascript, null);
-                    value = ret.ToString();
-                }
-            }
-            if (this.webDriver.GetType() == typeof(FirefoxDriver))
-            {
-                if (((FirefoxDriver)this.webDriver).IsJavaScriptEnabled == true)
-                {
-                    Object ret = ((FirefoxDriver)this.webDriver).ExecuteScript(javascript, null);
-                    value = ret.ToString();
-                }
-            }
-            if (this.webDriver.GetType() == typeof(ChromeDriver))
-            {
-                if (((ChromeDriver)this.webDriver).IsJavaScriptEnabled == true)
-                {
-                    Object ret = ((ChromeDriver)this.webDriver).ExecuteScript(javascript, null);
-                    value = ret.ToString();
-                }
-            }
-            return value;
-            */
         }
 
         public By convertSelenseLocatorString(String locator)
@@ -197,7 +169,6 @@ namespace Continuum_Windows_Testing_Agent
                 locator.Replace("identifier=", "");
                 return By.Id(locator);
             }
-            // We have to lookup by name, then id because old selenium supports both.
 
             try
             {
@@ -208,11 +179,9 @@ namespace Continuum_Windows_Testing_Agent
             catch
             {
                 // okay so by name failed, try id, otherwise they are fucked =)
-                By byId = By.Id(locator);
-                IWebElement target = this.webDriver.FindElement(byId);
-                return byId;
+                return By.Id(locator);
             }
-
+            
         }
 
         public Boolean seleneseOpen(Selenium_Test_Trinome testCommand)
