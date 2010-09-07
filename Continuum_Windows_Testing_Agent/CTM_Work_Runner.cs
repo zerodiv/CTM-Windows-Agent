@@ -29,6 +29,7 @@ namespace Continuum_Windows_Testing_Agent
         public int testStatus;
         public String seleniumLogFile;
         public Selenium_Test_Log seleniumTestLog;
+        public Boolean useVerboseTestLogs;
 
         private String proxyFile;
         private String tempTestDir;
@@ -115,7 +116,8 @@ namespace Continuum_Windows_Testing_Agent
         {
 
             this.seleniumLogFile = Environment.GetEnvironmentVariable("TEMP") + "\\selenium_" + this.testRunId + ".html";
-            this.seleniumTestLog = new Selenium_Test_Log(this.seleniumLogFile);
+
+            this.seleniumTestLog = new Selenium_Test_Log(this.useVerboseTestLogs, this.seleniumLogFile);
             this.seleniumTestLog.message("init seleniumLogFile: " + this.seleniumLogFile);
             
 

@@ -18,25 +18,25 @@ namespace Continuum_Windows_Testing_Agent
 
         public void message(String message)
         {
-            return;
-            
-                // Manage the arraylist.
-                int maxEntries = 255;
-                if ( this.lastLogLines.Count > maxEntries ) {
-                    this.lastLogLines.RemoveRange(0, 1);
-                }
-                String logLine = System.DateTime.Now.ToString() + " - " + message;
-                this.lastLogLines.Add(logLine + "\r\n");
+            // Manage the arraylist.
+            int maxEntries = 255;
+            if (this.lastLogLines.Count > maxEntries)
+            {
+                this.lastLogLines.RemoveRange(0, 1);
             }
+            String logLine = System.DateTime.Now.ToString() + " - " + message;
+            this.lastLogLines.Add(logLine + "\r\n");
+        }
+
 
         public String getLastLogLines()
         {
-            String lastLogLines = "";
+            String logLines = "";
             foreach (String logLine in this.lastLogLines)
             {
-                lastLogLines += logLine;
+                logLines += logLine;
             }
-            return lastLogLines;
+            return logLines;
         }
 
     }

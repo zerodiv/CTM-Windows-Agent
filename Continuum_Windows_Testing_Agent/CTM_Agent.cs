@@ -26,6 +26,7 @@ namespace Continuum_Windows_Testing_Agent
 
         private WebClient ctmClient;
         private BackgroundWorker ctmBgWorker;
+        private Boolean useVerboseTestLogs;
    
         public LocalWebBrowser googlechrome;
         public LocalWebBrowser firefox;
@@ -50,6 +51,11 @@ namespace Continuum_Windows_Testing_Agent
             this.ie = new LocalWebBrowser("ie");
             this.safari = new LocalWebBrowser("safari");
 
+        }
+
+        public void setUseVerboseTestLogs(Boolean useVerboseLogs)
+        {
+            this.useVerboseTestLogs = useVerboseLogs; 
         }
 
         public String setGuid(String guid)
@@ -257,6 +263,7 @@ namespace Continuum_Windows_Testing_Agent
                        ctmWorkRunner.testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
                        ctmWorkRunner.testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
                        ctmWorkRunner.testBaseurl = xmlDoc.SelectSingleNode("/etResponse/testBaseurl").InnerText;
+                       ctmWorkRunner.useVerboseTestLogs = this.useVerboseTestLogs;
 
                         this.log.message(" testRunId: " + ctmWorkRunner.testRunId.ToString());
                         this.log.message(" testRunBrowserId: " + ctmWorkRunner.testRunBrowserId.ToString());

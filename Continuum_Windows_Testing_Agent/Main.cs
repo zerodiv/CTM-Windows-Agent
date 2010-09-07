@@ -175,7 +175,7 @@ namespace Continuum_Windows_Testing_Agent
             this.et.setCTMHostname(this.hostnameBox.Text);
             this.et.setLocalIp(this.ipBox.Text);
             this.et.setMachineName(this.machineNameBox.Text);
-
+            this.et.setUseVerboseTestLogs(this.useVerboseTestLogsCheckbox.Checked);
             this.et.run();
 
             if (this.et.getIsRegistered() == true)
@@ -183,8 +183,10 @@ namespace Continuum_Windows_Testing_Agent
                 DateTime now = DateTime.Now;
                 this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
             }
-            
-            this.lastRunLogBox.Text = this.et.log.getLastLogLines();
+            else
+            {
+                this.ctmStatusLabel.Text = "Phoning home now";
+            }
             
         }
 
@@ -221,6 +223,21 @@ namespace Continuum_Windows_Testing_Agent
         private void label8_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void logRefresh_Tick(object sender, EventArgs e)
+        {
+            this.lastRunLogBox.Text = this.et.log.getLastLogLines();
         }
     }
 }

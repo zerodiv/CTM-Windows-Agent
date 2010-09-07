@@ -20,13 +20,17 @@ namespace Continuum_Windows_Testing_Agent
         private DateTime startTest;
         private DateTime stopTest;
 
+        private Boolean useVerboseTestLogs;
+
         private long totalCommands;
         private long totalSuccessfulCommands;
         private long totalFailedCommands;
 
-        public Selenium_Test_Log(String logFile ) {
+        public Selenium_Test_Log(Boolean useVerboseTestLogs, String logFile ) {
             try
             {
+                this.useVerboseTestLogs = useVerboseTestLogs;
+
                 this.logFile = logFile;
                 this.bodyFile = this.logFile + ".body";
 
@@ -196,6 +200,10 @@ namespace Continuum_Windows_Testing_Agent
 
         public void message(String message)
         {
+            if (this.useVerboseTestLogs == false)
+            {
+                return;
+            }
             this.bodyFh.WriteLine("<tr class=\"odd\">");
             this.bodyFh.WriteLine("<td colspan=\"8\">" + System.DateTime.Now.ToString() + " - " + System.Web.HttpUtility.HtmlEncode(message) + "</td>");
             this.bodyFh.WriteLine("</tr>");
