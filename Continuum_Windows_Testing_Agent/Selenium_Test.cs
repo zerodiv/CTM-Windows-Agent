@@ -16,6 +16,7 @@ namespace Continuum_Windows_Testing_Agent
 {
     class Selenium_Test
     {
+        private Boolean testHadError;
         private IWebDriver webDriver;
         private String baseUrl;
 
@@ -24,14 +25,36 @@ namespace Continuum_Windows_Testing_Agent
 
         public Selenium_Test(IWebDriver webDriver, Selenium_Test_Log log)
         {
+            this.testHadError = false;
             this.webDriver = webDriver;
             this.baseUrl = "";
             this.testVariables = new Selenium_Test_Suite_Variables();
             this.log = log;
         }
 
-        public Boolean processSelenese(Selenium_Test_Trinome testCommand)
+        private void trapSeleneseReturn(Boolean functionReturn)
         {
+            if (this.testHadError == true)
+            {
+                return;
+            }
+            if (functionReturn == true)
+            {
+                this.testHadError = false;
+                return;
+            }
+            this.testHadError = false;
+            return;
+        }
+
+        public void processSelenese(Selenium_Test_Trinome testCommand)
+        {
+            if (this.testHadError == true)
+            {
+                this.log.logFailure(testCommand, "not executed - failure already occurred.");
+                return;
+            }
+
             // Special exception for cleaning up / interpolating the testCommand into the new values.
             if (testCommand.command != "store")
             {
@@ -42,40 +65,57 @@ namespace Continuum_Windows_Testing_Agent
             switch (testCommand.command)
             {
                 case "addSelection":
-                    return this.seleneseAddSelection(testCommand);
+                    this.trapSeleneseReturn(this.seleneseAddSelection(testCommand));
+                    return;
                 case "clickAndWait":
-                    return this.seleneseClickAndWait(testCommand);
+                    this.trapSeleneseReturn(this.seleneseClickAndWait(testCommand));
+                    return;
                 case "click":
-                    return this.seleneseClick(testCommand);
+                    this.trapSeleneseReturn(this.seleneseClick(testCommand));
+                    return;
                 case "doubleClick":
-                    return this.seleneseDoubleClick(testCommand);
+                    this.trapSeleneseReturn(this.seleneseDoubleClick(testCommand));
+                    return;
                 case "controlKeyDown":
-                    return this.seleneseControlKeyDown(testCommand);
+                    this.trapSeleneseReturn(this.seleneseControlKeyDown(testCommand));
+                    return;
                 case "controlKeyUp":
-                    return this.seleneseControlKeyUp(testCommand);
+                    this.trapSeleneseReturn(this.seleneseControlKeyUp(testCommand));
+                    return;
                 case "focus":
-                    return this.seleneseFocus(testCommand);
+                    this.trapSeleneseReturn(this.seleneseFocus(testCommand));
+                    return;
                 case "open":
-                    return this.seleneseOpen(testCommand);
+                    this.trapSeleneseReturn(this.seleneseOpen(testCommand));
+                    return;
                 case "select":
-                    return this.seleneseSelect(testCommand);
+                    this.trapSeleneseReturn(this.seleneseSelect(testCommand));
+                    return;
                 case "selectWindow":
-                    return this.seleneseSelectWindow(testCommand);
+                    this.trapSeleneseReturn(this.seleneseSelectWindow(testCommand));
+                    return;
                 case "store":
-                    return this.seleneseStore(testCommand);
+                    this.trapSeleneseReturn(this.seleneseStore(testCommand));
+                    return;
                 case "type":
-                    return this.seleneseType(testCommand);
+                    this.trapSeleneseReturn(this.seleneseType(testCommand));
+                    return;
                 case "typeAndWait":
-                    return this.seleneseTypeAndWait(testCommand);
+                    this.trapSeleneseReturn(this.seleneseTypeAndWait(testCommand));
+                    return;
                 case "waitForPageToLoad":
-                    return this.seleneseWaitForPageToLoad(testCommand);
+                    this.trapSeleneseReturn(this.seleneseWaitForPageToLoad(testCommand));
+                    return;
                 case "verifyTextPresent":
-                    return this.seleneseVerifyTextPresent(testCommand);
+                    this.trapSeleneseReturn(this.seleneseVerifyTextPresent(testCommand));
+                    return;
                 case "pause":
-                    return this.selenesePause(testCommand);
+                    this.trapSeleneseReturn(this.selenesePause(testCommand));
+                    return;
                 default:
+                    this.testHadError = true;
                     this.log.logFailure(testCommand, "unimplemented selenese");
-                    return false;
+                    return;
             }
         }
 
@@ -148,6 +188,7 @@ namespace Continuum_Windows_Testing_Agent
         public By convertSelenseLocatorString(String locator)
         {
             // TODO: locate by DOM, if it is even needed.
+           
             if (locator.StartsWith("css="))
             {
                 locator = locator.Replace("css=", "");
@@ -237,6 +278,31 @@ namespace Continuum_Windows_Testing_Agent
         public Boolean seleneseType(Selenium_Test_Trinome testCommand)
         {
            this.log.startTimer();
+           
+           // TinyMCE Hack - We don't need full dom= support, but we do need to support tinyMCE in our environment.
+           // dom=document.getElementById('job_requirements_ifr').contentWindow.document.body
+           try
+           {
+               Regex domRegex = new Regex(@"^dom=document.getElementById\('(.*?)'\)");
+               Match domMatch = domRegex.Match(testCommand.target);
+
+               if (domMatch.Success)
+               {
+                   String tinyMCEiFrame = domMatch.Groups[1].Value;
+                   this.webDriver.SwitchTo().Frame(tinyMCEiFrame);
+                   IWebElement element = this.webDriver.FindElement(By.Id("tinymce"));
+                   element.SendKeys(this.runJavascriptValue(testCommand.value));
+                   this.webDriver.SwitchTo().Window(this.webDriver.GetWindowHandle()); 
+                   this.log.logSuccess(testCommand, "");
+                   return true;
+               }
+           }
+           catch (Exception e)
+           {
+               this.log.logFailure(testCommand, "failed dom= syntax: " + e.Message);
+               return false;
+           }
+
             try
             {
                 IWebElement element = this.webDriver.FindElement(this.convertSelenseLocatorString(testCommand.target));
@@ -315,20 +381,74 @@ namespace Continuum_Windows_Testing_Agent
         {
 
             this.log.startTimer();
+
+            // label=bar
+            String label = "";
+            if (testCommand.value.StartsWith("label="))
+            {
+                label = testCommand.value;
+                label = label.Replace("label=", "");
+            }
+            else
+            {
+                this.log.logFailure(testCommand, "Value is expected to be in the form of label=");
+                return false;
+            }
+            
+            // First attempte is via constructed xpath.
+            
+            IWebElement option = null;
+            Boolean optionFound = false;
+
             try
             {
-                // label=bar
-                String label = "";
-                if (testCommand.value.StartsWith("label="))
+                String xByNamePath = "//select[@name='" + testCommand.target + "']/option[normalize-space(.)='" + label + "']";
+                option = this.webDriver.FindElement(this.convertSelenseLocatorString(xByNamePath));
+                optionFound = true;
+            } catch {
+                optionFound = false;
+            }
+
+            // Try by id if the option was not found. 
+            if (optionFound == false)
+            {
+                try
                 {
-                    label = testCommand.value;
-                    label = label.Replace("label=", "");
+                    String xByIdPath = "//select[@id='" + testCommand.target + "']/option[normalize-space(.)='" + label + "']";
+                    option = this.webDriver.FindElement(this.convertSelenseLocatorString(xByIdPath));
+                    optionFound = true;
                 }
-                else 
+                catch
                 {
-                    this.log.logFailure(testCommand, "Value is expected to be in the form of label=" );
-                    return false;
+                    optionFound = false;
                 }
+            }
+
+            if (optionFound == false)
+            {
+                this.log.logFailure(testCommand, "Failed to find option");
+                return false;
+            }
+
+            try
+            {
+                option.Select();
+                this.log.logSuccess(testCommand, "");
+                return true;
+            
+            }
+            catch (Exception e)
+            {
+                this.log.logFailure(testCommand, e.Message);
+            }
+                
+                
+            return false;
+
+            /*
+            try
+            {
+                
 
                 IWebElement element = this.webDriver.FindElement(this.convertSelenseLocatorString(testCommand.target));
                 
@@ -350,7 +470,8 @@ namespace Continuum_Windows_Testing_Agent
             {
                 this.log.logFailure(testCommand, e.Message);
             }
-            return false;
+            */
+            
         }
 
         public Boolean seleneseDoubleClick(Selenium_Test_Trinome testCommand)

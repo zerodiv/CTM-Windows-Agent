@@ -52,14 +52,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Continuum_Windows_Testing_Agent.exe" size="52736">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Continuum_Windows_Testing_Agent.exe" size="53760">
       <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>Tpnk5ujboUi6qg7z7ItdAa3u2VI=</dsig:DigestValue>
+        <dsig:DigestValue>SnrpMK01IO5UWDIOztgVpmynI7w=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
