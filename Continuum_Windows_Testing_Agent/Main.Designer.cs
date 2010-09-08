@@ -39,14 +39,18 @@
             this.ieVersionBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.forcePollBtn = new System.Windows.Forms.Button();
+            this.regenerateGuidBtn = new System.Windows.Forms.Button();
+            this.guidBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.useVerboseTestLogsCheckbox = new System.Windows.Forms.CheckBox();
             this.machineNameBox = new System.Windows.Forms.TextBox();
+            this.configSaveSettingsBtn = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.ipBox = new System.Windows.Forms.TextBox();
             this.osVersionBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.configSaveSettingsBtn = new System.Windows.Forms.Button();
             this.hostnameBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.ctmStatusBar = new System.Windows.Forms.StatusStrip();
@@ -54,7 +58,6 @@
             this.callHomeTimer = new System.Windows.Forms.Timer(this.components);
             this.lastRunLogBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.logRefresh = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.ctmStatusBar.SuspendLayout();
@@ -153,28 +156,69 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.forcePollBtn);
+            this.groupBox2.Controls.Add(this.regenerateGuidBtn);
+            this.groupBox2.Controls.Add(this.guidBox);
+            this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.useVerboseTestLogsCheckbox);
             this.groupBox2.Controls.Add(this.machineNameBox);
+            this.groupBox2.Controls.Add(this.configSaveSettingsBtn);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.ipBox);
             this.groupBox2.Controls.Add(this.osVersionBox);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.configSaveSettingsBtn);
             this.groupBox2.Controls.Add(this.hostnameBox);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Location = new System.Drawing.Point(222, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(560, 139);
+            this.groupBox2.Size = new System.Drawing.Size(534, 139);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Config";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
+            // forcePollBtn
+            // 
+            this.forcePollBtn.Location = new System.Drawing.Point(419, 72);
+            this.forcePollBtn.Name = "forcePollBtn";
+            this.forcePollBtn.Size = new System.Drawing.Size(102, 23);
+            this.forcePollBtn.TabIndex = 13;
+            this.forcePollBtn.Text = "Force Poll";
+            this.forcePollBtn.UseVisualStyleBackColor = true;
+            this.forcePollBtn.Click += new System.EventHandler(this.forcePollBtn_Click);
+            // 
+            // regenerateGuidBtn
+            // 
+            this.regenerateGuidBtn.Location = new System.Drawing.Point(419, 48);
+            this.regenerateGuidBtn.Name = "regenerateGuidBtn";
+            this.regenerateGuidBtn.Size = new System.Drawing.Size(102, 23);
+            this.regenerateGuidBtn.TabIndex = 12;
+            this.regenerateGuidBtn.Text = "Regenerate GUID";
+            this.regenerateGuidBtn.UseVisualStyleBackColor = true;
+            this.regenerateGuidBtn.Click += new System.EventHandler(this.regenerateGuidBtn_Click);
+            // 
+            // guidBox
+            // 
+            this.guidBox.Location = new System.Drawing.Point(336, 22);
+            this.guidBox.Name = "guidBox";
+            this.guidBox.ReadOnly = true;
+            this.guidBox.Size = new System.Drawing.Size(185, 20);
+            this.guidBox.TabIndex = 11;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(293, 25);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(37, 13);
+            this.label10.TabIndex = 10;
+            this.label10.Text = "GUID:";
+            // 
             // useVerboseTestLogsCheckbox
             // 
             this.useVerboseTestLogsCheckbox.AutoSize = true;
-            this.useVerboseTestLogsCheckbox.Location = new System.Drawing.Point(425, 108);
+            this.useVerboseTestLogsCheckbox.Location = new System.Drawing.Point(296, 54);
             this.useVerboseTestLogsCheckbox.Name = "useVerboseTestLogsCheckbox";
             this.useVerboseTestLogsCheckbox.Size = new System.Drawing.Size(115, 17);
             this.useVerboseTestLogsCheckbox.TabIndex = 9;
@@ -184,10 +228,20 @@
             // 
             // machineNameBox
             // 
-            this.machineNameBox.Location = new System.Drawing.Point(95, 74);
+            this.machineNameBox.Location = new System.Drawing.Point(92, 74);
             this.machineNameBox.Name = "machineNameBox";
             this.machineNameBox.Size = new System.Drawing.Size(185, 20);
             this.machineNameBox.TabIndex = 8;
+            // 
+            // configSaveSettingsBtn
+            // 
+            this.configSaveSettingsBtn.Location = new System.Drawing.Point(419, 98);
+            this.configSaveSettingsBtn.Name = "configSaveSettingsBtn";
+            this.configSaveSettingsBtn.Size = new System.Drawing.Size(102, 23);
+            this.configSaveSettingsBtn.TabIndex = 2;
+            this.configSaveSettingsBtn.Text = "Save Settings";
+            this.configSaveSettingsBtn.UseVisualStyleBackColor = true;
+            this.configSaveSettingsBtn.Click += new System.EventHandler(this.configSaveSettingsBtn_Click);
             // 
             // label9
             // 
@@ -197,11 +251,12 @@
             this.label9.Size = new System.Drawing.Size(80, 13);
             this.label9.TabIndex = 7;
             this.label9.Text = "Machine name:";
+            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 110);
+            this.label4.Location = new System.Drawing.Point(6, 103);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(23, 13);
             this.label4.TabIndex = 5;
@@ -209,14 +264,14 @@
             // 
             // ipBox
             // 
-            this.ipBox.Location = new System.Drawing.Point(95, 48);
+            this.ipBox.Location = new System.Drawing.Point(92, 48);
             this.ipBox.Name = "ipBox";
             this.ipBox.Size = new System.Drawing.Size(185, 20);
             this.ipBox.TabIndex = 4;
             // 
             // osVersionBox
             // 
-            this.osVersionBox.Location = new System.Drawing.Point(50, 107);
+            this.osVersionBox.Location = new System.Drawing.Point(35, 99);
             this.osVersionBox.Name = "osVersionBox";
             this.osVersionBox.ReadOnly = true;
             this.osVersionBox.Size = new System.Drawing.Size(351, 20);
@@ -231,19 +286,9 @@
             this.label3.TabIndex = 3;
             this.label3.Text = "My IP:";
             // 
-            // configSaveSettingsBtn
-            // 
-            this.configSaveSettingsBtn.Location = new System.Drawing.Point(298, 22);
-            this.configSaveSettingsBtn.Name = "configSaveSettingsBtn";
-            this.configSaveSettingsBtn.Size = new System.Drawing.Size(83, 31);
-            this.configSaveSettingsBtn.TabIndex = 2;
-            this.configSaveSettingsBtn.Text = "Save Settings";
-            this.configSaveSettingsBtn.UseVisualStyleBackColor = true;
-            this.configSaveSettingsBtn.Click += new System.EventHandler(this.configSaveSettingsBtn_Click);
-            // 
             // hostnameBox
             // 
-            this.hostnameBox.Location = new System.Drawing.Point(95, 22);
+            this.hostnameBox.Location = new System.Drawing.Point(92, 22);
             this.hostnameBox.Name = "hostnameBox";
             this.hostnameBox.Size = new System.Drawing.Size(185, 20);
             this.hostnameBox.TabIndex = 1;
@@ -264,7 +309,7 @@
             this.ctmStatusLabel});
             this.ctmStatusBar.Location = new System.Drawing.Point(0, 518);
             this.ctmStatusBar.Name = "ctmStatusBar";
-            this.ctmStatusBar.Size = new System.Drawing.Size(794, 22);
+            this.ctmStatusBar.Size = new System.Drawing.Size(766, 22);
             this.ctmStatusBar.TabIndex = 3;
             this.ctmStatusBar.Text = "statusStrip1";
             // 
@@ -287,7 +332,7 @@
             this.lastRunLogBox.Multiline = true;
             this.lastRunLogBox.Name = "lastRunLogBox";
             this.lastRunLogBox.ReadOnly = true;
-            this.lastRunLogBox.Size = new System.Drawing.Size(770, 304);
+            this.lastRunLogBox.Size = new System.Drawing.Size(744, 304);
             this.lastRunLogBox.TabIndex = 4;
             // 
             // label8
@@ -300,17 +345,11 @@
             this.label8.Text = "Last Test Log:";
             this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
-            // logRefresh
-            // 
-            this.logRefresh.Enabled = true;
-            this.logRefresh.Interval = 5000;
-            this.logRefresh.Tick += new System.EventHandler(this.logRefresh_Tick);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 540);
+            this.ClientSize = new System.Drawing.Size(766, 540);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.lastRunLogBox);
             this.Controls.Add(this.ctmStatusBar);
@@ -357,7 +396,10 @@
         private System.Windows.Forms.TextBox machineNameBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckBox useVerboseTestLogsCheckbox;
-        private System.Windows.Forms.Timer logRefresh;
+        private System.Windows.Forms.TextBox guidBox;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button regenerateGuidBtn;
+        private System.Windows.Forms.Button forcePollBtn;
     }
 }
 

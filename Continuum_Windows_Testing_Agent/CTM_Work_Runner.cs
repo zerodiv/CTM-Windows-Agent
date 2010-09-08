@@ -24,14 +24,12 @@ namespace Continuum_Windows_Testing_Agent
         public UInt64 testRunBrowserId;
         public String testDownloadUrl;
         public String testBrowser;
-        public String testBaseurl;
-
+        
         public int testStatus;
         public String seleniumLogFile;
         public Selenium_Test_Log seleniumTestLog;
         public Boolean useVerboseTestLogs;
 
-        private String proxyFile;
         private String tempTestDir;
         private String tempZipFile;
         private String testRunIndexHtml;
@@ -150,35 +148,6 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
-        private Boolean createProxyFile()
-        {
-
-            this.proxyFile = Environment.GetEnvironmentVariable("TEMP");
-            this.proxyFile += "\\ctmProxy.pac";
-
-            this.seleniumTestLog.message("proxyFile: " + this.proxyFile);
-
-            if (File.Exists(this.proxyFile))
-            {
-                return true;
-            }
-
-            using (StreamWriter sw = new StreamWriter(this.proxyFile, false, Encoding.Default))
-            {
-                sw.WriteLine("function FindProxyForURL(url, host) {");
-                sw.WriteLine("        return 'PROXY localhost:4444; DIRECT';");
-                sw.WriteLine("}");
-                sw.Close();
-
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings");
-                key.SetValue("AutoConfigUrl", "file://" + this.proxyFile.Replace("\\", "/"));
-
-                return true;
-            }
-
-
-        }
-
         public ArrayList getTestsFromTestSuite()
         {
             // slurp through the html file.
@@ -280,7 +249,11 @@ namespace Continuum_Windows_Testing_Agent
                 triNome.target = System.Web.HttpUtility.HtmlDecode(triNome.target);
                 triNome.value = System.Web.HttpUtility.HtmlDecode(triNome.value);
 
-                this.seleniumTestLog.message("testCommand: " + triNome.command);
+                this.seleniumTestLog.message(
+                    "testCommand: " + triNome.command + " " +
+                    "testTarget: " + triNome.target + " " +
+                    "testValue: " + triNome.value 
+                );
                 testCommands.Add(triNome);
             }
 
@@ -320,14 +293,14 @@ namespace Continuum_Windows_Testing_Agent
                         this.seleniumTestLog.message("Invalid browser specificed: " + this.testBrowser);
                         return false;
                 }
-
+                
                 // JEO: This is a ghetto hack to help prevent issues where IE does not allow you to 
                 // click on non-visibile elements. This can crop up pretty often and hopefully will
                 // be fixed in later versions of Web Driver.
                 webDriver.Navigate().GoToUrl("http://www.google.com");
 
                 // ImplicityWait() change
-                webDriver.Manage().Timeouts().ImplicitlyWait(new TimeSpan(0, 1, 0));
+                // webDriver.Manage().Timeouts().ImplicitlyWait(new TimeSpan(0, 1, 0));
 
                 OpenQA.Selenium.IJavaScriptExecutor jsExecutor = (OpenQA.Selenium.IJavaScriptExecutor)webDriver;
                 jsExecutor.ExecuteScript("if(window.screen){window.moveTo(0,0);window.resizeTo(window.screen.availWidth, window.screen.availHeight);};");
@@ -416,14 +389,6 @@ namespace Continuum_Windows_Testing_Agent
                     return false;
                 }
 
-                // Create a self pointing proxy file for IE (if needed).
-                if (this.createProxyFile() == false)
-                {
-                    this.seleniumTestLog.message("Failed to create proxy file");
-                    this.cleanup();
-                    return false;
-                }
-
                 // run the tests.
                 if (this.runTestSuite() == true)
                 {
@@ -465,7 +430,6 @@ namespace Continuum_Windows_Testing_Agent
             this.seleniumTestLog = null;
            this.tempTestDir = null;
             this.tempZipFile = null;
-            this.testBaseurl = null;
             this.testBrowser = null;
             this.testDownloadUrl = null;
             this.testLog = null;

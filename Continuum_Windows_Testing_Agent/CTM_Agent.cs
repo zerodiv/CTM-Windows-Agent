@@ -25,7 +25,7 @@ namespace Continuum_Windows_Testing_Agent
         private Boolean isRegistered;
 
         private WebClient ctmClient;
-        private BackgroundWorker ctmBgWorker;
+        public BackgroundWorker ctmBgWorker;
         private Boolean useVerboseTestLogs;
    
         public LocalWebBrowser googlechrome;
@@ -43,8 +43,11 @@ namespace Continuum_Windows_Testing_Agent
             this.isRegistered = false;
 
             this.ctmClient = new WebClient();
-            this.ctmBgWorker = new BackgroundWorker();
+            this.ctmClient.UploadValuesCompleted += new UploadValuesCompletedEventHandler(requestWork_Completed);
 
+            this.ctmBgWorker = new BackgroundWorker();
+            this.ctmBgWorker.DoWork += new DoWorkEventHandler(ctmBgWorker_DoWork);
+            
             // init the various browsers
             this.googlechrome = new LocalWebBrowser("googlechrome");
             this.firefox = new LocalWebBrowser("firefox");
@@ -119,29 +122,14 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
-        private void registerHost_Completed(object sender, UploadValuesCompletedEventArgs e)
-        {
-            try
-            {
-                if (e.Result != null)
-                {
-                    this.isRegistered = true;
-                    return;
-                }
-                this.isRegistered = false;
-            }
-            catch (Exception ex)
-            {
-                this.log.message("connection issue caught: " + ex.Message);
-            }
-        }
-
+        
         public void run()
         {
             try
             {
-                this.registerHost();
                 this.requestWork();
+                // this.registerHost();
+                // this.requestWork();
             }
             catch (Exception e ) 
             {
@@ -150,34 +138,23 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
-        public Boolean registerHost()
+        public void requestWork()
         {
             if (this.isInitalized() != true)
             {
-                return false;
+                return;
             }
 
-            // Client is busy don't try to request again.
             if (this.ctmClient.IsBusy == true)
             {
-                return false;
-            }
-
-            if (this.isRegistered == true)
-            {
-                return true;
+                return;
             }
 
             if (this.ctmBgWorker.IsBusy == true)
             {
-                return false;
+                return;
             }
 
-            // We register every time so that if the master falls off the map we can continue
-            // to operate correctly.
-
-            ctmClient.UploadValuesCompleted += new UploadValuesCompletedEventHandler(registerHost_Completed);
-            
             NameValueCollection postValues = new NameValueCollection();
 
             postValues.Add("guid", this.guid);
@@ -191,8 +168,8 @@ namespace Continuum_Windows_Testing_Agent
             // add the browsers into our post params
             if (this.ie.exists == true)
             {
-                postValues.Add("ie", "yes");
-                postValues.Add("ie_version", this.ie.getVersion());
+                postValues.Add("iexplore", "yes");
+                postValues.Add("iexplore_version", this.ie.getVersion());
             }
 
             if (this.googlechrome.exists == true)
@@ -213,79 +190,88 @@ namespace Continuum_Windows_Testing_Agent
                 postValues.Add("safari_version", this.safari.getVersion());
             }
 
-            String registerUrl = "http://" + this.ctmHostname + "/et/phone/home/1.0/";
-            ctmClient.UploadValuesAsync(new Uri(registerUrl), postValues);
-            
-            return true;
+            String pollUrl = "http://" + this.ctmHostname + "/agent/poll/";
+            ctmClient.UploadValuesAsync(new Uri(pollUrl), postValues);
+
         }
 
         private void requestWork_Completed(object sender, UploadValuesCompletedEventArgs args)
         {
             try
             {
-                if (this.ctmBgWorker.IsBusy)
-                {
-                    // TODO: Watch this FIXME for coming up alot, since if it does we have to look at race states in our timers.
-                    this.log.message("FIXME: Request work fired, even though a processing work.");
-                    return;
-                }
-
                 if (args.Result != null)
                 {
+                    this.isRegistered = true;
+
                     String stringResponse = Encoding.ASCII.GetString(args.Result);
 
                     System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
 
                     xmlDoc.LoadXml(stringResponse);
 
+                    // Okay we're hooked in.
                     if (xmlDoc.SelectSingleNode("/etResponse/status").InnerText.Equals("OK"))
                     {
-
                         
-
-                        // TODO: JEO - We might not need this.
-                        // this.ctmBgWorker.WorkerSupportsCancellation = true;
-
-                        // this.ctmBgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(ctmBgWorker_RunWorkerCompleted);
-                        this.ctmBgWorker.DoWork += new DoWorkEventHandler(ctmBgWorker_DoWork);
-
-
-                        this.log.message("we have work todo");
-
                         // we have work to do lets get the party started!
                         // init the work runner obj with the test run data.
 
+                        XmlNodeList testRuns = xmlDoc.SelectNodes("/etResponse/Runs/CTM_Test_Run_Browser");
 
-                       CTM_Work_Runner ctmWorkRunner = new CTM_Work_Runner();
+                        if (testRuns.Count > 0)
+                        {
+                            this.log.message("we have work todo: " + testRuns.Count + " test runs");
+                        }
+                        else
+                        {
+                            this.log.message("we have no work to do");
+                        }
 
-                       ctmWorkRunner.testRunId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunId").InnerText);
-                       ctmWorkRunner.testRunBrowserId = UInt64.Parse(xmlDoc.SelectSingleNode("/etResponse/testRunBrowserId").InnerText);
-                       ctmWorkRunner.testDownloadUrl = xmlDoc.SelectSingleNode("/etResponse/downloadUrl").InnerText;
-                       ctmWorkRunner.testBrowser = xmlDoc.SelectSingleNode("/etResponse/testBrowser").InnerText;
-                       ctmWorkRunner.testBaseurl = xmlDoc.SelectSingleNode("/etResponse/testBaseurl").InnerText;
-                       ctmWorkRunner.useVerboseTestLogs = this.useVerboseTestLogs;
+                        foreach (XmlNode testRun in testRuns)
+                        {
+                            if (this.ctmBgWorker.IsBusy != true)
+                            {
 
-                        this.log.message(" testRunId: " + ctmWorkRunner.testRunId.ToString());
-                        this.log.message(" testRunBrowserId: " + ctmWorkRunner.testRunBrowserId.ToString());
-                        this.log.message(" testDownloadUrl: " + ctmWorkRunner.testDownloadUrl);
-                        this.log.message(" testBrowser: " + ctmWorkRunner.testBrowser);
-                        this.log.message(" testBaseurl: " + ctmWorkRunner.testBaseurl);
+                                CTM_Work_Runner ctmWorkRunner = new CTM_Work_Runner();
 
-                        this.ctmBgWorker.RunWorkerAsync(ctmWorkRunner);
+                                // Convert the XML document into a ctmWorkRunner object.
+                                ctmWorkRunner.testRunId = UInt64.Parse(testRun.SelectSingleNode("test_run_id").InnerText);
+                                ctmWorkRunner.testRunBrowserId = UInt64.Parse(testRun.SelectSingleNode("id").InnerText);
+
+                                XmlNode ctmTestBrowser = testRun.SelectSingleNode("CTM_Test_Browser");
+                                ctmWorkRunner.testBrowser = ctmTestBrowser.SelectSingleNode("name").InnerText;
+
+                                ctmWorkRunner.useVerboseTestLogs = this.useVerboseTestLogs;
+
+                                // create the download url.
+                                ctmWorkRunner.testDownloadUrl = "http://" + this.ctmHostname + "/test/run/download/?id=" + ctmWorkRunner.testRunId;
+
+                                this.ctmBgWorker.RunWorkerAsync(ctmWorkRunner);
+
+                                this.log.message(" testRunId: " + ctmWorkRunner.testRunId.ToString());
+                                this.log.message(" testRunBrowserId: " + ctmWorkRunner.testRunBrowserId.ToString());
+                                this.log.message(" testDownloadUrl: " + ctmWorkRunner.testDownloadUrl);
+                                this.log.message(" testBrowser: " + ctmWorkRunner.testBrowser);
+                            }
+                            else
+                            {
+                                this.log.message("ctmBgWorker is busy, we will come back later.");
+                            }
+                        
+                        }
 
                     }
                     else
                     {
-                        this.log.message("no work for us");
+                        this.log.message("No work for us");
                     }
-
-
-
+                    return;
                 }
+                this.isRegistered = false;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                this.log.message("Fetch work failed message: " + e.Message);
+                this.log.message("connection issue caught: " + ex.Message);
             }
         }
 
@@ -321,50 +307,6 @@ namespace Continuum_Windows_Testing_Agent
             {
                 ctmWorkRunner.cleanup();
             }
-        }
-
-        public Boolean requestWork()
-        {
-
-            if (this.isInitalized() != true)
-            {
-                return false;
-            }
-
-            if (this.isRegistered != true)
-            {
-                return false;
-            }
-
-            // Do not queue up another piece of work until the previous is done.
-            if (this.ctmClient.IsBusy == true)
-            {
-                return false;
-            }
-
-            if (this.ctmBgWorker.IsBusy == true)
-            {
-                return false;
-            }
-
-            this.ctmClient.UploadValuesCompleted += new UploadValuesCompletedEventHandler(requestWork_Completed);
-
-            NameValueCollection postValues = new NameValueCollection();
-
-            postValues.Add("guid", this.guid);
-
-            try
-            {
-                String pollUrl = "http://" + this.ctmHostname + "/et/poll/1.0/";
-                this.log.message("requesting from: " + pollUrl);
-                ctmClient.UploadValuesAsync(new Uri(pollUrl), postValues);
-            }
-            catch (WebException e)
-            {
-                this.log.message("Failed to do request for work: " + e.Message);
-            }
-
-            return true;
         }
 
     }

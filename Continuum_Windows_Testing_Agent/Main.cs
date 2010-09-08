@@ -146,8 +146,18 @@ namespace Continuum_Windows_Testing_Agent
             this.firefoxVersionBox.Text = et.firefox.getVersion();
             this.safariVersionBox.Text = et.safari.getVersion();
             this.osVersionBox.Text = et.determineWindowsVersion();
+            this.guidBox.Text = this._getGuid();
             
+            // hook up the onLog event handler.
+            // this.et.log.logMessage += new CTM_Agent_Log_Message_Handler(agentLogHandler);
         }
+
+        /*
+        public void agentLogHandler(object sender, CTM_Agent_Log_Message_Handler_Args e)
+        {
+            this.lastRunLogBox.Text += e.message + "\r\n";
+        }
+        */
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
@@ -171,7 +181,22 @@ namespace Continuum_Windows_Testing_Agent
 
         private void activePolling()
         {
+            if (this.et.ctmBgWorker.IsBusy == true)
+            {
+                // Quiet down while we're working on the other threads.
+                this.ctmStatusLabel.Text = "Running tests..";
+                this.callHomeTimer.Interval = 60 * 5 * 1000;
+                return;
+            }
+            else
+            {
+                // We get noisy when we're not loaded.
+                this.callHomeTimer.Interval = 30000;
+            }
+
+            // make sure we have a guid.
             this.et.setGuid(this._getGuid());
+
             this.et.setCTMHostname(this.hostnameBox.Text);
             this.et.setLocalIp(this.ipBox.Text);
             this.et.setMachineName(this.machineNameBox.Text);
@@ -187,7 +212,9 @@ namespace Continuum_Windows_Testing_Agent
             {
                 this.ctmStatusLabel.Text = "Phoning home now";
             }
-            
+
+            this.lastRunLogBox.Text = this.et.log.getLastLogLines();
+
         }
 
         private void configSaveSettingsBtn_Click(object sender, EventArgs e)
@@ -237,7 +264,32 @@ namespace Continuum_Windows_Testing_Agent
 
         private void logRefresh_Tick(object sender, EventArgs e)
         {
-            this.lastRunLogBox.Text = this.et.log.getLastLogLines();
+            
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void regenerateGuidBtn_Click(object sender, EventArgs e)
+        {
+           Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
+           if (key.GetValue("guid") != null)
+           {
+               key.DeleteValue("guid");
+           }
+           this.guidBox.Text = this._getGuid();
+        }
+
+        private void forcePollBtn_Click(object sender, EventArgs e)
+        {
+            this.activePolling();
+        }
+
+        private void ctmLogTimer_Tick(object sender, EventArgs e)
+        {
+           
         }
     }
 }

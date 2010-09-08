@@ -71,9 +71,20 @@ namespace Continuum_Windows_Testing_Agent
                     return this.seleneseWaitForPageToLoad(testCommand);
                 case "verifyTextPresent":
                     return this.seleneseVerifyTextPresent(testCommand);
+                case "pause":
+                    return this.selenesePause(testCommand);
                 default:
+                    this.log.logFailure(testCommand, "unimplemented selenese");
                     return false;
             }
+        }
+
+        private bool selenesePause(Selenium_Test_Trinome testCommand)
+        {
+            this.log.startTimer();
+            this.log.stopTimer();
+            this.log.logSuccess(testCommand, "");
+            return true;
         }
 
         public Boolean seleneseStore(Selenium_Test_Trinome testCommand)
@@ -122,8 +133,12 @@ namespace Continuum_Windows_Testing_Agent
 
             if (jsExecutor.IsJavaScriptEnabled == true)
             {
+            
+                this.log.message("executing javascript: " + javascript );
+
                 Object ret = jsExecutor.ExecuteScript(javascript);
                 value = ret.ToString();
+                this.log.message("end js_exec value: " + value);
             }
 
             return value;
@@ -172,15 +187,19 @@ namespace Continuum_Windows_Testing_Agent
 
             try
             {
+                this.log.message("legacy byName start");
                 By byName = By.Name(locator);
                 IWebElement target = this.webDriver.FindElement(byName);
+                this.log.message("legacy byName end");
                 return byName;
             }
             catch
             {
+                this.log.message("legacy byName end - failover to id");
                 // okay so by name failed, try id, otherwise they are fucked =)
                 return By.Id(locator);
             }
+           
             
         }
 
