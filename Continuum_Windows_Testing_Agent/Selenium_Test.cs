@@ -16,7 +16,7 @@ namespace Continuum_Windows_Testing_Agent
 {
     class Selenium_Test
     {
-        private Boolean testHadError;
+        public Boolean testHadError;
         private IWebDriver webDriver;
         private String baseUrl;
 
@@ -43,7 +43,7 @@ namespace Continuum_Windows_Testing_Agent
                 this.testHadError = false;
                 return;
             }
-            this.testHadError = false;
+            this.testHadError = true;
             return;
         }
 
@@ -122,8 +122,20 @@ namespace Continuum_Windows_Testing_Agent
         private bool selenesePause(Selenium_Test_Trinome testCommand)
         {
             this.log.startTimer();
-            this.log.stopTimer();
-            this.log.logSuccess(testCommand, "");
+            int testWait = 3000;
+
+            if (testCommand.value != "")
+            {
+                testWait = Convert.ToInt32(testCommand.value);
+            }
+
+            if (testWait > 0)
+            {
+                System.Threading.Thread.Sleep(testWait);
+            }
+
+
+            this.log.logSuccess(testCommand, "waited: " + testWait);
             return true;
         }
 

@@ -308,6 +308,8 @@ namespace Continuum_Windows_Testing_Agent
                 // loop across all the tests and run them.
                 String testBasedir = Path.GetDirectoryName(this.testRunIndexHtml);
 
+                Selenium_Test seTest = new Selenium_Test(webDriver, this.seleniumTestLog);
+
                 foreach (String test in tests)
                 {
                     String testFile = testBasedir + "\\" + test;
@@ -315,8 +317,6 @@ namespace Continuum_Windows_Testing_Agent
                     this.seleniumTestLog.message("running test: " + testFile);
 
                     ArrayList testCommands = this.getTestCommands(testFile);
-
-                    Selenium_Test seTest = new Selenium_Test(webDriver, this.seleniumTestLog);
 
                     int commandId = 0;
                     foreach (Selenium_Test_Trinome testCommand in testCommands)
@@ -340,8 +340,13 @@ namespace Continuum_Windows_Testing_Agent
 
                 webDriver.Quit();
 
-                this.seleniumTestLog.message("completed running suite");
-                return true;
+                if (seTest.testHadError == false)
+                {
+                    this.seleniumTestLog.message("completed running suite - successful");
+                    return true;
+                }
+                this.seleniumTestLog.message("completed running suite - failure");
+                return false;
             }
             catch (Exception e)
             {
