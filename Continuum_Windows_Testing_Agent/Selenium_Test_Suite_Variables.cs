@@ -32,7 +32,7 @@ namespace Continuum_Windows_Testing_Agent
         {
             foreach (String key in this.vars.Keys)
             {
-                target.Replace("${" + key + "}", this.vars[key].ToString());
+                target = target.Replace("${" + key + "}", this.vars[key].ToString());
             }
             return target;
         }

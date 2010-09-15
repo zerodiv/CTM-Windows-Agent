@@ -201,6 +201,35 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
+        public String getTestTitle(String testFile)
+        {
+            String testTitle = "Unknown Test";
+
+            HtmlDocument doc = new HtmlDocument();
+
+            doc.OptionFixNestedTags = true;
+
+            doc.Load(testFile);
+
+            if (doc.ParseErrors != null && doc.ParseErrors.Count() > 0)
+            {
+                foreach (HtmlParseError htmlError in doc.ParseErrors)
+                {
+                    this.seleniumTestLog.message("testFile: " + testFile);
+                    this.seleniumTestLog.message("error parsing file: " + htmlError.SourceText);
+                }
+                return testTitle;
+            }
+            foreach (HtmlNode testTitleRow in doc.DocumentNode.SelectNodes("/html/body/table/thead/*"))
+            {
+                foreach (HtmlNode testTitleCell in testTitleRow.SelectNodes("td"))
+                {
+                    testTitle = testTitleCell.InnerHtml;
+                }
+            }
+            return testTitle;
+        }
+
         public ArrayList getTestCommands(String testFile)
         {
             ArrayList testCommands = new ArrayList();
@@ -315,6 +344,10 @@ namespace Continuum_Windows_Testing_Agent
                     String testFile = testBasedir + "\\" + test;
 
                     this.seleniumTestLog.message("running test: " + testFile);
+
+                    String testTitle = this.getTestTitle(testFile);
+                    // output the test title.
+                    this.seleniumTestLog.startTestMessage(testTitle);
 
                     ArrayList testCommands = this.getTestCommands(testFile);
 

@@ -110,6 +110,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Selenese\SeleneseStore.cs" />
+    <Compile Include="Selenese\SeleneseOpen.cs" />
+    <Compile Include="Selenese\SeleneseType.cs" />
+    <Compile Include="Selenese\SeleneseClickAndWait.cs" />
+    <Compile Include="Selenese\SeleneseClick.cs" />
+    <Compile Include="Selenese\SeleneseWaitForPageToLoad.cs" />
+    <Compile Include="Selenese\SelenesePause.cs" />
+    <Compile Include="Selenese\SeleneseVerifyTextPresent.cs" />
+    <Compile Include="Selenese\SeleneseAssertTextPresent.cs" />
+    <Compile Include="Selenese\SeleneseAssertElementPresent.cs" />
+    <Compile Include="Selenese\SeleneseSelect.cs" />
+    <Compile Include="Selenese\SeleneseAddSelection.cs" />
+    <Compile Include="Selenese_Locator.cs" />
+    <Compile Include="Selenese_Command.cs" />
     <Compile Include="LocalWebBrowser.cs" />
     <Compile Include="OSInfo.cs" />
     <Compile Include="CTM_Agent.cs" />

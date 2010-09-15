@@ -117,17 +117,6 @@ namespace Continuum_Windows_Testing_Agent
                 
                 // put out the colum headers.
                
-                this.fh.WriteLine("<tr>");
-                this.fh.WriteLine("<th>#</th>");
-                this.fh.WriteLine("<th>Command:</th>");
-                this.fh.WriteLine("<th>Target:</th>");
-                this.fh.WriteLine("<th>Value:</th>");
-                this.fh.WriteLine("<th>Start:</th>");
-                this.fh.WriteLine("<th>Stop:</th>");
-                this.fh.WriteLine("<th>Elapsed:</th>");
-                this.fh.WriteLine("<th>Message:</th>");
-                this.fh.WriteLine("</tr>");
-
                 // chunk in body
                 this.bodyFh.Close();
                 this.bodyFh = null;
@@ -198,6 +187,24 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
+        public void startTestMessage(String testName)
+        {
+            this.bodyFh.WriteLine("<tr>");
+            this.bodyFh.WriteLine("<th colspan=\"8\">" + System.Web.HttpUtility.HtmlEncode(testName) + "</th>");
+            this.bodyFh.WriteLine("</tr>");
+
+            this.bodyFh.WriteLine("<tr>");
+            this.bodyFh.WriteLine("<th>#</th>");
+            this.bodyFh.WriteLine("<th>Command:</th>");
+            this.bodyFh.WriteLine("<th>Target:</th>");
+            this.bodyFh.WriteLine("<th>Value:</th>");
+            this.bodyFh.WriteLine("<th>Start:</th>");
+            this.bodyFh.WriteLine("<th>Stop:</th>");
+            this.bodyFh.WriteLine("<th>Elapsed:</th>");
+            this.bodyFh.WriteLine("<th>Message:</th>");
+            this.bodyFh.WriteLine("</tr>");
+
+        }
         public void message(String message)
         {
             if (this.useVerboseTestLogs == false)
