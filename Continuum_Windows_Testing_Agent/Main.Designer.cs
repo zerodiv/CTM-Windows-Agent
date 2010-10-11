@@ -39,6 +39,8 @@
             this.ieVersionBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buildBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.forcePollBtn = new System.Windows.Forms.Button();
             this.regenerateGuidBtn = new System.Windows.Forms.Button();
             this.guidBox = new System.Windows.Forms.TextBox();
@@ -58,6 +60,7 @@
             this.callHomeTimer = new System.Windows.Forms.Timer(this.components);
             this.lastRunLogBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.haltOnErrorBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.ctmStatusBar.SuspendLayout();
@@ -73,9 +76,9 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.ieVersionBox);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(195, 139);
+            this.groupBox1.Size = new System.Drawing.Size(195, 148);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Browsers";
@@ -156,6 +159,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.haltOnErrorBox);
+            this.groupBox2.Controls.Add(this.buildBox);
+            this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.forcePollBtn);
             this.groupBox2.Controls.Add(this.regenerateGuidBtn);
             this.groupBox2.Controls.Add(this.guidBox);
@@ -170,17 +176,35 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.hostnameBox);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Location = new System.Drawing.Point(222, 12);
+            this.groupBox2.Location = new System.Drawing.Point(222, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(534, 139);
+            this.groupBox2.Size = new System.Drawing.Size(534, 164);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Config";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
+            // buildBox
+            // 
+            this.buildBox.Location = new System.Drawing.Point(414, 132);
+            this.buildBox.Name = "buildBox";
+            this.buildBox.ReadOnly = true;
+            this.buildBox.Size = new System.Drawing.Size(114, 20);
+            this.buildBox.TabIndex = 6;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(366, 136);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(45, 13);
+            this.label11.TabIndex = 7;
+            this.label11.Text = "Version:";
+            this.label11.Click += new System.EventHandler(this.label11_Click);
+            // 
             // forcePollBtn
             // 
-            this.forcePollBtn.Location = new System.Drawing.Point(419, 72);
+            this.forcePollBtn.Location = new System.Drawing.Point(419, 48);
             this.forcePollBtn.Name = "forcePollBtn";
             this.forcePollBtn.Size = new System.Drawing.Size(102, 23);
             this.forcePollBtn.TabIndex = 13;
@@ -190,7 +214,7 @@
             // 
             // regenerateGuidBtn
             // 
-            this.regenerateGuidBtn.Location = new System.Drawing.Point(419, 48);
+            this.regenerateGuidBtn.Location = new System.Drawing.Point(240, 130);
             this.regenerateGuidBtn.Name = "regenerateGuidBtn";
             this.regenerateGuidBtn.Size = new System.Drawing.Size(102, 23);
             this.regenerateGuidBtn.TabIndex = 12;
@@ -200,7 +224,7 @@
             // 
             // guidBox
             // 
-            this.guidBox.Location = new System.Drawing.Point(336, 22);
+            this.guidBox.Location = new System.Drawing.Point(49, 133);
             this.guidBox.Name = "guidBox";
             this.guidBox.ReadOnly = true;
             this.guidBox.Size = new System.Drawing.Size(185, 20);
@@ -209,7 +233,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(293, 25);
+            this.label10.Location = new System.Drawing.Point(6, 136);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(37, 13);
             this.label10.TabIndex = 10;
@@ -218,7 +242,7 @@
             // useVerboseTestLogsCheckbox
             // 
             this.useVerboseTestLogsCheckbox.AutoSize = true;
-            this.useVerboseTestLogsCheckbox.Location = new System.Drawing.Point(296, 54);
+            this.useVerboseTestLogsCheckbox.Location = new System.Drawing.Point(296, 24);
             this.useVerboseTestLogsCheckbox.Name = "useVerboseTestLogsCheckbox";
             this.useVerboseTestLogsCheckbox.Size = new System.Drawing.Size(115, 17);
             this.useVerboseTestLogsCheckbox.TabIndex = 9;
@@ -235,7 +259,7 @@
             // 
             // configSaveSettingsBtn
             // 
-            this.configSaveSettingsBtn.Location = new System.Drawing.Point(419, 98);
+            this.configSaveSettingsBtn.Location = new System.Drawing.Point(419, 20);
             this.configSaveSettingsBtn.Name = "configSaveSettingsBtn";
             this.configSaveSettingsBtn.Size = new System.Drawing.Size(102, 23);
             this.configSaveSettingsBtn.TabIndex = 2;
@@ -271,7 +295,7 @@
             // 
             // osVersionBox
             // 
-            this.osVersionBox.Location = new System.Drawing.Point(35, 99);
+            this.osVersionBox.Location = new System.Drawing.Point(49, 100);
             this.osVersionBox.Name = "osVersionBox";
             this.osVersionBox.ReadOnly = true;
             this.osVersionBox.Size = new System.Drawing.Size(351, 20);
@@ -312,6 +336,7 @@
             this.ctmStatusBar.Size = new System.Drawing.Size(766, 22);
             this.ctmStatusBar.TabIndex = 3;
             this.ctmStatusBar.Text = "statusStrip1";
+            this.ctmStatusBar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ctmStatusBar_ItemClicked);
             // 
             // ctmStatusLabel
             // 
@@ -344,6 +369,16 @@
             this.label8.TabIndex = 5;
             this.label8.Text = "Last Test Log:";
             this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
+            // haltOnErrorBox
+            // 
+            this.haltOnErrorBox.AutoSize = true;
+            this.haltOnErrorBox.Location = new System.Drawing.Point(296, 48);
+            this.haltOnErrorBox.Name = "haltOnErrorBox";
+            this.haltOnErrorBox.Size = new System.Drawing.Size(87, 17);
+            this.haltOnErrorBox.TabIndex = 14;
+            this.haltOnErrorBox.Text = "Halt On Error";
+            this.haltOnErrorBox.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -400,6 +435,9 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button regenerateGuidBtn;
         private System.Windows.Forms.Button forcePollBtn;
+        private System.Windows.Forms.TextBox buildBox;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.CheckBox haltOnErrorBox;
     }
 }
 

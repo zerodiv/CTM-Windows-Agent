@@ -147,9 +147,20 @@ namespace Continuum_Windows_Testing_Agent
             this.safariVersionBox.Text = et.safari.getVersion();
             this.osVersionBox.Text = et.determineWindowsVersion();
             this.guidBox.Text = this._getGuid();
+            this.buildBox.Text = this._getBuild();
+            
+            
             
             // hook up the onLog event handler.
             // this.et.log.logMessage += new CTM_Agent_Log_Message_Handler(agentLogHandler);
+        }
+
+        private String _getBuild()
+        {
+            System.Version v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            
+            return v.ToString();
+
         }
 
         /*
@@ -290,6 +301,16 @@ namespace Continuum_Windows_Testing_Agent
         private void ctmLogTimer_Tick(object sender, EventArgs e)
         {
            
+        }
+
+        private void ctmStatusBar_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -235,7 +235,7 @@ namespace Continuum_Windows_Testing_Agent
                                 CTM_Work_Runner ctmWorkRunner = new CTM_Work_Runner();
 
                                 // Convert the XML document into a ctmWorkRunner object.
-                                ctmWorkRunner.testRunId = UInt64.Parse(testRun.SelectSingleNode("test_run_id").InnerText);
+                                ctmWorkRunner.testRunId = UInt64.Parse(testRun.SelectSingleNode("testRunId").InnerText);
                                 ctmWorkRunner.testRunBrowserId = UInt64.Parse(testRun.SelectSingleNode("id").InnerText);
 
                                 XmlNode ctmTestBrowser = testRun.SelectSingleNode("CTM_Test_Browser");
