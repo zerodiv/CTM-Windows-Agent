@@ -157,10 +157,14 @@ namespace Continuum_Windows_Testing_Agent
 
         private String _getBuild()
         {
-            System.Version v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            
-            return v.ToString();
-
+            if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed)
+            {
+                return System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+            }
+            else
+            {
+                return "We are in development.";
+            }
         }
 
         /*
@@ -309,6 +313,11 @@ namespace Continuum_Windows_Testing_Agent
         }
 
         private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buildBox_TextChanged(object sender, EventArgs e)
         {
 
         }

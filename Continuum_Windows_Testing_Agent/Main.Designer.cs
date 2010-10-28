@@ -39,6 +39,7 @@
             this.ieVersionBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.haltOnErrorBox = new System.Windows.Forms.CheckBox();
             this.buildBox = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.forcePollBtn = new System.Windows.Forms.Button();
@@ -60,7 +61,6 @@
             this.callHomeTimer = new System.Windows.Forms.Timer(this.components);
             this.lastRunLogBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.haltOnErrorBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.ctmStatusBar.SuspendLayout();
@@ -184,6 +184,16 @@
             this.groupBox2.Text = "Config";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
+            // haltOnErrorBox
+            // 
+            this.haltOnErrorBox.AutoSize = true;
+            this.haltOnErrorBox.Location = new System.Drawing.Point(296, 48);
+            this.haltOnErrorBox.Name = "haltOnErrorBox";
+            this.haltOnErrorBox.Size = new System.Drawing.Size(87, 17);
+            this.haltOnErrorBox.TabIndex = 14;
+            this.haltOnErrorBox.Text = "Halt On Error";
+            this.haltOnErrorBox.UseVisualStyleBackColor = true;
+            // 
             // buildBox
             // 
             this.buildBox.Location = new System.Drawing.Point(414, 132);
@@ -191,6 +201,7 @@
             this.buildBox.ReadOnly = true;
             this.buildBox.Size = new System.Drawing.Size(114, 20);
             this.buildBox.TabIndex = 6;
+            this.buildBox.TextChanged += new System.EventHandler(this.buildBox_TextChanged);
             // 
             // label11
             // 
@@ -369,16 +380,6 @@
             this.label8.TabIndex = 5;
             this.label8.Text = "Last Test Log:";
             this.label8.Click += new System.EventHandler(this.label8_Click);
-            // 
-            // haltOnErrorBox
-            // 
-            this.haltOnErrorBox.AutoSize = true;
-            this.haltOnErrorBox.Location = new System.Drawing.Point(296, 48);
-            this.haltOnErrorBox.Name = "haltOnErrorBox";
-            this.haltOnErrorBox.Size = new System.Drawing.Size(87, 17);
-            this.haltOnErrorBox.TabIndex = 14;
-            this.haltOnErrorBox.Text = "Halt On Error";
-            this.haltOnErrorBox.UseVisualStyleBackColor = true;
             // 
             // Main
             // 

@@ -18,9 +18,9 @@ namespace Continuum_Windows_Testing_Agent.Selenese
             this.log.startTimer();
             int testWait = 3000;
 
-            if (testCommand.value != "")
+            if (testCommand.getValue() != "")
             {
-                testWait = Convert.ToInt32(testCommand.value);
+                testWait = Convert.ToInt32(testCommand.getValue());
             }
 
             if (testWait > 0)

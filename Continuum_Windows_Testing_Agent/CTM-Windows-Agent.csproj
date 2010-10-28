@@ -22,7 +22,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <PublishUrl>ftp://ftp.zerodivide.net/ctm/</PublishUrl>
+    <PublishUrl>ftp://ftp.atcjet.net/ctm/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -35,7 +35,7 @@
     <InstallUrl>http://www.zerodivide.net/ctm/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>18</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -61,6 +61,10 @@
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL" />
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json.Net20, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Vendor\selenium-dotnet-2.0a6\Newtonsoft.Json.Net20.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -77,40 +81,30 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ThoughtWorks.Selenium.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a5\ThoughtWorks.Selenium.Core.dll</HintPath>
-    </Reference>
     <Reference Include="WebDriver.Chrome, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a5\WebDriver.Chrome.dll</HintPath>
+      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Chrome.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a5\WebDriver.Common.dll</HintPath>
+      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Common.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Firefox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a5\WebDriver.Firefox.dll</HintPath>
+      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Firefox.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.IE, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a5\WebDriver.IE.dll</HintPath>
+      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.IE.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Remote, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a5\WebDriver.Remote.dll</HintPath>
-    </Reference>
-    <Reference Include="WebDriver.Remote.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a5\WebDriver.Remote.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="WebDriverBackedSelenium, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a5\WebDriverBackedSelenium.dll</HintPath>
+      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Remote.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PageLoadWaiter.cs" />
+    <Compile Include="Selenese\SeleneseRemoveSelection.cs" />
     <Compile Include="Selenese\SeleneseStore.cs" />
     <Compile Include="Selenese\SeleneseOpen.cs" />
     <Compile Include="Selenese\SeleneseType.cs" />
@@ -136,6 +130,136 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vendor\selenium\Core\DefaultRemoteCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vendor\selenium\Core\DefaultSelenium.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vendor\selenium\Core\HttpCommandProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vendor\selenium\Core\ICommandProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vendor\selenium\Core\IRemoteCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vendor\selenium\Core\ISelenium.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vendor\selenium\Core\SeleniumException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AddLocationStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AddSelection.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AltKeyDown.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AltKeyUp.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AssignId.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AttachFile.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\CaptureScreenshotToString.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Check.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Click.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Close.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ControlKeyDown.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ControlKeyUp.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\CreateCookie.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\DeleteAllVisibleCookies.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\DeleteCookie.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\DoubleClick.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\DragAndDrop.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\DragAndDropToObject.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ElementFinder.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\FindFirstSelectedOptionProperty.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\FindSelectedOptionProperties.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\FireEvent.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\FireNamedEvent.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetAllButtons.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetAllFields.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetAllLinks.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetAllWindowTitles.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetAttribute.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetAttributeFromAllWindows.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetBodyText.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetCookie.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetCookieByName.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetElementHeight.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetElementIndex.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetElementPositionLeft.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetElementPositionTop.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetElementWidth.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetEval.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetHtmlSource.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetLocation.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetSelectOptions.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetTable.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetText.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetTitle.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetValue.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GetXpathCount.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\GoBack.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Highlight.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ILookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IOptionSelectStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsChecked.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsCookiePresent.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsEditable.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsElementPresent.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsOrdered.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsSomethingSelected.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsTextPresent.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsVisible.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ITextMatchingStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\JavaScriptLibrary.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\KeyEvent.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\KeyState.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\AltLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\ClassLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\DomTraversalLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\IdentifierLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\IdLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\ImplicitLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\LinkLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\NameLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\LookupStrategies\XPathLookupStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\MetaKeyDown.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\MetaKeyUp.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\MouseEvent.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\MouseEventAt.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\NoOp.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Open.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\OpenWindow.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\OptionSelectStratgies\BaseOptionSelectStragety.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\OptionSelectStratgies\IdOptionSelectStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\OptionSelectStratgies\IndexOptionSelectStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\OptionSelectStratgies\LabelOptionSelectStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\OptionSelectStratgies\ValueOptionSelectStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Refresh.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\RemoveAllSelections.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\RemoveSelection.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\RunScript.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\SelectFrame.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\SelectOption.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\SelectWindow.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\SeleneseCommand.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\SeleniumOptionSelector.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ShiftKeyDown.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ShiftKeyUp.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Submit.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\TextMatchingStrategies\ExactTextMatchingStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\TextMatchingStrategies\GlobTextMatchingStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\TextMatchingStrategies\RegExTextMatchingStrategy.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Type.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\TypeKeys.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Uncheck.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Waiter.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WaitForCondition.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WaitForPageToLoad.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WaitForPopup.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowFocus.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowMaximize.cs" />
+    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowSelector.cs" />
+    <Compile Include="Waiter.cs" />
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -197,6 +321,17 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Vendor\selenium\WebdriverBackedSelenium\Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="htmlutils.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="injectableSelenium.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

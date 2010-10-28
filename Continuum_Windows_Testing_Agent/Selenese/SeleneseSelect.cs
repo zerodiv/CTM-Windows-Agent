@@ -20,9 +20,9 @@ namespace Continuum_Windows_Testing_Agent
 
             // label=bar
             String label = "";
-            if (testCommand.value.StartsWith("label="))
+            if (testCommand.getValue().StartsWith("label="))
             {
-                label = testCommand.value;
+                label = testCommand.getValue();
                 label = label.Replace("label=", "");
             }
             else
@@ -38,7 +38,7 @@ namespace Continuum_Windows_Testing_Agent
 
             try
             {
-                String xByNamePath = "//select[@name='" + testCommand.target + "']/option[normalize-space(.)='" + label + "']";
+                String xByNamePath = "//select[@name='" + testCommand.getTarget() + "']/option[normalize-space(.)='" + label + "']";
                 option = this.webDriver.FindElement(this.locator.convert(xByNamePath));
                 optionFound = true;
             }
@@ -52,7 +52,7 @@ namespace Continuum_Windows_Testing_Agent
             {
                 try
                 {
-                    String xByIdPath = "//select[@id='" + testCommand.target + "']/option[normalize-space(.)='" + label + "']";
+                    String xByIdPath = "//select[@id='" + testCommand.getTarget() + "']/option[normalize-space(.)='" + label + "']";
                     option = this.webDriver.FindElement(this.locator.convert(xByIdPath));
                     optionFound = true;
                 }

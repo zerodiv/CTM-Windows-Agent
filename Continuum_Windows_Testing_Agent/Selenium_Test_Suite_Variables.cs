@@ -18,13 +18,13 @@ namespace Continuum_Windows_Testing_Agent
 
         public void consumeTrinome(Selenium_Test_Trinome triNome)
         {
-            if (this.vars.ContainsKey(triNome.value) == true)
+            if (this.vars.ContainsKey(triNome.getValue()) == true)
             {
-                this.vars[triNome.value] = triNome.target;
+                this.vars[triNome.getValue()] = triNome.getTarget();
             }
             else
             {
-                this.vars.Add(triNome.value, triNome.target);
+                this.vars.Add(triNome.getValue(), triNome.getTarget());
             }
         }
 

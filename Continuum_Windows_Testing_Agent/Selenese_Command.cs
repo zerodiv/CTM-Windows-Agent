@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using OpenQA.Selenium;
 using System.Text.RegularExpressions;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 
 namespace Continuum_Windows_Testing_Agent
 {
@@ -12,12 +14,24 @@ namespace Continuum_Windows_Testing_Agent
         protected Selenium_Test_Log log;
         protected IWebDriver webDriver;
         protected Selenese_Locator locator;
-
+        
         public Selenese_Command(Selenium_Test_Log log, IWebDriver webDriver)
         {
             this.log = log;
             this.webDriver = webDriver;
             this.locator = new Selenese_Locator(log, webDriver);
+                       
+        }
+
+        protected void waitForPageToLoad()
+        {
+            this.waitForPageToLoad(30000);
+        }
+
+        protected void waitForPageToLoad(int timeOut) 
+        {
+            PageLoadWaiter pageWaiter = new PageLoadWaiter(this.webDriver, timeOut);
+            pageWaiter.Wait("Page load timeout exceeded");
         }
 
         protected String runJavascriptValue(String javascriptValue)
@@ -61,5 +75,6 @@ namespace Continuum_Windows_Testing_Agent
         }
 
         abstract public Boolean run(Selenium_Test_Trinome testCommand);
+
     }
 }

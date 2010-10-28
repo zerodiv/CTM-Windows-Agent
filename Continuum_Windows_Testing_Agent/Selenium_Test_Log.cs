@@ -237,9 +237,9 @@ namespace Continuum_Windows_Testing_Agent
             
             this.bodyFh.WriteLine("<tr class=\"" + cssClass + "\">");
             this.bodyFh.WriteLine("<td>" + this.totalCommands + "</td>");
-            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.command) + "</td>");
-            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.target) + "</td>");
-            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.value) + "</td>");
+            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.getCommand()) + "</td>");
+            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.getTarget()) + "</td>");
+            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.getValue()) + "</td>");
             this.bodyFh.WriteLine("<td>" + this.startTime + "</td>");
             this.bodyFh.WriteLine("<td>" + this.stopTime + "</td>");
             this.bodyFh.WriteLine("<td>" + elapsed + "</td>");

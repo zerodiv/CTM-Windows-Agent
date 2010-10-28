@@ -18,8 +18,12 @@ namespace Continuum_Windows_Testing_Agent.Selenese
             this.log.startTimer();
             try
             {
-                IWebElement element = this.webDriver.FindElement(this.locator.convert(testCommand.target));
+                IWebElement element = this.webDriver.FindElement(this.locator.convert(testCommand.getTarget()));
+                
                 element.Click();
+                
+                this.waitForPageToLoad();
+
                 this.log.logSuccess(testCommand, "");
                 return true;
             }

@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ReferencePath>C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\</ReferencePath>
-    <PublishUrlHistory>ftp://ftp.zerodivide.net/ctm/|C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2010\Projects\CTM-Windows-Agent\deploy\|C:\deploy\ctm\|ftp://ftp.zerodivide.net/|ftp://ftp.atcjet.net/</PublishUrlHistory>
+    <PublishUrlHistory>ftp://ftp.atcjet.net/ctm/|ftp://ftp.zerodivide.net/ctm/|C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2010\Projects\CTM-Windows-Agent\deploy\|C:\deploy\ctm\|ftp://ftp.zerodivide.net/</PublishUrlHistory>
     <InstallUrlHistory>http://www.zerodivide.net/ctm/</InstallUrlHistory>
     <SupportUrlHistory>
     </SupportUrlHistory>

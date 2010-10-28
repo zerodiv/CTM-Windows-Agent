@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenQA.Selenium;
+using OpenQA.Selenium.IE;
 using System.Collections.Specialized;
 using System.Web;
 
 namespace Continuum_Windows_Testing_Agent.Selenese
-{
+{  
+
     class SeleneseOpen : Selenese_Command
     {
         private Uri baseUri;
@@ -76,6 +78,7 @@ namespace Continuum_Windows_Testing_Agent.Selenese
                 nUrl = nUrl + "?" + uParams;
             }
 
+            
             // Save the new url to the stack
             this.baseUri = new Uri(nUrl);
 
@@ -86,15 +89,23 @@ namespace Continuum_Windows_Testing_Agent.Selenese
         public override Boolean run(Selenium_Test_Trinome testCommand)
         {
             this.log.startTimer();
+            String uUrl = "";
             try
             {
-                this.webDriver.Navigate().GoToUrl(this.parseUri(testCommand.target));
-                this.log.logSuccess(testCommand, "");
+
+                uUrl = this.parseUri(testCommand.getTarget());
+                
+                this.webDriver.Navigate().GoToUrl(uUrl);
+
+                this.waitForPageToLoad();
+
+                this.log.logSuccess(testCommand, "used url: " + uUrl);
+
                 return true;
             }
             catch (Exception e)
             {
-                this.log.logFailure(testCommand, e.Message);
+                this.log.logFailure(testCommand, e.Message + " used url: " + uUrl );
             }
             return false;
         }

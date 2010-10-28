@@ -23,14 +23,14 @@ namespace Continuum_Windows_Testing_Agent.Selenese
             try
             {
                 Regex domRegex = new Regex(@"^dom=document.getElementById\('(.*?)'\)");
-                Match domMatch = domRegex.Match(testCommand.target);
+                Match domMatch = domRegex.Match(testCommand.getTarget());
 
                 if (domMatch.Success)
                 {
                     String tinyMCEiFrame = domMatch.Groups[1].Value;
                     this.webDriver.SwitchTo().Frame(tinyMCEiFrame);
                     IWebElement element = this.webDriver.FindElement(By.Id("tinymce"));
-                    element.SendKeys(this.runJavascriptValue(testCommand.value));
+                    element.SendKeys(this.runJavascriptValue(testCommand.getValue()));
                     this.webDriver.SwitchTo().Window(this.webDriver.GetWindowHandle());
                     this.log.logSuccess(testCommand, "");
                     return true;
@@ -44,8 +44,8 @@ namespace Continuum_Windows_Testing_Agent.Selenese
 
             try
             {
-                IWebElement element = this.webDriver.FindElement(this.locator.convert(testCommand.target));
-                element.SendKeys(this.runJavascriptValue(testCommand.value));
+                IWebElement element = this.webDriver.FindElement(this.locator.convert(testCommand.getTarget()));
+                element.SendKeys(this.runJavascriptValue(testCommand.getValue()));
                 this.log.logSuccess(testCommand, "");
                 return true;
             }

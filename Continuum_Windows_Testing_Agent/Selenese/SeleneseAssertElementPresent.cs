@@ -16,7 +16,7 @@ namespace Continuum_Windows_Testing_Agent
             this.log.startTimer();
             try
             {
-                IWebElement element = this.webDriver.FindElement(this.locator.convert(testCommand.target));
+                IWebElement element = this.webDriver.FindElement(this.locator.convert(testCommand.getTarget()));
                 this.log.logSuccess(testCommand, "");
                 return true;
             }

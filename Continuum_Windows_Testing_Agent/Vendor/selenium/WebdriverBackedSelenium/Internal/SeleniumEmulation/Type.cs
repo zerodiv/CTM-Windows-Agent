@@ -24,6 +24,11 @@ namespace Selenium.Internal.SeleniumEmulation
             string stringToType = state.ShiftKeyDown ? value.ToUpperInvariant() : value;
 
             IWebElement element = finder.FindElement(driver, locator);
+            
+            // JEO: I don't know why they did the javascript replaceText bit, but it doesn't work on all browsers.
+            element.SendKeys(stringToType);
+
+            /*
             IJavaScriptExecutor executor = driver as IJavaScriptExecutor;
             if (executor != null && executor.IsJavaScriptEnabled)
             {
@@ -33,6 +38,7 @@ namespace Selenium.Internal.SeleniumEmulation
             {
                 element.SendKeys(stringToType);
             }
+            */
 
             return null;
         }

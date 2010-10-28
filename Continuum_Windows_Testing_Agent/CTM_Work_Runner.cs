@@ -263,25 +263,25 @@ namespace Continuum_Windows_Testing_Agent
                     switch (tri)
                     {
                         case 1:
-                            triNome.command = testTrinome.InnerHtml;
+                            triNome.setCommand(testTrinome.InnerHtml);
                             break;
                         case 2:
-                            triNome.target = testTrinome.InnerHtml;
+                            triNome.setTarget(testTrinome.InnerHtml);
                             break;
                         case 3:
-                            triNome.value = testTrinome.InnerHtml;
+                            triNome.setValue(testTrinome.InnerHtml);
                             break;
                     }
 
                 }
 
-                triNome.target = System.Web.HttpUtility.HtmlDecode(triNome.target);
-                triNome.value = System.Web.HttpUtility.HtmlDecode(triNome.value);
+                triNome.setTarget(System.Web.HttpUtility.HtmlDecode(triNome.getTarget()));
+                triNome.setValue(System.Web.HttpUtility.HtmlDecode(triNome.getValue()));
 
                 this.seleniumTestLog.message(
-                    "testCommand: " + triNome.command + " " +
-                    "testTarget: " + triNome.target + " " +
-                    "testValue: " + triNome.value 
+                    "testCommand: " + triNome.getCommand() + " " +
+                    "testTarget: " + triNome.getTarget() + " " +
+                    "testValue: " + triNome.getValue() 
                 );
                 testCommands.Add(triNome);
             }
@@ -357,9 +357,9 @@ namespace Continuum_Windows_Testing_Agent
                         commandId++;
                         this.seleniumTestLog.message(
                             "testCommand[" + commandId + " of " + testCommands.Count + "] " +
-                            "command: " + testCommand.command + " " +
-                            "target: " + testCommand.target + " " +
-                            "value: " + testCommand.value);
+                            "command: " + testCommand.getCommand() + " " +
+                            "target: " + testCommand.getTarget() + " " +
+                            "value: " + testCommand.getValue());
                         // this.seleniumTestLog.message("testCommand[" + commandId + " of " + testCommands.Count + "]: '" + testCommand.command + "'");
                         seTest.processSelenese(testCommand);
                         this.seleniumTestLog.message("testCommand finished");

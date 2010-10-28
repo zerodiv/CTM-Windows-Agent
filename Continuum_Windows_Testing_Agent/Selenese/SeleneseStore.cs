@@ -22,7 +22,7 @@ namespace Continuum_Windows_Testing_Agent.Selenese
             try
             {
                 // If the value is javascript fix up the target / values.
-                testCommand.target = this.runJavascriptValue(testCommand.target);
+                testCommand.setTarget(this.runJavascriptValue(testCommand.getTarget()));
 
                 this.testVariables.consumeTrinome(testCommand);
                 this.log.stopTimer();

@@ -20,9 +20,9 @@ namespace Continuum_Windows_Testing_Agent.Selenese
             try
             {
                 Regex matchRegex = null;
-                if (testCommand.target.Contains("*"))
+                if (testCommand.getTarget().Contains("*"))
                 {
-                    String strRegex = testCommand.target;
+                    String strRegex = testCommand.getTarget();
                     strRegex = strRegex.Replace("*", ".*");
 
                     matchRegex = new Regex(strRegex);
@@ -42,13 +42,13 @@ namespace Continuum_Windows_Testing_Agent.Selenese
                     }
                     else
                     {
-                        if (element.Text == testCommand.target)
+                        if (element.Text == testCommand.getTarget())
                         {
                             // Exact match. 
                             this.log.logSuccess(testCommand, "");
                             return true;
                         }
-                        if (element.Text.Contains(testCommand.target))
+                        if (element.Text.Contains(testCommand.getTarget()))
                         {
                             // Contains support.
                             this.log.logSuccess(testCommand, "");
