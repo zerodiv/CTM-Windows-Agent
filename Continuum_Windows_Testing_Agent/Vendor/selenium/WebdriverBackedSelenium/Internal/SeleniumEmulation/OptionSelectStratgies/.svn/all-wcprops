@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/OptionSelectStratgies
+END
+LabelOptionSelectStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/OptionSelectStratgies/LabelOptionSelectStrategy.cs
+END
+IndexOptionSelectStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/OptionSelectStratgies/IndexOptionSelectStrategy.cs
+END
+BaseOptionSelectStragety.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/OptionSelectStratgies/BaseOptionSelectStragety.cs
+END
+IdOptionSelectStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/OptionSelectStratgies/IdOptionSelectStrategy.cs
+END
+ValueOptionSelectStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/OptionSelectStratgies/ValueOptionSelectStrategy.cs
+END

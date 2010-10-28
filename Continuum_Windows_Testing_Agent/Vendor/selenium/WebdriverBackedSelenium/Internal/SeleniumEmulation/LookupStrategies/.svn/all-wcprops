@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies
+END
+NameLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/NameLookupStrategy.cs
+END
+AltLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/AltLookupStrategy.cs
+END
+IdentifierLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/IdentifierLookupStrategy.cs
+END
+DomTraversalLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/DomTraversalLookupStrategy.cs
+END
+XPathLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/XPathLookupStrategy.cs
+END
+ClassLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/ClassLookupStrategy.cs
+END
+ImplicitLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/ImplicitLookupStrategy.cs
+END
+IdLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/IdLookupStrategy.cs
+END
+LinkLookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/LookupStrategies/LinkLookupStrategy.cs
+END

@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/9764/trunk/selenium/src/csharp/Core
+END
+AssemblyInfo.cs
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/Core/AssemblyInfo.cs
+END
+HttpCommandProcessor.cs
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/9174/trunk/selenium/src/csharp/Core/HttpCommandProcessor.cs
+END
+DefaultRemoteCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/7806/trunk/selenium/src/csharp/Core/DefaultRemoteCommand.cs
+END
+SeleniumException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/7806/trunk/selenium/src/csharp/Core/SeleniumException.cs
+END
+selenium-core.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/Core/selenium-core.csproj
+END
+IRemoteCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/7806/trunk/selenium/src/csharp/Core/IRemoteCommand.cs
+END
+CommonAssemblyInfo.cs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/7806/trunk/selenium/src/csharp/Core/CommonAssemblyInfo.cs
+END
+DefaultSelenium.cs
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/9174/trunk/selenium/src/csharp/Core/DefaultSelenium.cs
+END
+ICommandProcessor.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/9174/trunk/selenium/src/csharp/Core/ICommandProcessor.cs
+END
+ISelenium.cs
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/7806/trunk/selenium/src/csharp/Core/ISelenium.cs
+END

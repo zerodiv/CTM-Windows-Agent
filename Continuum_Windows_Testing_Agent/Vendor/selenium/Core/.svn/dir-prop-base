@@ -1,0 +1,15 @@
+K 10
+svn:ignore
+V 92
+*.log
+*.log.lck
+.classpath
+.project
+classes
+dist
+obj
+selenium.ipr
+selenium.iws
+selenium.xml
+
+END

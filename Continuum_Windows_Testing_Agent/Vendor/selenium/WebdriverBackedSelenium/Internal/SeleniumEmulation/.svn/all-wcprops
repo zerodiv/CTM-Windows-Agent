@@ -1,0 +1,551 @@
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/9058/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation
+END
+ShiftKeyDown.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/ShiftKeyDown.cs
+END
+IsTextPresent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/9058/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IsTextPresent.cs
+END
+ElementFinder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/ElementFinder.cs
+END
+Type.cs
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Type.cs
+END
+GetTitle.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetTitle.cs
+END
+DragAndDrop.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/DragAndDrop.cs
+END
+GetAllWindowTitles.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetAllWindowTitles.cs
+END
+DeleteAllVisibleCookies.cs
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/DeleteAllVisibleCookies.cs
+END
+KeyState.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/KeyState.cs
+END
+RunScript.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/RunScript.cs
+END
+FireNamedEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/FireNamedEvent.cs
+END
+IsCookiePresent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IsCookiePresent.cs
+END
+SelectOption.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/SelectOption.cs
+END
+WindowMaximize.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/WindowMaximize.cs
+END
+Check.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Check.cs
+END
+TypeKeys.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/TypeKeys.cs
+END
+MouseEventAt.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/MouseEventAt.cs
+END
+Uncheck.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Uncheck.cs
+END
+GetElementIndex.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetElementIndex.cs
+END
+AltKeyDown.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/AltKeyDown.cs
+END
+ControlKeyDown.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/ControlKeyDown.cs
+END
+GetText.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetText.cs
+END
+GetHtmlSource.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetHtmlSource.cs
+END
+Click.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Click.cs
+END
+FireEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/FireEvent.cs
+END
+GetTable.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetTable.cs
+END
+GetAllButtons.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetAllButtons.cs
+END
+GetElementWidth.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetElementWidth.cs
+END
+GetElementPositionLeft.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetElementPositionLeft.cs
+END
+MouseEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/MouseEvent.cs
+END
+GetAttributeFromAllWindows.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetAttributeFromAllWindows.cs
+END
+ITextMatchingStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/ITextMatchingStrategy.cs
+END
+Waiter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Waiter.cs
+END
+CreateCookie.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/CreateCookie.cs
+END
+GetXpathCount.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetXpathCount.cs
+END
+AddSelection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/AddSelection.cs
+END
+AltKeyUp.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/AltKeyUp.cs
+END
+ControlKeyUp.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/ControlKeyUp.cs
+END
+WaitForPopup.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/WaitForPopup.cs
+END
+SeleneseCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/SeleneseCommand.cs
+END
+Close.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Close.cs
+END
+SelectWindow.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/SelectWindow.cs
+END
+Highlight.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Highlight.cs
+END
+GetLocation.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetLocation.cs
+END
+NoOp.cs
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/NoOp.cs
+END
+SeleniumOptionSelector.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/9009/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/SeleniumOptionSelector.cs
+END
+GetValue.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetValue.cs
+END
+RemoveAllSelections.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/RemoveAllSelections.cs
+END
+IsChecked.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IsChecked.cs
+END
+IsElementPresent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IsElementPresent.cs
+END
+IsVisible.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IsVisible.cs
+END
+ShiftKeyUp.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/ShiftKeyUp.cs
+END
+GetSelectOptions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetSelectOptions.cs
+END
+JavaScriptLibrary.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/9009/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/JavaScriptLibrary.cs
+END
+CaptureScreenshotToString.cs
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/CaptureScreenshotToString.cs
+END
+DeleteCookie.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/DeleteCookie.cs
+END
+Refresh.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Refresh.cs
+END
+GetElementPositionTop.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetElementPositionTop.cs
+END
+IsSomethingSelected.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IsSomethingSelected.cs
+END
+Submit.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Submit.cs
+END
+GetAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetAttribute.cs
+END
+AttachFile.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/AttachFile.cs
+END
+AddLocationStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/AddLocationStrategy.cs
+END
+WindowFocus.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/WindowFocus.cs
+END
+WindowSelector.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/WindowSelector.cs
+END
+GetCookie.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetCookie.cs
+END
+GetAllLinks.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetAllLinks.cs
+END
+WaitForPageToLoad.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/WaitForPageToLoad.cs
+END
+DragAndDropToObject.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/DragAndDropToObject.cs
+END
+IsOrdered.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IsOrdered.cs
+END
+DoubleClick.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/DoubleClick.cs
+END
+GetElementHeight.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetElementHeight.cs
+END
+WaitForCondition.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/WaitForCondition.cs
+END
+GoBack.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GoBack.cs
+END
+MetaKeyDown.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/MetaKeyDown.cs
+END
+GetEval.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetEval.cs
+END
+OpenWindow.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/OpenWindow.cs
+END
+SelectFrame.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/SelectFrame.cs
+END
+KeyEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/KeyEvent.cs
+END
+FindFirstSelectedOptionProperty.cs
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/FindFirstSelectedOptionProperty.cs
+END
+FindSelectedOptionProperties.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/FindSelectedOptionProperties.cs
+END
+GetAllFields.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetAllFields.cs
+END
+AssignId.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/AssignId.cs
+END
+Open.cs
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/9058/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/Open.cs
+END
+GetBodyText.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetBodyText.cs
+END
+RemoveSelection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/RemoveSelection.cs
+END
+IOptionSelectStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IOptionSelectStrategy.cs
+END
+MetaKeyUp.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/MetaKeyUp.cs
+END
+IsEditable.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/IsEditable.cs
+END
+GetCookieByName.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/GetCookieByName.cs
+END
+ILookupStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/ILookupStrategy.cs
+END

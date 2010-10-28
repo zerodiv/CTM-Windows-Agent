@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/TextMatchingStrategies
+END
+RegExTextMatchingStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/TextMatchingStrategies/RegExTextMatchingStrategy.cs
+END
+GlobTextMatchingStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/TextMatchingStrategies/GlobTextMatchingStrategy.cs
+END
+ExactTextMatchingStrategy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/!svn/ver/8964/trunk/selenium/src/csharp/WebdriverBackedSelenium/Internal/SeleniumEmulation/TextMatchingStrategies/ExactTextMatchingStrategy.cs
+END
