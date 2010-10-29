@@ -205,6 +205,14 @@ namespace Continuum_Windows_Testing_Agent
             this.bodyFh.WriteLine("</tr>");
 
         }
+
+        public void insertTestComment(String comment)
+        {
+            this.bodyFh.WriteLine("<tr>");
+            this.bodyFh.WriteLine("<td colspan=\"8\" class=\"comments\"><center>" + System.Web.HttpUtility.HtmlEncode(comment) + "</center></td>");
+            this.bodyFh.WriteLine("</tr>");
+        }
+
         public void message(String message)
         {
             if (this.useVerboseTestLogs == false)

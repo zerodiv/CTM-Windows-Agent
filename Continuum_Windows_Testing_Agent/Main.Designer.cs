@@ -193,6 +193,7 @@
             this.haltOnErrorBox.TabIndex = 14;
             this.haltOnErrorBox.Text = "Halt On Error";
             this.haltOnErrorBox.UseVisualStyleBackColor = true;
+            this.haltOnErrorBox.CheckedChanged += new System.EventHandler(this.haltOnErrorBox_CheckedChanged);
             // 
             // buildBox
             // 

@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using Continuum_Windows_Testing_Agent.Selenese;
 using OpenQA.Selenium;
-using Selenium;
 using Selenium.Internal.SeleniumEmulation;
 using System.Collections.Generic;
 
@@ -19,7 +18,7 @@ namespace Continuum_Windows_Testing_Agent
         private Selenium_Test_Log log;
         private Hashtable seleneseCommands;
 
-        private Dictionary<string, SeleneseCommand> seleneseMethods;
+        private Hashtable seleneseMethods;
         private ElementFinder elementFinder;
         private SeleniumOptionSelector select;
         private KeyState keyState;
@@ -34,8 +33,8 @@ namespace Continuum_Windows_Testing_Agent
             this.log = log;
 
             this.seleneseCommands = new Hashtable();
-            
-            this.seleneseMethods = new Dictionary<string, SeleneseCommand>();
+
+            this.seleneseMethods = new Hashtable();
             this.elementFinder = new ElementFinder();
             this.select = new SeleniumOptionSelector(this.elementFinder);
 
@@ -47,11 +46,11 @@ namespace Continuum_Windows_Testing_Agent
 
         private void initSeleneseCommands()
         {
-            this.seleneseCommands.Add("addSelection", new SeleneseAddSelection(this.log, this.webDriver) );
+            this.seleneseCommands.Add("addSelection", new SeleneseAddSelection(this.log, this.webDriver));
             this.seleneseCommands.Add("assertElementPresent", new SeleneseAssertElementPresent(this.log, this.webDriver));
-            this.seleneseCommands.Add("assertTextPresent",  new SeleneseAssertTextPresent(this.log, this.webDriver));
+            this.seleneseCommands.Add("assertTextPresent", new SeleneseAssertTextPresent(this.log, this.webDriver));
             // this.seleneseCommands.Add("click", new SeleneseClick(this.log, this.webDriver));
-            this.seleneseCommands.Add("clickAndWait", new SeleneseClickAndWait(this.log, this.webDriver));
+            // this.seleneseCommands.Add("clickAndWait", new SeleneseClickAndWait(this.log, this.webDriver));
             this.seleneseCommands.Add("open", new SeleneseOpen(this.log, this.webDriver));
             this.seleneseCommands.Add("pause", new SelenesePause(this.log, this.webDriver));
             this.seleneseCommands.Add("removeSelection", new SeleneseRemoveSelection(this.log, this.webDriver));
@@ -71,6 +70,7 @@ namespace Continuum_Windows_Testing_Agent
             //seleneseMethods.Add("attachFile", new AttachFile(elementFinder));
             //seleneseMethods.Add("captureScreenshotToString", new CaptureScreenshotToString());
             this.seleneseMethods.Add("click", new Click(this.elementFinder));
+            this.seleneseMethods.Add("clickAndWait", new ClickAndWait(this.elementFinder));
             //seleneseMethods.Add("check", new Check(elementFinder));
             //seleneseMethods.Add("close", new Close());
             //seleneseMethods.Add("createCookie", new CreateCookie());
@@ -168,21 +168,6 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
-        private void trapSeleneseReturn(Boolean functionReturn)
-        {
-            if (this.testHadError == true)
-            {
-                return;
-            }
-            if (functionReturn == true)
-            {
-                this.testHadError = false;
-                return;
-            }
-            this.testHadError = true;
-            return;
-        }
-
         protected String runJavascriptValue(String javascriptValue)
         {
             String javascript = "";
@@ -223,29 +208,41 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
-        public void processSelenese(Selenium_Test_Trinome testCommand)
+        public Selenium_Test_Trinome interpolateSeleneseVariables(Selenium_Test_Trinome testCommand)
         {
-        
-           if (this.testHadError == true)
+            // Special exception for cleaning up / interpolating the testCommand into the new values.
+            if (testCommand.getCommand() != "store" && testCommand.getCommand() != ":comment:")
             {
-                this.log.logFailure(testCommand, "not executed - failure already occurred.");
-                return;
+                testCommand.setTarget(this.testVariables.replaceVariables(testCommand.getTarget()));
+                testCommand.setValue(this.testVariables.replaceVariables(testCommand.getValue()));
             }
 
+            // If the value contains javascript run it and replace the value.
+            testCommand.setValue(this.runJavascriptValue(testCommand.getValue()));
 
-           // Special exception for cleaning up / interpolating the testCommand into the new values.
-           if (testCommand.getCommand() != "store")
-           {
-               testCommand.setTarget(this.testVariables.replaceVariables(testCommand.getTarget()));
-               testCommand.setValue(this.testVariables.replaceVariables(testCommand.getValue()));
-           } 
+            return testCommand;
+        }
 
-           // If the value contains javascript run it and replace the value.
-           testCommand.setValue(this.runJavascriptValue(testCommand.getValue()));
+        public Boolean processSelenese(Selenium_Test_Trinome testCommand)
+        {
 
-           SeleneseCommand command;
-            if ( this.seleneseMethods.TryGetValue(testCommand.getCommand(), out command))
+            if (testCommand.getCommand() == ":comment:")
             {
+                this.log.insertTestComment(testCommand.getTarget());
+                return true;
+            }
+
+            if (this.testHadError == true)
+            {
+                this.log.logFailure(testCommand, "not executed - failure already occurred.");
+                return false;
+            }
+
+            if (this.seleneseMethods.ContainsKey(testCommand.getCommand())) {
+                SeleneseCommand cmd = (SeleneseCommand) this.seleneseMethods[testCommand.getCommand()];
+
+                testCommand = this.interpolateSeleneseVariables(testCommand);
+
                 // Found the command in the vendor commands.
                 String[] args;
 
@@ -268,31 +265,40 @@ namespace Continuum_Windows_Testing_Agent
                 try
                 {
                     this.log.startTimer();
-                    command.Apply(this.webDriver, args);
+                    cmd.Apply(this.webDriver, args);
                     this.log.logSuccess(testCommand, "");
+                    return true;
                 }
                 catch (Exception e)
                 {
                     this.log.logFailure(testCommand, "failed: " + e.Message);
                     this.testHadError = true;
+                    return false;
                 }
-                return;
             }
 
 
 
             if (this.seleneseCommands.ContainsKey(testCommand.getCommand()))
             {
-                Selenese_Command cmd = (Selenese_Command) this.seleneseCommands[testCommand.getCommand()];
-                this.trapSeleneseReturn(cmd.run(testCommand));
-                return;
+                Selenese_Command cmd = (Selenese_Command)this.seleneseCommands[testCommand.getCommand()];
+                testCommand = this.interpolateSeleneseVariables(testCommand);
+
+                if (cmd.run(testCommand) == true)
+                {
+                    return true;
+                } else {
+                    this.testHadError = true;
+                    return false;
+                } 
+
             }
 
             this.testHadError = true;
             this.log.logFailure(testCommand, "unimplemented selenese");
-            return;
+            return false;
 
         }
- 
+
     }
 }

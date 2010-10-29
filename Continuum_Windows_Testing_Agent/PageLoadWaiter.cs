@@ -26,8 +26,15 @@ namespace Continuum_Windows_Testing_Agent
                 object result = ((IJavaScriptExecutor)driver).ExecuteScript("return document['readyState'] ? 'complete' == document.readyState : true");
 
                 DateTime now = DateTime.Now;
-                if (result != null && result is bool && (bool)result)
-                {
+
+                // JEO: The logic here is odd if the page is loaded return true since it's done otherwise wait until the 
+                // return happens.
+                if (result != null && result is bool && (bool)result) {
+                    double foo = now.Subtract(started).TotalMilliseconds;
+                    if ((bool) result == true)
+                    {
+                        return true;
+                    }
                     if (now.Subtract(started).TotalMilliseconds > timeToWaitAfterPageLoad)
                     {
                         return true;

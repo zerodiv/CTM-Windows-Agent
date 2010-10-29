@@ -30,12 +30,15 @@ namespace Continuum_Windows_Testing_Agent
         public Selenium_Test_Log seleniumTestLog;
         public Boolean useVerboseTestLogs;
 
+        public Boolean haltOnError;
+
         private String tempTestDir;
         private String tempZipFile;
         private String testRunIndexHtml;
 
         public CTM_Work_Runner()
         {
+            this.haltOnError = false;
         }
 
         private Boolean initTestingDirectory()
@@ -252,38 +255,55 @@ namespace Continuum_Windows_Testing_Agent
                 return testCommands;
             }
 
-            foreach (HtmlNode testCommandRow in doc.DocumentNode.SelectNodes("/html/body/table/tbody/*"))
+            foreach (HtmlNode testCommandRow in doc.DocumentNode.SelectNodes("/html/body/table/tbody"))
             {
-                Selenium_Test_Trinome triNome = new Selenium_Test_Trinome();
-
-                int tri = 0;
-                foreach (HtmlNode testTrinome in testCommandRow.SelectNodes("td"))
+                foreach (HtmlNode testNode in testCommandRow.ChildNodes)
                 {
-                    tri++;
-                    switch (tri)
+                    if (testNode.Name == "#comment")
                     {
-                        case 1:
-                            triNome.setCommand(testTrinome.InnerHtml);
-                            break;
-                        case 2:
-                            triNome.setTarget(testTrinome.InnerHtml);
-                            break;
-                        case 3:
-                            triNome.setValue(testTrinome.InnerHtml);
-                            break;
+                        Selenium_Test_Trinome triNome = new Selenium_Test_Trinome();
+                        triNome.setCommand(":comment:");
+                        String comment = System.Web.HttpUtility.HtmlDecode(testNode.InnerText);
+                        comment = comment.Replace("<!-- ", "");
+                        comment = comment.Replace(" -->", "");
+                        triNome.setTarget(comment);
+                        testCommands.Add(triNome);
                     }
+                    if (testNode.Name == "tr")
+                    {
+                        Selenium_Test_Trinome triNome = new Selenium_Test_Trinome();
+                        int tri = 0;
+                        foreach (HtmlNode testTrinome in testNode.ChildNodes)
+                        {
+                            if (testTrinome.Name == "td")
+                            {
+                                tri++;
 
+                                if (tri == 1)
+                                {
+                                    triNome.setCommand(testTrinome.InnerHtml);
+                                }
+                                if (tri == 2)
+                                {
+                                    triNome.setTarget(System.Web.HttpUtility.HtmlDecode(testTrinome.InnerHtml));
+                                }
+                                if (tri == 3)
+                                {
+                                    triNome.setValue(System.Web.HttpUtility.HtmlDecode(testTrinome.InnerHtml));
+                                }
+                            }
+                        }
+
+                        testCommands.Add(triNome);
+
+                        this.seleniumTestLog.message(
+                            "testCommand: " + triNome.getCommand() + " " +
+                            "testTarget: " + triNome.getTarget() + " " +
+                            "testValue: " + triNome.getValue()
+                        );
+                    }
                 }
 
-                triNome.setTarget(System.Web.HttpUtility.HtmlDecode(triNome.getTarget()));
-                triNome.setValue(System.Web.HttpUtility.HtmlDecode(triNome.getValue()));
-
-                this.seleniumTestLog.message(
-                    "testCommand: " + triNome.getCommand() + " " +
-                    "testTarget: " + triNome.getTarget() + " " +
-                    "testValue: " + triNome.getValue() 
-                );
-                testCommands.Add(triNome);
             }
 
             this.seleniumTestLog.message("found: " + testCommands.Count + " testCommands in test file");
@@ -337,7 +357,7 @@ namespace Continuum_Windows_Testing_Agent
                 // loop across all the tests and run them.
                 String testBasedir = Path.GetDirectoryName(this.testRunIndexHtml);
 
-                Selenium_Test seTest = new Selenium_Test(webDriver, this.seleniumTestLog);
+                Selenium_Test seTest = new Selenium_Test(webDriver, this.seleniumTestLog );
 
                 foreach (String test in tests)
                 {
@@ -361,7 +381,13 @@ namespace Continuum_Windows_Testing_Agent
                             "target: " + testCommand.getTarget() + " " +
                             "value: " + testCommand.getValue());
                         // this.seleniumTestLog.message("testCommand[" + commandId + " of " + testCommands.Count + "]: '" + testCommand.command + "'");
-                        seTest.processSelenese(testCommand);
+                        Boolean selReturn = seTest.processSelenese(testCommand);
+
+                        if (this.haltOnError == true && selReturn == false)
+                        {
+                            Thread.Sleep(30000);
+                        }
+
                         this.seleniumTestLog.message("testCommand finished");
                         // Thread.Sleep(1000);
                     }

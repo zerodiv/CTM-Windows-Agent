@@ -27,7 +27,9 @@ namespace Continuum_Windows_Testing_Agent
         private WebClient ctmClient;
         public BackgroundWorker ctmBgWorker;
         private Boolean useVerboseTestLogs;
-   
+
+        private Boolean haltOnError;
+
         public LocalWebBrowser googlechrome;
         public LocalWebBrowser firefox;
         public LocalWebBrowser ie;
@@ -59,6 +61,15 @@ namespace Continuum_Windows_Testing_Agent
         public void setUseVerboseTestLogs(Boolean useVerboseLogs)
         {
             this.useVerboseTestLogs = useVerboseLogs; 
+        }
+
+        public void setHaltOnError(Boolean haltOnError) {
+            this.haltOnError = haltOnError;
+        }
+
+        public Boolean getHaltOnError()
+        {
+            return this.haltOnError;
         }
 
         public String setGuid(String guid)
@@ -245,6 +256,8 @@ namespace Continuum_Windows_Testing_Agent
 
                                 // create the download url.
                                 ctmWorkRunner.testDownloadUrl = "http://" + this.ctmHostname + "/test/run/download/?id=" + ctmWorkRunner.testRunId;
+
+                                ctmWorkRunner.haltOnError = this.haltOnError;
 
                                 this.ctmBgWorker.RunWorkerAsync(ctmWorkRunner);
 

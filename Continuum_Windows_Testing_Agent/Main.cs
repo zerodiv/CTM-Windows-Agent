@@ -216,6 +216,7 @@ namespace Continuum_Windows_Testing_Agent
             this.et.setLocalIp(this.ipBox.Text);
             this.et.setMachineName(this.machineNameBox.Text);
             this.et.setUseVerboseTestLogs(this.useVerboseTestLogsCheckbox.Checked);
+            this.et.setHaltOnError(this.haltOnErrorBox.Checked);
             this.et.run();
 
             if (this.et.getIsRegistered() == true)
@@ -318,6 +319,11 @@ namespace Continuum_Windows_Testing_Agent
         }
 
         private void buildBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void haltOnErrorBox_CheckedChanged(object sender, EventArgs e)
         {
 
         }
