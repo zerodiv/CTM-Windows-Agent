@@ -15,6 +15,13 @@
             </summary>
             <param name="addressOfRemoteServer">Address of the WebDriver Server</param>
         </member>
+        <member name="M:OpenQA.Selenium.Remote.HttpCommandExecutor.#ctor(System.Uri,System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the HttpCommandExecutor class
+            </summary>
+            <param name="addressOfRemoteServer">Address of the WebDriver Server</param>
+            <param name="timeout">The timeout within which the server must respond.</param>
+        </member>
         <member name="M:OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(OpenQA.Selenium.Remote.Command)">
             <summary>
             Executes a command

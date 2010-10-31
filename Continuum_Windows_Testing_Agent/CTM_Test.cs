@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using System.IO;
 using System.Net;
-// using System.Xml;
-// using System.Xml.XPath;
-using HtmlAgilityPack;
 using Ionic.Zip;
-using OpenQA.Selenium;
-using Selenium;
 using System.Collections;
-using System.ComponentModel;
+using HtmlAgilityPack;
+using OpenQA.Selenium;
 using System.Threading;
 
 namespace Continuum_Windows_Testing_Agent
 {
-
-    class CTM_Work_Runner
+    public partial class CTM_Test : Form
     {
         
         public UInt64 testRunId;
@@ -36,8 +35,10 @@ namespace Continuum_Windows_Testing_Agent
         private String tempZipFile;
         private String testRunIndexHtml;
 
-        public CTM_Work_Runner()
+        public CTM_Test()
         {
+            InitializeComponent();
+
             this.haltOnError = false;
         }
 
@@ -172,7 +173,7 @@ namespace Continuum_Windows_Testing_Agent
             try
             {
 
-                HtmlDocument doc = new HtmlDocument();
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
 
                 doc.OptionFixNestedTags = true;
 
@@ -208,7 +209,7 @@ namespace Continuum_Windows_Testing_Agent
         {
             String testTitle = "Unknown Test";
 
-            HtmlDocument doc = new HtmlDocument();
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
 
             doc.OptionFixNestedTags = true;
 
@@ -239,7 +240,7 @@ namespace Continuum_Windows_Testing_Agent
 
             // this.seleniumTestLog.message("testFile: " + testFile);
 
-            HtmlDocument doc = new HtmlDocument();
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
 
             doc.OptionFixNestedTags = true;
 

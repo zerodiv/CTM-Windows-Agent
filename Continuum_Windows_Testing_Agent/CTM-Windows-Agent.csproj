@@ -103,6 +103,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CTM_Test.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CTM_Test.Designer.cs">
+      <DependentUpon>CTM_Test.cs</DependentUpon>
+    </Compile>
     <Compile Include="PageLoadWaiter.cs" />
     <Compile Include="Selenese\ClickAndWait.cs" />
     <Compile Include="Selenese\SeleneseRemoveSelection.cs" />
@@ -122,12 +128,11 @@
     <Compile Include="Selenese_Command.cs" />
     <Compile Include="LocalWebBrowser.cs" />
     <Compile Include="OSInfo.cs" />
-    <Compile Include="CTM_Agent.cs" />
-    <Compile Include="Main.cs">
+    <Compile Include="CTM_Agent.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
+    <Compile Include="CTM_Agent.Designer.cs">
+      <DependentUpon>CTM_Agent.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -261,8 +266,11 @@
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowMaximize.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowSelector.cs" />
     <Compile Include="Waiter.cs" />
-    <EmbeddedResource Include="Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
+    <EmbeddedResource Include="CTM_Agent.resx">
+      <DependentUpon>CTM_Agent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CTM_Test.resx">
+      <DependentUpon>CTM_Test.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -289,7 +297,6 @@
     <Compile Include="Selenium_Test_Suite_Variables.cs" />
     <Compile Include="Selenium_Test_Trinome.cs" />
     <Compile Include="Selenium_Test_Log.cs" />
-    <Compile Include="CTM_Work_Runner.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

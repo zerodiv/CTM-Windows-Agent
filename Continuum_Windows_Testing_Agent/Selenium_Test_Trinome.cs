@@ -6,7 +6,7 @@ using OpenQA.Selenium;
 
 namespace Continuum_Windows_Testing_Agent
 {
-    class Selenium_Test_Trinome
+    public class Selenium_Test_Trinome
     {
         private String _command;
         private String _target;

@@ -111,6 +111,12 @@
             <returns>A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1"/> of all <see cref="T:OpenQA.Selenium.IWebElement">WebElements</see>
             matching the current criteria, or an empty list if nothing matches.</returns>
         </member>
+        <member name="M:OpenQA.Selenium.By.ToString">
+            <summary>
+            Gets a string representation of the finder.
+            </summary>
+            <returns>The string displaying the finder content.</returns>
+        </member>
         <member name="T:OpenQA.Selenium.Cookie">
             <summary>
             Represents a cookie in the browser.
@@ -662,11 +668,6 @@
             Creates and returns a string representation of the current cookie. 
             </summary>
             <returns>A string representation of the current cookie.</returns>
-        </member>
-        <member name="M:OpenQA.Selenium.Internal.ReturnedCookie.Validate">
-            <summary>
-            Validates the cookie is correctly formed.
-            </summary>
         </member>
         <member name="P:OpenQA.Selenium.Internal.ReturnedCookie.Secure">
             <summary>

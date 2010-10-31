@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Continuum_Windows_Testing_Agent
 {
-    class Selenium_Test_Log
+    public class Selenium_Test_Log
     {
         private string logFile;
         private string bodyFile;

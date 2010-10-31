@@ -1,6 +1,6 @@
 ﻿namespace Continuum_Windows_Testing_Agent
 {
-    partial class Main
+    partial class CTM_Agent
     {
         /// <summary>
         /// Required designer variable.
@@ -51,16 +51,17 @@
             this.configSaveSettingsBtn = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.ipBox = new System.Windows.Forms.TextBox();
+            this.localIpBox = new System.Windows.Forms.TextBox();
             this.osVersionBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.hostnameBox = new System.Windows.Forms.TextBox();
+            this.ctmHostnameBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.ctmStatusBar = new System.Windows.Forms.StatusStrip();
             this.ctmStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.callHomeTimer = new System.Windows.Forms.Timer(this.components);
             this.lastRunLogBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.agentBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.ctmStatusBar.SuspendLayout();
@@ -82,7 +83,6 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Browsers";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // safariVersionBox
             // 
@@ -171,10 +171,10 @@
             this.groupBox2.Controls.Add(this.configSaveSettingsBtn);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.ipBox);
+            this.groupBox2.Controls.Add(this.localIpBox);
             this.groupBox2.Controls.Add(this.osVersionBox);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.hostnameBox);
+            this.groupBox2.Controls.Add(this.ctmHostnameBox);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Location = new System.Drawing.Point(222, 3);
             this.groupBox2.Name = "groupBox2";
@@ -182,7 +182,6 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Config";
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // haltOnErrorBox
             // 
@@ -202,7 +201,6 @@
             this.buildBox.ReadOnly = true;
             this.buildBox.Size = new System.Drawing.Size(114, 20);
             this.buildBox.TabIndex = 6;
-            this.buildBox.TextChanged += new System.EventHandler(this.buildBox_TextChanged);
             // 
             // label11
             // 
@@ -212,7 +210,6 @@
             this.label11.Size = new System.Drawing.Size(45, 13);
             this.label11.TabIndex = 7;
             this.label11.Text = "Version:";
-            this.label11.Click += new System.EventHandler(this.label11_Click);
             // 
             // forcePollBtn
             // 
@@ -260,7 +257,7 @@
             this.useVerboseTestLogsCheckbox.TabIndex = 9;
             this.useVerboseTestLogsCheckbox.Text = "Verbose Test Logs";
             this.useVerboseTestLogsCheckbox.UseVisualStyleBackColor = true;
-            this.useVerboseTestLogsCheckbox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.useVerboseTestLogsCheckbox.CheckedChanged += new System.EventHandler(this.useVerboseTestLogsCheckbox_CheckedChanged);
             // 
             // machineNameBox
             // 
@@ -287,7 +284,6 @@
             this.label9.Size = new System.Drawing.Size(80, 13);
             this.label9.TabIndex = 7;
             this.label9.Text = "Machine name:";
-            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label4
             // 
@@ -298,12 +294,12 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Os:";
             // 
-            // ipBox
+            // localIpBox
             // 
-            this.ipBox.Location = new System.Drawing.Point(92, 48);
-            this.ipBox.Name = "ipBox";
-            this.ipBox.Size = new System.Drawing.Size(185, 20);
-            this.ipBox.TabIndex = 4;
+            this.localIpBox.Location = new System.Drawing.Point(92, 48);
+            this.localIpBox.Name = "localIpBox";
+            this.localIpBox.Size = new System.Drawing.Size(185, 20);
+            this.localIpBox.TabIndex = 4;
             // 
             // osVersionBox
             // 
@@ -322,12 +318,12 @@
             this.label3.TabIndex = 3;
             this.label3.Text = "My IP:";
             // 
-            // hostnameBox
+            // ctmHostnameBox
             // 
-            this.hostnameBox.Location = new System.Drawing.Point(92, 22);
-            this.hostnameBox.Name = "hostnameBox";
-            this.hostnameBox.Size = new System.Drawing.Size(185, 20);
-            this.hostnameBox.TabIndex = 1;
+            this.ctmHostnameBox.Location = new System.Drawing.Point(92, 22);
+            this.ctmHostnameBox.Name = "ctmHostnameBox";
+            this.ctmHostnameBox.Size = new System.Drawing.Size(185, 20);
+            this.ctmHostnameBox.TabIndex = 1;
             // 
             // label2
             // 
@@ -337,7 +333,6 @@
             this.label2.Size = new System.Drawing.Size(67, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "CTM Server:";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // ctmStatusBar
             // 
@@ -348,20 +343,18 @@
             this.ctmStatusBar.Size = new System.Drawing.Size(766, 22);
             this.ctmStatusBar.TabIndex = 3;
             this.ctmStatusBar.Text = "statusStrip1";
-            this.ctmStatusBar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ctmStatusBar_ItemClicked);
             // 
             // ctmStatusLabel
             // 
             this.ctmStatusLabel.Name = "ctmStatusLabel";
-            this.ctmStatusLabel.Size = new System.Drawing.Size(51, 17);
+            this.ctmStatusLabel.Size = new System.Drawing.Size(50, 17);
             this.ctmStatusLabel.Text = "Started..";
-            this.ctmStatusLabel.Click += new System.EventHandler(this.toolStripStatusLabel1_Click_1);
             // 
             // callHomeTimer
             // 
             this.callHomeTimer.Enabled = true;
             this.callHomeTimer.Interval = 30000;
-            this.callHomeTimer.Tick += new System.EventHandler(this.timer1_Tick);
+            this.callHomeTimer.Tick += new System.EventHandler(this.callHomeTimer_Tick);
             // 
             // lastRunLogBox
             // 
@@ -380,9 +373,12 @@
             this.label8.Size = new System.Drawing.Size(75, 13);
             this.label8.TabIndex = 5;
             this.label8.Text = "Last Test Log:";
-            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
-            // Main
+            // agentBackgroundWorker
+            // 
+            this.agentBackgroundWorker.WorkerReportsProgress = true;
+            // 
+            // CTM_Agent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -392,9 +388,9 @@
             this.Controls.Add(this.ctmStatusBar);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Main";
+            this.Name = "CTM_Agent";
             this.Text = "Continuum Windows Testing Agent";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.CTM_Agent_Load_1);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -419,9 +415,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button configSaveSettingsBtn;
-        private System.Windows.Forms.TextBox hostnameBox;
+        private System.Windows.Forms.TextBox ctmHostnameBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox ipBox;
+        private System.Windows.Forms.TextBox localIpBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.StatusStrip ctmStatusBar;
         private System.Windows.Forms.ToolStripStatusLabel ctmStatusLabel;
@@ -440,6 +436,7 @@
         private System.Windows.Forms.TextBox buildBox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.CheckBox haltOnErrorBox;
+        private System.ComponentModel.BackgroundWorker agentBackgroundWorker;
     }
 }
 

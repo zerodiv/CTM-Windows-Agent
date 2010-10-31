@@ -136,7 +136,6 @@
                 public void TearDown()
                 {
                     driver.Quit();
-                    driver.Dispose();
                 } 
             }
             </code>
@@ -229,6 +228,16 @@
             </summary>
             <param name="elementId">The ID of this element.</param>
             <returns>A <see cref="T:OpenQA.Selenium.Remote.RemoteWebElement"/> with the specified ID. For the FirefoxDriver this will be a <see cref="T:OpenQA.Selenium.Firefox.FirefoxWebElement"/>.</returns>
+        </member>
+        <member name="P:OpenQA.Selenium.Firefox.FirefoxDriver.Binary">
+            <summary>
+            Gets the FirefoxBinary and its details for subclasses
+            </summary>
+        </member>
+        <member name="P:OpenQA.Selenium.Firefox.FirefoxDriver.Profile">
+            <summary>
+            Gets the FirefoxProfile that is currently in use by subclasses
+            </summary>
         </member>
         <member name="T:OpenQA.Selenium.Firefox.FirefoxProfile">
             <summary>

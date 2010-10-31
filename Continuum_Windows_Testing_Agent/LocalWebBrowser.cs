@@ -8,14 +8,14 @@ using System.IO;
 
 namespace Continuum_Windows_Testing_Agent
 {
-    class LocalWebBrowser
+    public class CTM_LocalWebBrowser
     {
         public Boolean exists;
         public int major;
         public int minor;
         public int patch;
 
-        public LocalWebBrowser(String browserType)
+        public CTM_LocalWebBrowser(String browserType)
         {
 
             this.exists = false;

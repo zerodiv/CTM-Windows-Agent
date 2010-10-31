@@ -24,6 +24,12 @@
             <param name="extension">The extension to launch Chrome with.</param>
             <param name="port">The port on which to listen for commands.</param>
         </member>
+        <member name="M:OpenQA.Selenium.Chrome.ChromeBinary.AddCustomArgs(System.String)">
+            <summary>
+            Adds custom arguments to the command line.
+            </summary>
+            <param name="customArgs">The arguments to add.</param>
+        </member>
         <member name="M:OpenQA.Selenium.Chrome.ChromeBinary.IncrementStartWaitInterval(System.Int32)">
             <summary>
             Increases the wait time used for starting the Chrome process.
@@ -189,9 +195,19 @@
             </code>
             </example>
         </member>
+        <member name="F:OpenQA.Selenium.Chrome.ChromeDriver.AcceptUntrustedCertficates">
+            <summary>
+            Accept untrusted SSL Certificates
+            </summary>
+        </member>
         <member name="M:OpenQA.Selenium.Chrome.ChromeDriver.#ctor">
             <summary>
             Initializes a new instance of the ChromeDriver class with the required extension loaded, and has it connect to a new ChromeCommandExecutor on its port
+            </summary>
+        </member>
+        <member name="M:OpenQA.Selenium.Chrome.ChromeDriver.#ctor(OpenQA.Selenium.Chrome.ChromeBinary)">
+            <summary>
+            Initializes a new instance of the ChromeDriver class with the required Chrome Binary
             </summary>
         </member>
         <member name="M:OpenQA.Selenium.Chrome.ChromeDriver.#ctor(OpenQA.Selenium.Chrome.ChromeProfile,OpenQA.Selenium.Chrome.ChromeExtension)">
@@ -278,8 +294,7 @@
             <summary>
             Verifies that the given {@code directory} is a valid Chrome extension
             directory. Will check if the directory has the required
-            {@code manifest.json} file.  If not, it will check for the correct
-            platform manifest and copy it over.     
+            {@code manifest.json} file.
             </summary>
             <param name="directory">The directory to check.</param>
             <returns>The verified directory.</returns>
@@ -326,6 +341,16 @@
         <member name="P:OpenQA.Selenium.Chrome.ChromeProfile.DeleteProfileOnExit">
             <summary>
             Gets or sets a value indicating whether to delete this profile when exiting the browser.
+            </summary>
+        </member>
+        <member name="P:OpenQA.Selenium.Chrome.ChromeProfile.UntrustedCertificatesFlag">
+            <summary>
+            Gets a value of the UntrustedCertificatesFlag that is used when starting the browser
+            </summary>
+        </member>
+        <member name="P:OpenQA.Selenium.Chrome.ChromeProfile.AcceptUntrustedCertificates">
+            <summary>
+            Sets a value indicating where to accept untrusted certificates or not
             </summary>
         </member>
         <member name="T:OpenQA.Selenium.Chrome.ChromeWebElement">
