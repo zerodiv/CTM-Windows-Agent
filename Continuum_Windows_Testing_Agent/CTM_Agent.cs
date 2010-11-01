@@ -290,27 +290,27 @@ namespace Continuum_Windows_Testing_Agent
 
         void ctmAgentBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            
-            CTM_Test ctmTestObject = (CTM_Test)e.Argument;
+            BackgroundWorker agentBw = sender as BackgroundWorker;
+
+            CTM_Test test = (CTM_Test)e.Argument;
 
             try
             {
-                
-                ctmTestObject.runWork();
+                test.runWork();
 
                 NameValueCollection resultPostValues = new NameValueCollection();
-                resultPostValues.Add("testRunBrowserId", ctmTestObject.testRunBrowserId.ToString());
+                resultPostValues.Add("testRunBrowserId", test.testRunBrowserId.ToString());
                 // TODO: jeo - we need to make a better timeElapsed tracker.
                 // resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
-                resultPostValues.Add("testStatus", ctmTestObject.testStatus.ToString());
+                resultPostValues.Add("testStatus", test.testStatus.ToString());
                 resultPostValues.Add("runLog", "");
-                resultPostValues.Add("seleniumLog", ctmTestObject.seleniumTestLog.getLogContents());
+                resultPostValues.Add("seleniumLog", test.seleniumTestLog.getLogContents());
 
                 String logUrl = "http://" + this.ctmHostname + "/et/log/";
                 WebClient resultClient = new WebClient();
                 resultClient.UploadValues(logUrl, resultPostValues);
 
-                this.log.message("Completed test run: " + ctmTestObject.testRunId);
+                this.log.message("Completed test run: " + test.testRunId);
             }
             catch (Exception ex)
             {
@@ -318,8 +318,11 @@ namespace Continuum_Windows_Testing_Agent
             }
             finally
             {
-                ctmTestObject.cleanup();
+                test.cleanup();
             }
+
+            // this.lastRunLogBox.Text = this.log.getLastLogLines();
+
         }
 
         private void requestWork_Completed(object sender, UploadValuesCompletedEventArgs args)
@@ -359,28 +362,33 @@ namespace Continuum_Windows_Testing_Agent
                             if (this.agentBackgroundWorker.IsBusy != true)
                             {
 
-                                CTM_Test ctmWorkRunner = new CTM_Test();
+                                CTM_Test test = new CTM_Test();
 
                                 // Convert the XML document into a ctmWorkRunner object.
-                                ctmWorkRunner.testRunId = UInt64.Parse(testRun.SelectSingleNode("testRunId").InnerText);
-                                ctmWorkRunner.testRunBrowserId = UInt64.Parse(testRun.SelectSingleNode("id").InnerText);
+                                test.testRunId = UInt64.Parse(testRun.SelectSingleNode("testRunId").InnerText);
+                                test.testRunBrowserId = UInt64.Parse(testRun.SelectSingleNode("id").InnerText);
 
                                 XmlNode ctmTestBrowser = testRun.SelectSingleNode("CTM_Test_Browser");
-                                ctmWorkRunner.testBrowser = ctmTestBrowser.SelectSingleNode("name").InnerText;
+                                test.testBrowser = ctmTestBrowser.SelectSingleNode("name").InnerText;
 
-                                ctmWorkRunner.useVerboseTestLogs = this.useVerboseTestLogs;
+                                test.useVerboseTestLogs = this.useVerboseTestLogs;
 
                                 // create the download url.
-                                ctmWorkRunner.testDownloadUrl = "http://" + this.ctmHostname + "/test/run/download/?id=" + ctmWorkRunner.testRunId;
+                                test.testDownloadUrl = "http://" + this.ctmHostname + "/test/run/download/?id=" + test.testRunId;
 
-                                ctmWorkRunner.haltOnError = this.haltOnError;
+                                test.haltOnError = this.haltOnError;
 
-                                this.agentBackgroundWorker.RunWorkerAsync(ctmWorkRunner);
+                                this.log.message(" testRunId: " + test.testRunId.ToString());
+                                this.log.message(" testRunBrowserId: " + test.testRunBrowserId.ToString());
+                                this.log.message(" testDownloadUrl: " + test.testDownloadUrl);
+                                this.log.message(" testBrowser: " + test.testBrowser);
 
-                                this.log.message(" testRunId: " + ctmWorkRunner.testRunId.ToString());
-                                this.log.message(" testRunBrowserId: " + ctmWorkRunner.testRunBrowserId.ToString());
-                                this.log.message(" testDownloadUrl: " + ctmWorkRunner.testDownloadUrl);
-                                this.log.message(" testBrowser: " + ctmWorkRunner.testBrowser);
+                                test.Visible = true;
+
+                                test.Activate();
+
+                                this.agentBackgroundWorker.RunWorkerAsync(test);
+
                             }
                             else
                             {

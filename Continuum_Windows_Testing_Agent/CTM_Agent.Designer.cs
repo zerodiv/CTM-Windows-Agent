@@ -374,10 +374,6 @@
             this.label8.TabIndex = 5;
             this.label8.Text = "Last Test Log:";
             // 
-            // agentBackgroundWorker
-            // 
-            this.agentBackgroundWorker.WorkerReportsProgress = true;
-            // 
             // CTM_Agent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

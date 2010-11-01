@@ -14,14 +14,14 @@
     <framework targetVersion="4.0" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="Continuum_Windows_Testing_Agent.exe.manifest" size="10404">
+    <dependentAssembly dependencyType="install" codebase="Continuum_Windows_Testing_Agent.exe.manifest" size="10408">
       <assemblyIdentity name="Continuum_Windows_Testing_Agent.exe" version="1.0.0.20" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>TnWS90WUbZE1RGmwhQElWaTd7K0=</dsig:DigestValue>
+        <dsig:DigestValue>lRhwk3gySHUhyG5fAWqNnNmhLhg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
