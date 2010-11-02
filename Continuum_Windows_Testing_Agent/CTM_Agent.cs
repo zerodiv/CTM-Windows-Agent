@@ -15,8 +15,10 @@ namespace Continuum_Windows_Testing_Agent
 {
     public partial class CTM_Agent : Form
     {
-        #region Private Variables
 
+        #region Private Variables
+        delegate void SetLastRunLogBoxCallback(string text);
+        
         private CTM_Agent_Log log;
         private String guid;
         private String ctmHostname;
@@ -33,6 +35,7 @@ namespace Continuum_Windows_Testing_Agent
       
         #endregion Private Variables
 
+        #region Constructor
         public CTM_Agent()
         {
 
@@ -65,6 +68,7 @@ namespace Continuum_Windows_Testing_Agent
             this.safari = new CTM_LocalWebBrowser("safari");
 
         }
+        #endregion Constructor
 
         #region Registry Settings
         private void loadRegistryKeys()
@@ -77,7 +81,7 @@ namespace Continuum_Windows_Testing_Agent
                 this.guid = key.GetValue("guid").ToString();
             }
 
-            if (this.guid == null)
+            if (this.guid == "")
             {
                 this.guid = System.Guid.NewGuid().ToString();
                 key.SetValue("guid", this.guid);
@@ -93,7 +97,7 @@ namespace Continuum_Windows_Testing_Agent
                 this.localIp = key.GetValue("localIp").ToString();
             }
 
-            if (this.localIp == null)
+            if (this.localIp == "")
             {
                 String ip = "";
 
@@ -114,12 +118,12 @@ namespace Continuum_Windows_Testing_Agent
                 }
             }
 
-            if (key.GetValue("machineName") != null)
+            if (key.GetValue("machineName") != null )
             {
                 this.machineName = key.GetValue("machineName").ToString();
             }
 
-            if (this.machineName == null)
+            if (this.machineName == "")
             {
                 this.machineName = Environment.MachineName;
 
@@ -165,6 +169,7 @@ namespace Continuum_Windows_Testing_Agent
         }
         #endregion Helper Functions
 
+        #region Form Load
         private void CTM_Agent_Load_1(object sender, EventArgs e)
         {
 
@@ -180,6 +185,7 @@ namespace Continuum_Windows_Testing_Agent
             this.safariVersionBox.Text = this.safari.getVersion();
             this.osVersionBox.Text = this.determineWindowsVersion();
         }
+        #endregion Form Load
 
         #region Button Actions
         private void configSaveSettingsBtn_Click(object sender, EventArgs e)
@@ -225,33 +231,59 @@ namespace Continuum_Windows_Testing_Agent
 
         private Boolean readyToAttatchToServer()
         {
-            if (this.guid.Length == 0)
+            String message = "";
+            Boolean isReady = true;
+
+            if (this.guid.Length == 0 && isReady == true )
             {
-                this.ctmStatusLabel.Text = "Missing guid, please click on regenerate.";
-                return false;
+                message = "Missing guid, please click on regenerate.";
+                isReady = false;
             }
 
-            if (this.ctmHostname.Length == 0)
+            if (this.ctmHostname.Length == 0 && isReady == true)
             {
-                this.ctmStatusLabel.Text = "Please provide a CTM server name.";
-                return false;
+                message = "Please provide a CTM server name.";
+                isReady = false;
             }
 
-            if (localIp.Length == 0)
+            if (localIp.Length == 0 && isReady == true)
             {
-                this.ctmStatusLabel.Text = "Unable to determin our local IP.";
-                return false;
+                message = "Unable to determin our local IP.";
+                isReady = false;
             }
 
-            if (machineName.Length == 0)
+            if (machineName.Length == 0 && isReady == true)
             {
-                this.ctmStatusLabel.Text = "Please provide a name for this host.";
-                return false;
+                message = "Please provide a name for this host.";
+                isReady = false;
+            }
+
+            if (isReady == false)
+            {
+                this.log.message(message);
+                this.ctmStatusLabel.Text = message;
+                return isReady;
             }
 
             return true;
         }
 
+        private void updateLastRunLogBox(String text)
+        {
+            if (this.lastRunLogBox.InvokeRequired == true)
+            {
+                SetLastRunLogBoxCallback d = new SetLastRunLogBoxCallback(updateLastRunLogBox);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.lastRunLogBox.Text = text;
+                // this.log.getLastLogLines();
+            }
+        }
+
+
+        #region Call Home Timer
         private void callHomeTimer_Tick(object sender, EventArgs e)
         {
             // Check to see if we are already doing work, otherwise reset our poll interval to 30s
@@ -275,18 +307,10 @@ namespace Continuum_Windows_Testing_Agent
 
             this.requestWork();
 
-            if (this.isRegistered == true)
-            {
-                DateTime now = DateTime.Now;
-                this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
-            }
-            else
-            {
-                this.ctmStatusLabel.Text = "Phoning home now";
-            }
 
-            this.lastRunLogBox.Text = this.log.getLastLogLines();
+
         }
+        #endregion Call Home Timer
 
         void ctmAgentBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -299,18 +323,18 @@ namespace Continuum_Windows_Testing_Agent
                 test.runWork();
 
                 NameValueCollection resultPostValues = new NameValueCollection();
-                resultPostValues.Add("testRunBrowserId", test.testRunBrowserId.ToString());
+                resultPostValues.Add("testRunBrowserId", test.getTestRunBrowserId().ToString());
                 // TODO: jeo - we need to make a better timeElapsed tracker.
                 // resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
-                resultPostValues.Add("testStatus", test.testStatus.ToString());
+                resultPostValues.Add("testStatus", test.getTestStatus().ToString());
                 resultPostValues.Add("runLog", "");
-                resultPostValues.Add("seleniumLog", test.seleniumTestLog.getLogContents());
+                resultPostValues.Add("seleniumLog", test.getSeleniumTestLog().getLogContents());
 
                 String logUrl = "http://" + this.ctmHostname + "/et/log/";
                 WebClient resultClient = new WebClient();
                 resultClient.UploadValues(logUrl, resultPostValues);
 
-                this.log.message("Completed test run: " + test.testRunId);
+                this.log.message("Completed test run: " + test.getTestRunId());
             }
             catch (Exception ex)
             {
@@ -321,7 +345,7 @@ namespace Continuum_Windows_Testing_Agent
                 test.cleanup();
             }
 
-            // this.lastRunLogBox.Text = this.log.getLastLogLines();
+            this.updateLastRunLogBox( this.log.getLastLogLines() );
 
         }
 
@@ -365,23 +389,23 @@ namespace Continuum_Windows_Testing_Agent
                                 CTM_Test test = new CTM_Test();
 
                                 // Convert the XML document into a ctmWorkRunner object.
-                                test.testRunId = UInt64.Parse(testRun.SelectSingleNode("testRunId").InnerText);
-                                test.testRunBrowserId = UInt64.Parse(testRun.SelectSingleNode("id").InnerText);
+                                test.setTestRunId( UInt64.Parse(testRun.SelectSingleNode("testRunId").InnerText) );
+                                test.setTestRunBrowserId( UInt64.Parse(testRun.SelectSingleNode("id").InnerText) );
 
                                 XmlNode ctmTestBrowser = testRun.SelectSingleNode("CTM_Test_Browser");
-                                test.testBrowser = ctmTestBrowser.SelectSingleNode("name").InnerText;
+                                test.setTestBrowser( ctmTestBrowser.SelectSingleNode("name").InnerText );
 
-                                test.useVerboseTestLogs = this.useVerboseTestLogs;
+                                test.setUseVerboseTestLogs(this.useVerboseTestLogs);
 
                                 // create the download url.
-                                test.testDownloadUrl = "http://" + this.ctmHostname + "/test/run/download/?id=" + test.testRunId;
+                                test.setTestDownloadUrl( "http://" + this.ctmHostname + "/test/run/download/?id=" + test.getTestRunId() );
+                                
+                                test.setHaltOnError( this.haltOnError );
 
-                                test.haltOnError = this.haltOnError;
-
-                                this.log.message(" testRunId: " + test.testRunId.ToString());
-                                this.log.message(" testRunBrowserId: " + test.testRunBrowserId.ToString());
-                                this.log.message(" testDownloadUrl: " + test.testDownloadUrl);
-                                this.log.message(" testBrowser: " + test.testBrowser);
+                                this.log.message(" testRunId: " + test.getTestRunId());
+                                this.log.message(" testRunBrowserId: " + test.getTestRunBrowserId());
+                                this.log.message(" testDownloadUrl: " + test.getTestDownloadUrl());
+                                this.log.message(" testBrowser: " + test.getTestBrowser());
 
                                 test.Visible = true;
 
@@ -402,33 +426,53 @@ namespace Continuum_Windows_Testing_Agent
                     {
                         this.log.message("No work for us");
                     }
-                    return;
+
+                    // this.updateLastRunLogBox();
+
                 }
-                this.isRegistered = false;
+                else
+                {
+                    this.isRegistered = false;
+                }
+               
             }
             catch (Exception ex)
             {
                 this.log.message("connection issue caught: " + ex.Message);
             }
+
+            if (this.isRegistered == true)
+            {
+                DateTime now = DateTime.Now;
+                this.ctmStatusLabel.Text = "Last check in: " + String.Format("{0:r}", now);
+            }
+
+            this.updateLastRunLogBox( this.log.getLastLogLines() );
+
         }
 
         public void requestWork()
         {
             if (this.readyToAttatchToServer() != true)
             {
+                this.log.message("We are not ready to attatch to a CTM server.");
                 return;
             }
 
             if (this.ctmClient.IsBusy == true)
             {
+                this.log.message("Agent Busy: We are already requesting work.");
                 return;
             }
 
             if (this.agentBackgroundWorker.IsBusy == true)
             {
+                this.log.message("Agent is actively running a test");
                 return;
             }
-
+            
+            this.ctmStatusLabel.Text = "Phoning home now";
+           
             NameValueCollection postValues = new NameValueCollection();
 
             postValues.Add("guid", this.guid);
@@ -466,6 +510,8 @@ namespace Continuum_Windows_Testing_Agent
 
             String pollUrl = "http://" + this.ctmHostname + "/agent/poll/";
             ctmClient.UploadValuesAsync(new Uri(pollUrl), postValues);
+
+            // this.updateLastRunLogBox();
 
         }
 

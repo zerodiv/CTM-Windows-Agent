@@ -8,9 +8,20 @@ namespace Continuum_Windows_Testing_Agent
 {
     public class Selenium_Test_Trinome
     {
+        private int _id;
         private String _command;
         private String _target;
         private String _value;
+
+        public void setId(int id)
+        {
+            this._id = id;
+        }
+
+        public int getId()
+        {
+            return this._id;
+        }
 
         public void setCommand(String command)
         {
