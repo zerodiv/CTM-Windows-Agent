@@ -3,12 +3,12 @@ using OpenQA.Selenium;
 
 namespace Selenium.Internal.SeleniumEmulation
 {
-    internal class Type : SeleneseCommand
+    internal class CTM_Type : SeleneseCommand
     {
         private ElementFinder finder;
         private KeyState state;
 
-        public Type(ElementFinder elementFinder, KeyState keyState)
+        public CTM_Type(ElementFinder elementFinder, KeyState keyState)
         {
             this.finder = elementFinder;
             this.state = keyState;

@@ -29,19 +29,17 @@
         private void InitializeComponent()
         {
             this.activeTestGrid = new System.Windows.Forms.DataGridView();
+            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.message = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.testRunNameBox = new System.Windows.Forms.TextBox();
             this.testRunProgressBar = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.testProgressBar = new System.Windows.Forms.ProgressBar();
             this.testNameBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.target = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.message = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.activeTestGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,6 +47,8 @@
             // 
             this.activeTestGrid.AllowUserToAddRows = false;
             this.activeTestGrid.AllowUserToDeleteRows = false;
+            this.activeTestGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.activeTestGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.activeTestGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.activeTestGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.command,
@@ -59,6 +59,30 @@
             this.activeTestGrid.Name = "activeTestGrid";
             this.activeTestGrid.Size = new System.Drawing.Size(677, 506);
             this.activeTestGrid.TabIndex = 0;
+            // 
+            // command
+            // 
+            this.command.HeaderText = "Command";
+            this.command.Name = "command";
+            this.command.Width = 79;
+            // 
+            // target
+            // 
+            this.target.HeaderText = "Target";
+            this.target.Name = "target";
+            this.target.Width = 63;
+            // 
+            // value
+            // 
+            this.value.HeaderText = "Value";
+            this.value.Name = "value";
+            this.value.Width = 59;
+            // 
+            // message
+            // 
+            this.message.HeaderText = "Message";
+            this.message.Name = "message";
+            this.message.Width = 75;
             // 
             // button1
             // 
@@ -88,9 +112,9 @@
             // 
             // testRunProgressBar
             // 
-            this.testRunProgressBar.Location = new System.Drawing.Point(373, 9);
+            this.testRunProgressBar.Location = new System.Drawing.Point(368, 9);
             this.testRunProgressBar.Name = "testRunProgressBar";
-            this.testRunProgressBar.Size = new System.Drawing.Size(234, 23);
+            this.testRunProgressBar.Size = new System.Drawing.Size(239, 23);
             this.testRunProgressBar.TabIndex = 4;
             // 
             // label2
@@ -102,28 +126,12 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Run Progress:";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(293, 40);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 13);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "Test Progress:";
-            // 
-            // testProgressBar
-            // 
-            this.testProgressBar.Location = new System.Drawing.Point(373, 35);
-            this.testProgressBar.Name = "testProgressBar";
-            this.testProgressBar.Size = new System.Drawing.Size(234, 23);
-            this.testProgressBar.TabIndex = 8;
-            // 
             // testNameBox
             // 
             this.testNameBox.Location = new System.Drawing.Point(69, 37);
             this.testNameBox.Name = "testNameBox";
             this.testNameBox.ReadOnly = true;
-            this.testNameBox.Size = new System.Drawing.Size(207, 20);
+            this.testNameBox.Size = new System.Drawing.Size(538, 20);
             this.testNameBox.TabIndex = 7;
             // 
             // label4
@@ -135,33 +143,11 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Test:";
             // 
-            // command
-            // 
-            this.command.HeaderText = "Command";
-            this.command.Name = "command";
-            // 
-            // target
-            // 
-            this.target.HeaderText = "Target";
-            this.target.Name = "target";
-            // 
-            // value
-            // 
-            this.value.HeaderText = "Value";
-            this.value.Name = "value";
-            // 
-            // message
-            // 
-            this.message.HeaderText = "Message";
-            this.message.Name = "message";
-            // 
             // CTM_Test
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 584);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.testProgressBar);
             this.Controls.Add(this.testNameBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
@@ -186,8 +172,6 @@
         private System.Windows.Forms.TextBox testRunNameBox;
         private System.Windows.Forms.ProgressBar testRunProgressBar;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ProgressBar testProgressBar;
         private System.Windows.Forms.TextBox testNameBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DataGridViewTextBoxColumn command;

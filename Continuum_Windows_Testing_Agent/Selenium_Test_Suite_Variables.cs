@@ -16,15 +16,15 @@ namespace Continuum_Windows_Testing_Agent
             this.vars = new Hashtable();
         }
 
-        public void consumeTrinome(Selenium_Test_Trinome triNome)
+        public void consumeCommand(String value, String target)
         {
-            if (this.vars.ContainsKey(triNome.getValue()) == true)
+            if (this.vars.ContainsKey(value) == true)
             {
-                this.vars[triNome.getValue()] = triNome.getTarget();
+                this.vars[value] = target;
             }
             else
             {
-                this.vars.Add(triNome.getValue(), triNome.getTarget());
+                this.vars.Add(value, target);
             }
         }
 

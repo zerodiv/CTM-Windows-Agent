@@ -11,11 +11,11 @@ namespace Selenium.Internal.SeleniumEmulation
     /// <summary>
     /// Defines the command for the click keyword.
     /// </summary>
-    internal class ClickAndWait : SeleneseCommand
+    internal class CTM_ClickAndWait : SeleneseCommand
     {
         private ElementFinder finder;
 
-        public ClickAndWait(ElementFinder finder)
+        public CTM_ClickAndWait(ElementFinder finder)
         {
             this.finder = finder;
         }

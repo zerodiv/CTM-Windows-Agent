@@ -9,13 +9,13 @@ using OpenQA.Selenium.Internal;
 
 namespace Continuum_Windows_Testing_Agent
 {
-    abstract class Selenese_Command
+    abstract class Shite_Selenese_Command
     {
         protected Selenium_Test_Log log;
         protected IWebDriver webDriver;
         protected Selenese_Locator locator;
         
-        public Selenese_Command(Selenium_Test_Log log, IWebDriver webDriver)
+        public Shite_Selenese_Command(Selenium_Test_Log log, IWebDriver webDriver)
         {
             this.log = log;
             this.webDriver = webDriver;

@@ -110,20 +110,10 @@
       <DependentUpon>CTM_Test.cs</DependentUpon>
     </Compile>
     <Compile Include="PageLoadWaiter.cs" />
-    <Compile Include="Selenese\ClickAndWait.cs" />
-    <Compile Include="Selenese\SeleneseRemoveSelection.cs" />
-    <Compile Include="Selenese\SeleneseStore.cs" />
-    <Compile Include="Selenese\SeleneseOpen.cs" />
-    <Compile Include="Selenese\SeleneseType.cs" />
-    <Compile Include="Selenese\SeleneseClickAndWait.cs" />
-    <Compile Include="Selenese\SeleneseClick.cs" />
-    <Compile Include="Selenese\SeleneseWaitForPageToLoad.cs" />
-    <Compile Include="Selenese\SelenesePause.cs" />
-    <Compile Include="Selenese\SeleneseVerifyTextPresent.cs" />
-    <Compile Include="Selenese\SeleneseAssertTextPresent.cs" />
-    <Compile Include="Selenese\SeleneseAssertElementPresent.cs" />
-    <Compile Include="Selenese\SeleneseSelect.cs" />
-    <Compile Include="Selenese\SeleneseAddSelection.cs" />
+    <Compile Include="Selenese\CTM_ClickAndWait.cs" />
+    <Compile Include="Selenese\CTM_Open.cs" />
+    <Compile Include="Selenese\CTM_Store.cs" />
+    <Compile Include="Selenese\CTM_Pause.cs" />
     <Compile Include="Selenese_Locator.cs" />
     <Compile Include="Selenese_Command.cs" />
     <Compile Include="LocalWebBrowser.cs" />
@@ -165,7 +155,7 @@
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AttachFile.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\CaptureScreenshotToString.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Check.cs" />
-    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Click.cs" />
+    <Compile Include="Selenese\CTM_Click.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Close.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ControlKeyDown.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ControlKeyUp.cs" />
@@ -213,7 +203,7 @@
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsElementPresent.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsOrdered.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsSomethingSelected.cs" />
-    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsTextPresent.cs" />
+    <Compile Include="Selenese\CTM_IsTextPresent.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\IsVisible.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\ITextMatchingStrategy.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\JavaScriptLibrary.cs" />
@@ -255,7 +245,7 @@
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\TextMatchingStrategies\ExactTextMatchingStrategy.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\TextMatchingStrategies\GlobTextMatchingStrategy.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\TextMatchingStrategies\RegExTextMatchingStrategy.cs" />
-    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Type.cs" />
+    <Compile Include="Selenese\CTM_Type.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\TypeKeys.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Uncheck.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\Waiter.cs" />
@@ -293,7 +283,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="CTM_Agent_Log.cs" />
-    <Compile Include="Selenium_Test.cs" />
     <Compile Include="Selenium_Test_Suite_Variables.cs" />
     <Compile Include="Selenium_Test_Trinome.cs" />
     <Compile Include="Selenium_Test_Log.cs" />

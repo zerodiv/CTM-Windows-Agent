@@ -28,7 +28,8 @@ namespace Continuum_Windows_Testing_Agent
 
         delegate void clearGridCallback();
         delegate void addCommandToGridCallback(Selenium_Test_Trinome cmd);
-        delegate void updateCommandStatusCallback(int id, Boolean state, String message);
+        delegate void updateCommandStatusCallback(int id, int state, String message);
+        delegate void updateTestRunProgressCallback(int completed, int total);
         
         private UInt64 testRunId;
         private UInt64 testRunBrowserId;
@@ -51,6 +52,10 @@ namespace Continuum_Windows_Testing_Agent
         private ElementFinder elementFinder;
         private SeleniumOptionSelector select;
         private KeyState keyState;
+
+        private ArrayList tests;
+        private ArrayList testCommands;
+        private int currentTestCommand;
 
         #endregion Private Variables
 
@@ -80,6 +85,10 @@ namespace Continuum_Windows_Testing_Agent
             this.select = new SeleniumOptionSelector(this.elementFinder);
 
             this.keyState = new KeyState();
+
+            this.tests = new ArrayList();
+            this.testCommands = new ArrayList();
+            this.currentTestCommand = 0;
 
         }
         #endregion Constructor
@@ -184,7 +193,7 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
-        private void updateCommandStatus(int id, Boolean state, String message)
+        private void updateCommandStatus(int id, int state, String message)
         {
             if (this.activeTestGrid.InvokeRequired == true)
             {
@@ -194,17 +203,61 @@ namespace Continuum_Windows_Testing_Agent
             else
             {
                 int rowId = id - 1;
+
+                // Move the selected row to the next item on the stack.
+                if (rowId > 0)
+                {
+                    this.activeTestGrid.Rows[(rowId-1)].Selected = false;
+                }
+
+                this.activeTestGrid.CurrentCell = this.activeTestGrid.Rows[rowId].Cells[0];
+
+                this.activeTestGrid.Rows[rowId].Selected = true;
+                
+                // Set the message (we have to allow empty to move the "Working.." message.
                 this.activeTestGrid.Rows[rowId].Cells[3].Value = message;
-                if (state == true)
-                    {
-                        this.activeTestGrid.Rows[rowId].DefaultCellStyle.BackColor = System.Drawing.Color.Green;
-                    }
-                    else
-                    {
-                        this.activeTestGrid.Rows[rowId].DefaultCellStyle.BackColor = System.Drawing.Color.Red;
-                    }
-                    
+                
+                // Set the state / color of the row based upon the result.
+                if (state == -1)
+                {
+                    this.activeTestGrid.Rows[rowId].DefaultCellStyle.BackColor = System.Drawing.Color.LightYellow;
+                }
+                if (state == 0 ) 
+                {                   
+                    this.activeTestGrid.Rows[rowId].DefaultCellStyle.BackColor = System.Drawing.Color.Red;
+                }
+                if (state == 1)
+                {
+                    this.activeTestGrid.Rows[rowId].DefaultCellStyle.BackColor = System.Drawing.Color.LightGreen;
+                }
+
+                this.activeTestGrid.Refresh();
+
+                // Bring the form to the for front.
+                if (this.Focused == false)
+                {
+                    this.Activate();
+                }
+                
             }
+        }
+
+        private void updateTestRunProgress(int completed, int total)
+        {
+            if (this.testRunProgressBar.InvokeRequired == true)
+            {
+                updateTestRunProgressCallback d = new updateTestRunProgressCallback(updateTestRunProgress);
+                this.Invoke(d, new object[] { completed, total });
+            }
+            else
+            {
+                if (this.testRunProgressBar.Maximum != total)
+                {
+                    this.testRunProgressBar.Maximum = total;
+                }
+                this.testRunProgressBar.Value = completed;
+            }
+            
         }
 
         #endregion Async Delegates
@@ -322,8 +375,13 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
-        public ArrayList getTestsFromTestSuite()
+        public Boolean getTestsFromTestSuite()
         {
+            if (this.tests.Count > 0)
+            {
+                return true;
+            }
+
             // slurp through the html file.
             /* Example:
              * <html>
@@ -338,7 +396,7 @@ namespace Continuum_Windows_Testing_Agent
              * </body>
              * </html>
              */
-            ArrayList tests = new ArrayList();
+            this.tests = new ArrayList();
 
             try
             {
@@ -355,12 +413,12 @@ namespace Continuum_Windows_Testing_Agent
                     {
                         Console.WriteLine("error parsing file: " + htmlError.SourceText);
                     }
-                    return tests;
+                    return false;
                 }
 
                 foreach (HtmlNode testRow in doc.DocumentNode.SelectNodes("/html/body/table/tr/td/a[@href]"))
                 {
-                    tests.Add(testRow.Attributes["href"].Value.Replace("./", ""));
+                    this.tests.Add(testRow.Attributes["href"].Value.Replace("./", ""));
                 }
 
             }
@@ -369,9 +427,9 @@ namespace Continuum_Windows_Testing_Agent
                 this.log.message("Failed to parse testSuiteHtml: " + this.testRunIndexHtml + " errorMessage: " + e.Message);
             }
 
-            this.log.message("Found: " + tests.Count + " tests in your test suite.");
+            this.log.message("Found: " + this.tests.Count + " tests in your test suite.");
 
-            return tests;
+            return true;
 
         }
 
@@ -406,6 +464,7 @@ namespace Continuum_Windows_Testing_Agent
 
         public ArrayList getTestCommands(String testFile)
         {
+
             ArrayList testCommands = new ArrayList();
 
             // this.log.message("testFile: " + testFile);
@@ -488,54 +547,68 @@ namespace Continuum_Windows_Testing_Agent
         }
         #endregion Test File Manipulation
 
+        private Boolean initWebDriver()
+        {
+            if (this.webDriver != null)
+            {
+                return true;
+            }
+
+            // start up the requested browser.
+            this.log.message("starting up browser: " + this.testBrowser);
+
+            switch (this.testBrowser)
+            {
+                case "chrome":
+                    this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                    break;
+                case "firefox":
+                    this.webDriver = new OpenQA.Selenium.Firefox.FirefoxDriver();
+                    break;
+                case "googlechrome":
+                    this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                    break;
+                case "iexplore":
+                    this.webDriver = new OpenQA.Selenium.IE.InternetExplorerDriver();
+                    break;
+                default:
+                    this.log.message("Invalid browser specificed: " + this.testBrowser);
+                    return false;
+            }
+
+            // TODO: We should pull this up to the top level init, but the log() requirement 
+            // prevents this right now.
+            this.initSeleneseCommands();
+
+            // JEO: This is a ghetto hack to help prevent issues where IE does not allow you to 
+            // click on non-visibile elements. This can crop up pretty often and hopefully will
+            // be fixed in later versions of Web Driver.
+            webDriver.Navigate().GoToUrl("http://www.google.com");
+
+            OpenQA.Selenium.IJavaScriptExecutor jsExecutor = (OpenQA.Selenium.IJavaScriptExecutor)webDriver;
+            jsExecutor.ExecuteScript("if(window.screen){window.moveTo(0,0);window.resizeTo(window.screen.availWidth, window.screen.availHeight);};");
+
+            return true;
+
+        }
+
         private Boolean runTestSuite()
         {
             // Parse up the suite and start sending it over to the server.
             try
             {
-                ArrayList tests = this.getTestsFromTestSuite();
+                
+                this.getTestsFromTestSuite();
 
-                // start up the requested browser.
-                this.log.message("starting up browser: " + this.testBrowser);
+                this.updateTestRunProgress(0, this.tests.Count);
 
-                switch (this.testBrowser)
-                {
-                    case "chrome":
-                        this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
-                        break;
-                    case "firefox":
-                        this.webDriver = new OpenQA.Selenium.Firefox.FirefoxDriver();
-                        break;
-                    case "googlechrome":
-                        this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
-                        break;
-                    case "iexplore":
-                        this.webDriver = new OpenQA.Selenium.IE.InternetExplorerDriver();
-                        break;
-                    default:
-                        this.log.message("Invalid browser specificed: " + this.testBrowser);
-                        return false;
-                }
-
-                // TODO: We should pull this up to the top level init, but the log() requirement 
-                // prevents this right now.
-                this.initSeleneseCommands();
-        
-                // JEO: This is a ghetto hack to help prevent issues where IE does not allow you to 
-                // click on non-visibile elements. This can crop up pretty often and hopefully will
-                // be fixed in later versions of Web Driver.
-                webDriver.Navigate().GoToUrl("http://www.google.com");
-
-                // ImplicityWait() change
-                // webDriver.Manage().Timeouts().ImplicitlyWait(new TimeSpan(0, 1, 0));
-
-                OpenQA.Selenium.IJavaScriptExecutor jsExecutor = (OpenQA.Selenium.IJavaScriptExecutor)webDriver;
-                jsExecutor.ExecuteScript("if(window.screen){window.moveTo(0,0);window.resizeTo(window.screen.availWidth, window.screen.availHeight);};");
-
+                this.initWebDriver();
+                
                 // loop across all the tests and run them.
                 String testBasedir = Path.GetDirectoryName(this.testRunIndexHtml);
 
-                foreach (String test in tests)
+                int completedTestsCnt = 0;
+                foreach (String test in this.tests)
                 {
                     String testFile = testBasedir + "\\" + test;
 
@@ -552,7 +625,7 @@ namespace Continuum_Windows_Testing_Agent
                     // Reset the test table
                     this.clearGrid();
 
-                    ArrayList testCommands = this.getTestCommands(testFile);
+                    this.testCommands = this.getTestCommands(testFile);
 
                     // Load the commands into the table
                     foreach (Selenium_Test_Trinome testCommand in testCommands)
@@ -561,8 +634,15 @@ namespace Continuum_Windows_Testing_Agent
                     }
 
                     // Run the commands.
+                    this.currentTestCommand = 0;
+
+                    // this.runTestCommands();
+                    int completedTestCmdCnt = 0;
                     foreach (Selenium_Test_Trinome testCommand in testCommands)
                     {
+                        
+                        this.currentTestCommand = testCommand.getId();
+
                         this.log.message(
                             "testCommand[" + testCommand.getId() + " of " + testCommands.Count + "] " +
                             "command: " + testCommand.getCommand() + " " +
@@ -578,10 +658,14 @@ namespace Continuum_Windows_Testing_Agent
                         }
 
                         this.log.message("testCommand finished");
-                       
+                        completedTestCmdCnt++;
+
                     }
 
                     this.log.message("finished test: " + testFile);
+                    
+                    completedTestsCnt++;
+                    this.updateTestRunProgress(completedTestsCnt, this.tests.Count);
                 }
 
                 this.log.message("shutting down selenium");
@@ -691,36 +775,36 @@ namespace Continuum_Windows_Testing_Agent
             this.testRunIndexHtml = null;
             this.testStatus = 0;
             */
+            this.Dispose();
         }
 
 
         private void initSeleneseCommands()
         {
-            this.seleneseCommands.Add("addSelection", new SeleneseAddSelection(this.log, this.webDriver));
-            this.seleneseCommands.Add("assertElementPresent", new SeleneseAssertElementPresent(this.log, this.webDriver));
-            this.seleneseCommands.Add("assertTextPresent", new SeleneseAssertTextPresent(this.log, this.webDriver));
-            // this.seleneseCommands.Add("click", new SeleneseClick(this.log, this.webDriver));
-            // this.seleneseCommands.Add("clickAndWait", new SeleneseClickAndWait(this.log, this.webDriver));
-            this.seleneseCommands.Add("open", new SeleneseOpen(this.log, this.webDriver));
-            this.seleneseCommands.Add("pause", new SelenesePause(this.log, this.webDriver));
-            this.seleneseCommands.Add("removeSelection", new SeleneseRemoveSelection(this.log, this.webDriver));
-            this.seleneseCommands.Add("select", new SeleneseSelect(this.log, this.webDriver));
-            this.seleneseCommands.Add("store", new SeleneseStore(this.log, this.webDriver, this.testVariables));
-            // this.seleneseCommands.Add("type", new SeleneseType(this.log, this.webDriver));
-            this.seleneseCommands.Add("waitForPageToLoad", new SeleneseWaitForPageToLoad(this.log, this.webDriver));
-            this.seleneseCommands.Add("verifyTextPresent", new SeleneseVerifyTextPresent(this.log, this.webDriver));
 
+            // this.seleneseCommands.Add("waitForPageToLoad", new SeleneseWaitForPageToLoad(this.log, this.webDriver)); - might need to jiggle this, don't know yet.
+
+            // Code we have added or modified
+            this.seleneseMethods.Add("assertElementPresent", new IsElementPresent(this.elementFinder));         // reused from mainline code.
+            this.seleneseMethods.Add("assertTextPresent", new CTM_IsTextPresent());                             // reused from mainline code.
+            this.seleneseMethods.Add("click", new CTM_Click(this.elementFinder));                               // Modified to include teh pageload wait.
+            this.seleneseMethods.Add("clickAndWait", new CTM_ClickAndWait(this.elementFinder));                 // New
+            this.seleneseMethods.Add("isTextPresent", new CTM_IsTextPresent());
+            this.seleneseMethods.Add("open", new CTM_Open());                                                   // Modified functionality to support param carry over and pageload wait.
+            this.seleneseMethods.Add("pause", new CTM_Pause());                                                 // New (Might not be thread safe)
+            this.seleneseMethods.Add("store", new CTM_Store(this.testVariables));                               // New our version of store has to talk to the local testVariables stack.
+            this.seleneseMethods.Add("type", new CTM_Type(elementFinder, this.keyState));                       // Removed the javascript based replacement. 
+            this.seleneseMethods.Add("verifyTextPresent", new CTM_IsTextPresent());                             // reused from mainline code.
+            
             // Vendor provided code we haven't modified.
             // Note the we use the names used by the CommandProcessor
             //seleneseMethods.Add("addLocationStrategy", new AddLocationStrategy(elementFinder));
-            //seleneseMethods.Add("addSelection", new AddSelection(elementFinder, select));
+            this.seleneseMethods.Add("addSelection", new AddSelection(elementFinder, select));
             //seleneseMethods.Add("altKeyDown", new AltKeyDown(keyState));
             //seleneseMethods.Add("altKeyUp", new AltKeyUp(keyState));
             //seleneseMethods.Add("assignId", new AssignId(elementFinder));
             //seleneseMethods.Add("attachFile", new AttachFile(elementFinder));
             //seleneseMethods.Add("captureScreenshotToString", new CaptureScreenshotToString());
-            this.seleneseMethods.Add("click", new Click(this.elementFinder));
-            this.seleneseMethods.Add("clickAndWait", new ClickAndWait(this.elementFinder));
             //seleneseMethods.Add("check", new Check(elementFinder));
             //seleneseMethods.Add("close", new Close());
             //seleneseMethods.Add("createCookie", new CreateCookie());
@@ -771,10 +855,9 @@ namespace Continuum_Windows_Testing_Agent
             //seleneseMethods.Add("isChecked", new IsChecked(elementFinder));
             //seleneseMethods.Add("isCookiePresent", new IsCookiePresent());
             //seleneseMethods.Add("isEditable", new IsEditable(elementFinder));
-            //seleneseMethods.Add("isElementPresent", new IsElementPresent(elementFinder));
+            this.seleneseMethods.Add("isElementPresent", new IsElementPresent(this.elementFinder));
             //seleneseMethods.Add("isOrdered", new IsOrdered(elementFinder));
             //seleneseMethods.Add("isSomethingSelected", new IsSomethingSelected(select));
-            //seleneseMethods.Add("isTextPresent", new IsTextPresent());
             //seleneseMethods.Add("isVisible", new IsVisible(elementFinder));
             //seleneseMethods.Add("keyDown", new KeyEvent(elementFinder, keyState, "doKeyDown"));
             //seleneseMethods.Add("keyPress", new TypeKeys(elementFinder));
@@ -789,13 +872,12 @@ namespace Continuum_Windows_Testing_Agent
             //seleneseMethods.Add("mouseMoveAt", new MouseEventAt(elementFinder, "mousemove"));
             //seleneseMethods.Add("mouseUp", new MouseEvent(elementFinder, "mouseup"));
             //seleneseMethods.Add("mouseUpAt", new MouseEventAt(elementFinder, "mouseup"));
-            //seleneseMethods.Add("open", new Open(baseUrl));
             //seleneseMethods.Add("openWindow", new OpenWindow(new GetEval(baseUrl)));
             //seleneseMethods.Add("refresh", new Refresh());
-            //seleneseMethods.Add("removeAllSelections", new RemoveAllSelections(elementFinder));
-            //seleneseMethods.Add("removeSelection", new RemoveSelection(elementFinder, select));
+            this.seleneseMethods.Add("removeAllSelections", new RemoveAllSelections(this.elementFinder));
+            this.seleneseMethods.Add("removeSelection", new RemoveSelection(this.elementFinder, this.select));
             //seleneseMethods.Add("runScript", new RunScript());
-            //seleneseMethods.Add("select", new SelectOption(select));
+            this.seleneseMethods.Add("select", new SelectOption(this.select));
             //seleneseMethods.Add("selectFrame", new SelectFrame(windows));
             //seleneseMethods.Add("selectWindow", new SelectWindow(windows));
             //seleneseMethods.Add("setBrowserLogLevel", new NoOp(null));
@@ -805,13 +887,12 @@ namespace Continuum_Windows_Testing_Agent
             //seleneseMethods.Add("shiftKeyDown", new ShiftKeyDown(keyState));
             //seleneseMethods.Add("shiftKeyUp", new ShiftKeyUp(keyState));
             //seleneseMethods.Add("submit", new Submit(elementFinder));
-            this.seleneseMethods.Add("type", new Selenium.Internal.SeleniumEmulation.Type(elementFinder, this.keyState));
             //seleneseMethods.Add("typeKeys", new TypeKeys(elementFinder));
             //seleneseMethods.Add("uncheck", new Uncheck(elementFinder));
             //seleneseMethods.Add("useXpathLibrary", new NoOp(null));
             //seleneseMethods.Add("waitForCondition", new WaitForCondition());
             //seleneseMethods.Add("waitForFrameToLoad", new NoOp(null));
-            //seleneseMethods.Add("waitForPageToLoad", new WaitForPageToLoad());
+            this.seleneseMethods.Add("waitForPageToLoad", new WaitForPageToLoad());
             //seleneseMethods.Add("waitForPopUp", new WaitForPopup(windows));
             //seleneseMethods.Add("windowFocus", new WindowFocus());
             //seleneseMethods.Add("windowMaximize", new WindowMaximize());
@@ -915,25 +996,25 @@ namespace Continuum_Windows_Testing_Agent
 
                 try
                 {
-                    this.log.startTimer();
+                    this.updateCommandStatus(testCommand.getId(), -1, "Working...");
+                    this.log.startTimer();                    
                     cmd.Apply(this.webDriver, args);
                     this.log.logSuccess(testCommand, "");
-                    this.updateCommandStatus(testCommand.getId(), true, "");
+                    this.updateCommandStatus(testCommand.getId(), 1, "");
                     return true;
                 }
                 catch (Exception e)
                 {
                     String message = "failed: " + e.Message;
                     this.log.logFailure(testCommand, message);
-
-                    this.updateCommandStatus(testCommand.getId(), false, message );
+                    this.updateCommandStatus(testCommand.getId(), 0, message );
                     this.testHadError = true;
                     return false;
                 }
             }
 
 
-
+            /*
             if (this.seleneseCommands.ContainsKey(testCommand.getCommand()))
             {
                 Selenese_Command cmd = (Selenese_Command)this.seleneseCommands[testCommand.getCommand()];
@@ -950,6 +1031,7 @@ namespace Continuum_Windows_Testing_Agent
                 }
 
             }
+            */
 
             this.testHadError = true;
             this.log.logFailure(testCommand, "unimplemented selenese");

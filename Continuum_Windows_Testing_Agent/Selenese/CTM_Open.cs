@@ -1,28 +1,40 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using OpenQA.Selenium;
-using OpenQA.Selenium.IE;
+using Selenium.Internal.SeleniumEmulation;
 using System.Collections.Specialized;
 using System.Web;
+using Continuum_Windows_Testing_Agent;
 
-namespace Continuum_Windows_Testing_Agent.Selenese
-{  
-
-    class SeleneseOpen : Selenese_Command
+namespace Selenium.Internal.SeleniumEmulation
+{
+    internal class CTM_Open : SeleneseCommand
     {
         private Uri baseUri;
         private NameValueCollection baseParams;
 
-        public SeleneseOpen(Selenium_Test_Log log, IWebDriver webDriver)
-            : base(log, webDriver)
+        public CTM_Open()
         {
             this.baseUri = null;
             this.baseParams = new NameValueCollection();
         }
 
-        private String parseUri(string rawUrl)
+        protected override object HandleSeleneseCommand(IWebDriver driver, string url, string ignored)
+        {
+            String uUrl = this.createUrl(url);
+                
+            driver.Navigate().GoToUrl(uUrl);
+
+            // JEO: To emulate the IDE's load behavior you need to do a waitforpagetoload 30s
+            PageLoadWaiter pageWaiter = new PageLoadWaiter(driver, 30000);
+            pageWaiter.Wait("Page load timeout exceeded");
+
+            return null;
+        }
+
+
+        private String createUrl(string rawUrl)
         {
             if (rawUrl.StartsWith("http:") == false && rawUrl.StartsWith("http:") == false)
             {
@@ -78,38 +90,13 @@ namespace Continuum_Windows_Testing_Agent.Selenese
                 nUrl = nUrl + "?" + uParams;
             }
 
-            
+
             // Save the new url to the stack
             this.baseUri = new Uri(nUrl);
 
             return nUrl;
 
         }
-
-        public override Boolean run(Selenium_Test_Trinome testCommand)
-        {
-            this.log.startTimer();
-            String uUrl = "";
-            try
-            {
-
-                uUrl = this.parseUri(testCommand.getTarget());
-                
-                this.webDriver.Navigate().GoToUrl(uUrl);
-
-                this.waitForPageToLoad();
-
-                this.log.logSuccess(testCommand, "used url: " + uUrl);
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                this.log.logFailure(testCommand, e.Message + " used url: " + uUrl );
-            }
-            return false;
-        }
-
 
     }
 }

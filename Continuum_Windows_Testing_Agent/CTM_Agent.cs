@@ -18,7 +18,8 @@ namespace Continuum_Windows_Testing_Agent
 
         #region Private Variables
         delegate void SetLastRunLogBoxCallback(string text);
-        
+        delegate void ctmTestCleanupCallback();
+
         private CTM_Agent_Log log;
         private String guid;
         private String ctmHostname;
@@ -32,7 +33,8 @@ namespace Continuum_Windows_Testing_Agent
         private CTM_LocalWebBrowser firefox;
         private CTM_LocalWebBrowser ie;
         private CTM_LocalWebBrowser safari;
-      
+        private CTM_Test currentTest;
+
         #endregion Private Variables
 
         #region Constructor
@@ -66,6 +68,8 @@ namespace Continuum_Windows_Testing_Agent
             this.firefox = new CTM_LocalWebBrowser("firefox");
             this.ie = new CTM_LocalWebBrowser("ie");
             this.safari = new CTM_LocalWebBrowser("safari");
+
+            this.currentTest = null;
 
         }
         #endregion Constructor
@@ -282,6 +286,45 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
+        private void ctmTestCleanup()
+        {
+            if (this.currentTest.InvokeRequired == true)
+            {
+                ctmTestCleanupCallback d = new ctmTestCleanupCallback(ctmTestCleanup);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                try
+                {
+
+                    this.currentTest.runWork();
+
+                    NameValueCollection resultPostValues = new NameValueCollection();
+                    resultPostValues.Add("testRunBrowserId", this.currentTest.getTestRunBrowserId().ToString());
+                    // TODO: jeo - we need to make a better timeElapsed tracker.
+                    // resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
+                    resultPostValues.Add("testStatus", this.currentTest.getTestStatus().ToString());
+                    resultPostValues.Add("runLog", "");
+                    resultPostValues.Add("seleniumLog", this.currentTest.getSeleniumTestLog().getLogContents());
+
+                    String logUrl = "http://" + this.ctmHostname + "/et/log/";
+                    WebClient resultClient = new WebClient();
+                    resultClient.UploadValues(logUrl, resultPostValues);
+
+                    this.log.message("Completed test run: " + this.currentTest.getTestRunId());
+                }
+                catch (Exception ex)
+                {
+                    this.log.message("uncaught run work exception message: " + ex.Message);
+                }
+                finally
+                {
+                    this.currentTest.cleanup();
+                }               
+            }
+
+        }
 
         #region Call Home Timer
         private void callHomeTimer_Tick(object sender, EventArgs e)
@@ -314,39 +357,8 @@ namespace Continuum_Windows_Testing_Agent
 
         void ctmAgentBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker agentBw = sender as BackgroundWorker;
-
-            CTM_Test test = (CTM_Test)e.Argument;
-
-            try
-            {
-                test.runWork();
-
-                NameValueCollection resultPostValues = new NameValueCollection();
-                resultPostValues.Add("testRunBrowserId", test.getTestRunBrowserId().ToString());
-                // TODO: jeo - we need to make a better timeElapsed tracker.
-                // resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
-                resultPostValues.Add("testStatus", test.getTestStatus().ToString());
-                resultPostValues.Add("runLog", "");
-                resultPostValues.Add("seleniumLog", test.getSeleniumTestLog().getLogContents());
-
-                String logUrl = "http://" + this.ctmHostname + "/et/log/";
-                WebClient resultClient = new WebClient();
-                resultClient.UploadValues(logUrl, resultPostValues);
-
-                this.log.message("Completed test run: " + test.getTestRunId());
-            }
-            catch (Exception ex)
-            {
-                this.log.message("uncaught run work exception message: " + ex.Message);
-            }
-            finally
-            {
-                test.cleanup();
-            }
-
+            this.ctmTestCleanup();
             this.updateLastRunLogBox( this.log.getLastLogLines() );
-
         }
 
         private void requestWork_Completed(object sender, UploadValuesCompletedEventArgs args)
@@ -386,32 +398,32 @@ namespace Continuum_Windows_Testing_Agent
                             if (this.agentBackgroundWorker.IsBusy != true)
                             {
 
-                                CTM_Test test = new CTM_Test();
+                                this.currentTest = new CTM_Test();
 
                                 // Convert the XML document into a ctmWorkRunner object.
-                                test.setTestRunId( UInt64.Parse(testRun.SelectSingleNode("testRunId").InnerText) );
-                                test.setTestRunBrowserId( UInt64.Parse(testRun.SelectSingleNode("id").InnerText) );
+                                this.currentTest.setTestRunId( UInt64.Parse(testRun.SelectSingleNode("testRunId").InnerText) );
+                                this.currentTest.setTestRunBrowserId( UInt64.Parse(testRun.SelectSingleNode("id").InnerText) );
 
                                 XmlNode ctmTestBrowser = testRun.SelectSingleNode("CTM_Test_Browser");
-                                test.setTestBrowser( ctmTestBrowser.SelectSingleNode("name").InnerText );
+                                this.currentTest.setTestBrowser( ctmTestBrowser.SelectSingleNode("name").InnerText );
 
-                                test.setUseVerboseTestLogs(this.useVerboseTestLogs);
+                                this.currentTest.setUseVerboseTestLogs(this.useVerboseTestLogs);
 
                                 // create the download url.
-                                test.setTestDownloadUrl( "http://" + this.ctmHostname + "/test/run/download/?id=" + test.getTestRunId() );
+                                this.currentTest.setTestDownloadUrl( "http://" + this.ctmHostname + "/test/run/download/?id=" + this.currentTest.getTestRunId() );
                                 
-                                test.setHaltOnError( this.haltOnError );
+                                this.currentTest.setHaltOnError( this.haltOnError );
 
-                                this.log.message(" testRunId: " + test.getTestRunId());
-                                this.log.message(" testRunBrowserId: " + test.getTestRunBrowserId());
-                                this.log.message(" testDownloadUrl: " + test.getTestDownloadUrl());
-                                this.log.message(" testBrowser: " + test.getTestBrowser());
+                                this.log.message(" testRunId: " + this.currentTest.getTestRunId());
+                                this.log.message(" testRunBrowserId: " + this.currentTest.getTestRunBrowserId());
+                                this.log.message(" testDownloadUrl: " + this.currentTest.getTestDownloadUrl());
+                                this.log.message(" testBrowser: " + this.currentTest.getTestBrowser());
 
-                                test.Visible = true;
+                                this.currentTest.Visible = true;
 
-                                test.Activate();
+                                this.currentTest.Activate();
 
-                                this.agentBackgroundWorker.RunWorkerAsync(test);
+                                this.agentBackgroundWorker.RunWorkerAsync();
 
                             }
                             else
