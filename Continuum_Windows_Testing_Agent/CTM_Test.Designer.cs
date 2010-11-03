@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.activeTestGrid = new System.Windows.Forms.DataGridView();
-            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.target = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.message = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.testRunNameBox = new System.Windows.Forms.TextBox();
@@ -40,6 +36,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.testNameBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.message = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.activeTestGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,6 +49,7 @@
             this.activeTestGrid.AllowUserToDeleteRows = false;
             this.activeTestGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.activeTestGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.activeTestGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.activeTestGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.activeTestGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.command,
@@ -59,30 +60,6 @@
             this.activeTestGrid.Name = "activeTestGrid";
             this.activeTestGrid.Size = new System.Drawing.Size(677, 506);
             this.activeTestGrid.TabIndex = 0;
-            // 
-            // command
-            // 
-            this.command.HeaderText = "Command";
-            this.command.Name = "command";
-            this.command.Width = 79;
-            // 
-            // target
-            // 
-            this.target.HeaderText = "Target";
-            this.target.Name = "target";
-            this.target.Width = 63;
-            // 
-            // value
-            // 
-            this.value.HeaderText = "Value";
-            this.value.Name = "value";
-            this.value.Width = 59;
-            // 
-            // message
-            // 
-            this.message.HeaderText = "Message";
-            this.message.Name = "message";
-            this.message.Width = 75;
             // 
             // button1
             // 
@@ -142,6 +119,30 @@
             this.label4.Size = new System.Drawing.Size(31, 13);
             this.label4.TabIndex = 6;
             this.label4.Text = "Test:";
+            // 
+            // command
+            // 
+            this.command.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.command.HeaderText = "Command";
+            this.command.Name = "command";
+            // 
+            // target
+            // 
+            this.target.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.target.HeaderText = "Target";
+            this.target.Name = "target";
+            // 
+            // value
+            // 
+            this.value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.value.HeaderText = "Value";
+            this.value.Name = "value";
+            // 
+            // message
+            // 
+            this.message.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.message.HeaderText = "Message";
+            this.message.Name = "message";
             // 
             // CTM_Test
             // 

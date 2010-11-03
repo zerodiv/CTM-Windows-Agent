@@ -236,6 +236,12 @@ namespace Continuum_Windows_Testing_Agent
                 // Bring the form to the for front.
                 if (this.Focused == false)
                 {
+                    // make sure the window lives in the right side bottom (personal preference) JEO - Might want to configure this eventually.
+                    this.Location = new Point(
+                        Screen.PrimaryScreen.WorkingArea.Width - this.Width,
+                        Screen.PrimaryScreen.WorkingArea.Height - this.Height
+                    );
+
                     this.Activate();
                 }
                 
