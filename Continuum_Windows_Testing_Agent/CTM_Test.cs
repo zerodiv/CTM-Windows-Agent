@@ -28,16 +28,16 @@ namespace Continuum_Windows_Testing_Agent
 
         delegate void clearGridCallback();
         delegate void addCommandToGridCallback(Selenium_Test_Trinome cmd);
-        delegate void updateCommandStatusCallback(int id, int state, String message);
+        delegate void updateCommandStatusCallback(int id, int state, DateTime startTime, DateTime stopTime, String message);
         delegate void updateTestRunProgressCallback(int completed, int total);
         
         private UInt64 testRunId;
         private UInt64 testRunBrowserId;
         private String testDownloadUrl;
         private String testBrowser;
-        private int testStatus;
         private Boolean useVerboseTestLogs;
         private Boolean haltOnError;
+
         private String tempTestDir;
         private String tempZipFile;
         private String testRunIndexHtml;
@@ -55,7 +55,8 @@ namespace Continuum_Windows_Testing_Agent
 
         private ArrayList tests;
         private ArrayList testCommands;
-        private int currentTestCommand;
+        
+        private IJavaScriptExecutor jsExecutor;
 
         #endregion Private Variables
 
@@ -70,7 +71,6 @@ namespace Continuum_Windows_Testing_Agent
             this.testRunBrowserId = 0;
             this.testDownloadUrl = "";
             this.testBrowser = "";
-            this.testStatus = 0;
             this.useVerboseTestLogs = false;
             this.haltOnError = false;
 
@@ -88,7 +88,8 @@ namespace Continuum_Windows_Testing_Agent
 
             this.tests = new ArrayList();
             this.testCommands = new ArrayList();
-            this.currentTestCommand = 0;
+
+            this.testRunWorker.DoWork += new DoWorkEventHandler(testRunWorker_DoWork);
 
         }
         #endregion Constructor
@@ -132,11 +133,6 @@ namespace Continuum_Windows_Testing_Agent
             this.testBrowser = browser;
         }
 
-        public int getTestStatus()
-        {
-            return this.testStatus;
-        }
-
         public void setUseVerboseTestLogs(Boolean use)
         {
             this.useVerboseTestLogs = use;
@@ -150,6 +146,15 @@ namespace Continuum_Windows_Testing_Agent
         public Selenium_Test_Log getSeleniumTestLog()
         {
             return this.log;
+        }
+
+        public int getTestHadError()
+        {
+            if (this.testHadError == true)
+            {
+                return 1;
+            }
+            return 0;
         }
 #endregion Getter / Setters
 
@@ -193,12 +198,12 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
-        private void updateCommandStatus(int id, int state, String message)
+        private void updateCommandStatus(int id, int state, DateTime startTime, DateTime stopTime, String message)
         {
-            if (this.activeTestGrid.InvokeRequired == true)
+           if (this.activeTestGrid.InvokeRequired == true)
             {
                 updateCommandStatusCallback d = new updateCommandStatusCallback(updateCommandStatus);
-                this.Invoke(d, new object[] { id, state, message });
+                this.Invoke(d, new object[] { id, state, startTime, stopTime, message });
             }
             else
             {
@@ -215,8 +220,15 @@ namespace Continuum_Windows_Testing_Agent
                 this.activeTestGrid.Rows[rowId].Selected = true;
                 
                 // Set the message (we have to allow empty to move the "Working.." message.
-                this.activeTestGrid.Rows[rowId].Cells[3].Value = message;
+                this.activeTestGrid.Rows[rowId].Cells[6].Value = message;
                 
+                // Set the date / time fields.
+                this.activeTestGrid.Rows[rowId].Cells[3].Value = startTime;
+                this.activeTestGrid.Rows[rowId].Cells[4].Value = stopTime;
+
+                TimeSpan elapsed = stopTime - startTime;
+                this.activeTestGrid.Rows[rowId].Cells[5].Value = elapsed;
+
                 // Set the state / color of the row based upon the result.
                 if (state == -1)
                 {
@@ -233,17 +245,17 @@ namespace Continuum_Windows_Testing_Agent
 
                 this.activeTestGrid.Refresh();
 
-                // Bring the form to the for front.
-                if (this.Focused == false)
-                {
-                    // make sure the window lives in the right side bottom (personal preference) JEO - Might want to configure this eventually.
-                    this.Location = new Point(
-                        Screen.PrimaryScreen.WorkingArea.Width - this.Width,
-                        Screen.PrimaryScreen.WorkingArea.Height - this.Height
-                    );
+                // make sure the window lives in the right side bottom (personal preference) JEO - Might want to configure this eventually.
+                int x = Screen.PrimaryScreen.WorkingArea.Width - this.Width;
+                int y = Screen.PrimaryScreen.WorkingArea.Height - this.Height;
 
-                    this.Activate();
+                if (this.Location.X != x && this.Location.Y != y)
+                {
+                    this.Location = new Point(x, y);
                 }
+
+                // Bring the form to the for front.
+                this.Activate();
                 
             }
         }
@@ -261,6 +273,34 @@ namespace Continuum_Windows_Testing_Agent
                 {
                     this.testRunProgressBar.Maximum = total;
                 }
+                if (completed > 0)
+                {
+                    foreach (DataGridViewRow row in this.activeTestGrid.Rows)
+                    {
+                        Boolean status = false;
+                        if (row.DefaultCellStyle.BackColor == System.Drawing.Color.LightGreen)
+                        {
+                            status = true;
+                        }
+                        if (row.Cells[0].Value.ToString() == ":comment:")
+                        {
+                            this.log.insertTestComment(row.Cells[1].Value.ToString());
+                        }
+                        else
+                        {
+                            this.log.logTrinome(
+                                status,
+                                row.Cells[0].Value.ToString(),
+                                row.Cells[1].Value.ToString(),
+                                row.Cells[2].Value.ToString(),
+                                row.Cells[3].Value.ToString(),
+                                row.Cells[4].Value.ToString(),
+                                row.Cells[5].Value.ToString(),
+                                row.Cells[6].Value.ToString()
+                            );
+                        }
+                    }
+                }
                 this.testRunProgressBar.Value = completed;
             }
             
@@ -271,16 +311,11 @@ namespace Continuum_Windows_Testing_Agent
         #region Init Testing
         private Boolean initTestingDirectory()
         {
-            this.log.message("initalize testing directories");
-
             this.tempTestDir = Environment.GetEnvironmentVariable("TEMP");
             this.tempTestDir += "\\ctmTestRun_" + this.testRunId;
 
-            this.log.message("tempTestDir: " + this.tempTestDir);
-
             if (Directory.Exists(this.tempTestDir) == true)
             {
-                this.log.message("temp dir was already there cleaning up from previous run");
                 Directory.Delete(this.tempTestDir, true);
             }
 
@@ -288,7 +323,6 @@ namespace Continuum_Windows_Testing_Agent
 
             if (Directory.Exists(this.tempTestDir) == false)
             {
-                this.log.message("failed to create temp dir: " + this.tempTestDir);
                 return false;
             }
             
@@ -302,24 +336,19 @@ namespace Continuum_Windows_Testing_Agent
             this.tempZipFile = Environment.GetEnvironmentVariable("TEMP");
             this.tempZipFile += "\\ctmTestRun_" + this.testRunId + ".zip";
 
-            this.log.message(" tempZipFile: " + this.tempZipFile);
-
             if (File.Exists(this.tempZipFile) == false)
             {
                 File.Delete(this.tempZipFile);
                 if (File.Exists(this.tempZipFile) == true)
                 {
-                    this.log.message("failed to remove tempZipFile: " + this.tempZipFile);
                     return false;
                 }
             }
 
             // download the file.
-            this.log.message("downloading zip file");
             WebClient masterClient = new WebClient();
             masterClient.DownloadFile(this.testDownloadUrl, this.tempZipFile);
-            this.log.message("zip file downloaded");
-
+            
             // unzip the file into the temp directory.
             try
             {
@@ -333,7 +362,6 @@ namespace Continuum_Windows_Testing_Agent
             }
             catch (Exception e)
             {
-                this.log.message("Failed to unzip message: " + e.Message);
                 return false;
             }
 
@@ -345,11 +373,7 @@ namespace Continuum_Windows_Testing_Agent
         {
 
             String seleniumLogFile = Environment.GetEnvironmentVariable("TEMP") + "\\selenium_" + this.testRunId + ".html";
-
             this.log = new Selenium_Test_Log(this.useVerboseTestLogs, seleniumLogFile);
-            this.log.message("init seleniumLogFile: " + seleniumLogFile);
-            
-
             return true;
         }
         #endregion Init Testing
@@ -373,11 +397,9 @@ namespace Continuum_Windows_Testing_Agent
 
             if (File.Exists(this.testRunIndexHtml) == false)
             {
-                this.log.message("failed to find test run index.html file");
                 return false;
             }
 
-            this.log.message("testRunIndexHtml: " + this.testRunIndexHtml);
             return true;
         }
 
@@ -430,10 +452,8 @@ namespace Continuum_Windows_Testing_Agent
             }
             catch (Exception e)
             {
-                this.log.message("Failed to parse testSuiteHtml: " + this.testRunIndexHtml + " errorMessage: " + e.Message);
+                return false;
             }
-
-            this.log.message("Found: " + this.tests.Count + " tests in your test suite.");
 
             return true;
 
@@ -451,12 +471,7 @@ namespace Continuum_Windows_Testing_Agent
 
             if (doc.ParseErrors != null && doc.ParseErrors.Count() > 0)
             {
-                foreach (HtmlParseError htmlError in doc.ParseErrors)
-                {
-                    this.log.message("testFile: " + testFile);
-                    this.log.message("error parsing file: " + htmlError.SourceText);
-                }
-                return testTitle;
+                 return testTitle;
             }
             foreach (HtmlNode testTitleRow in doc.DocumentNode.SelectNodes("/html/body/table/thead/*"))
             {
@@ -483,11 +498,6 @@ namespace Continuum_Windows_Testing_Agent
 
             if (doc.ParseErrors != null && doc.ParseErrors.Count() > 0)
             {
-                foreach (HtmlParseError htmlError in doc.ParseErrors)
-                {
-                    this.log.message("testFile: " + testFile);
-                    this.log.message("error parsing file: " + htmlError.SourceText);
-                }
                 return testCommands;
             }
 
@@ -537,17 +547,11 @@ namespace Continuum_Windows_Testing_Agent
 
                         testCommands.Add(triNome);
 
-                        this.log.message(
-                            "testCommand: " + triNome.getCommand() + " " +
-                            "testTarget: " + triNome.getTarget() + " " +
-                            "testValue: " + triNome.getValue()
-                        );
                     }
                 }
 
             }
 
-            this.log.message("found: " + testCommands.Count + " testCommands in test file");
             return testCommands;
 
         }
@@ -561,8 +565,6 @@ namespace Continuum_Windows_Testing_Agent
             }
 
             // start up the requested browser.
-            this.log.message("starting up browser: " + this.testBrowser);
-
             switch (this.testBrowser)
             {
                 case "chrome":
@@ -578,7 +580,6 @@ namespace Continuum_Windows_Testing_Agent
                     this.webDriver = new OpenQA.Selenium.IE.InternetExplorerDriver();
                     break;
                 default:
-                    this.log.message("Invalid browser specificed: " + this.testBrowser);
                     return false;
             }
 
@@ -598,102 +599,6 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
-        private Boolean runTestSuite()
-        {
-            // Parse up the suite and start sending it over to the server.
-            try
-            {
-                
-                this.getTestsFromTestSuite();
-
-                this.updateTestRunProgress(0, this.tests.Count);
-
-                this.initWebDriver();
-                
-                // loop across all the tests and run them.
-                String testBasedir = Path.GetDirectoryName(this.testRunIndexHtml);
-
-                int completedTestsCnt = 0;
-                foreach (String test in this.tests)
-                {
-                    String testFile = testBasedir + "\\" + test;
-
-                    this.log.message("running test: " + testFile);
-
-                    String testTitle = this.getTestTitle(testFile);
-
-                    // Change the title of the test to our test we are currently working on.
-                    this.setTestNameBox(testTitle);
-
-                    // output the test title.
-                    this.log.startTestMessage(testTitle);
-
-                    // Reset the test table
-                    this.clearGrid();
-
-                    this.testCommands = this.getTestCommands(testFile);
-
-                    // Load the commands into the table
-                    foreach (Selenium_Test_Trinome testCommand in testCommands)
-                    {
-                        this.addCommandToGrid(testCommand);
-                    }
-
-                    // Run the commands.
-                    this.currentTestCommand = 0;
-
-                    // this.runTestCommands();
-                    int completedTestCmdCnt = 0;
-                    foreach (Selenium_Test_Trinome testCommand in testCommands)
-                    {
-                        
-                        this.currentTestCommand = testCommand.getId();
-
-                        this.log.message(
-                            "testCommand[" + testCommand.getId() + " of " + testCommands.Count + "] " +
-                            "command: " + testCommand.getCommand() + " " +
-                            "target: " + testCommand.getTarget() + " " +
-                            "value: " + testCommand.getValue());
-                        
-                        // this.log.message("testCommand[" + commandId + " of " + testCommands.Count + "]: '" + testCommand.command + "'");
-                        Boolean selReturn = this.processSelenese(testCommand);
-
-                        if (this.haltOnError == true && selReturn == false)
-                        {
-                            Thread.Sleep(30000);
-                        }
-
-                        this.log.message("testCommand finished");
-                        completedTestCmdCnt++;
-
-                    }
-
-                    this.log.message("finished test: " + testFile);
-                    
-                    completedTestsCnt++;
-                    this.updateTestRunProgress(completedTestsCnt, this.tests.Count);
-                }
-
-                this.log.message("shutting down selenium");
-
-                webDriver.Quit();
-
-                if (this.testHadError == false)
-                {
-                    this.log.message("completed running suite - successful");
-                    return true;
-                }
-                this.log.message("completed running suite - failure");
-                return false;
-            }
-            catch (Exception e)
-            {
-                this.log.message("Failed running test: " + e.Message);
-            }
-
-            return false;
-        }
-
         public Boolean runWork()
         {
 
@@ -710,7 +615,6 @@ namespace Continuum_Windows_Testing_Agent
                 // init testing directory.
                 if (this.initTestingDirectory() == false)
                 {
-                    this.log.message("Failed to init testing directories");
                     this.cleanup();
                     return false;
                 }
@@ -719,7 +623,6 @@ namespace Continuum_Windows_Testing_Agent
                 // download zip file.
                 if (this.fetchZipFile() == false)
                 {
-                    this.log.message("Failed to download zip file");
                     this.cleanup();
                     return false;
                 }
@@ -727,60 +630,39 @@ namespace Continuum_Windows_Testing_Agent
                 // find the index.html file
                 if (this.findTestIndexFile() == false)
                 {
-                    this.log.message("Failed to find test index file");
                     this.cleanup();
                     return false;
                 }
 
                 // run the tests.
-                if (this.runTestSuite() == true)
-                {
-                    this.testStatus = 1;
-                }
-                else
-                {
-                    this.testStatus = 0;
-                }
+                this.initWebDriver();
 
-                this.log.closeLogFile();
+                this.testLocker.Set();
+                this.testRunWorker.RunWorkerAsync();
+
+                // this.log.closeLogFile();
 
                 return true;
 
             }
             catch (Exception e)
             {
-                // this.log.message("failed to run test suite message: " + e.Message);
-                this.log.message("Failed to run test suite message: " + e.Message);
                 this.cleanup();
                 return false;
             }
         }
 
         public void cleanup()
-        {
-            /*
+        {            
             if (Directory.Exists(this.tempTestDir) == true)
             {
-                // Directory.Delete(this.tempTestDir, true);
+                Directory.Delete(this.tempTestDir, true);
             }
             if (File.Exists(this.tempZipFile) == true)
             {
                 File.Delete(this.tempZipFile);
             }
-
-            // Flush all the variables pertaining to this run.
-            this.seleniumLogFile = null;
-            this.log = null;
-           this.tempTestDir = null;
-            this.tempZipFile = null;
-            this.testBrowser = null;
-            this.testDownloadUrl = null;
-            this.testLog = null;
-            this.testRunBrowserId = 0;
-            this.testRunId = 0;
-            this.testRunIndexHtml = null;
-            this.testStatus = 0;
-            */
+            this.webDriver.Quit();
             this.Dispose();
         }
 
@@ -929,16 +811,19 @@ namespace Continuum_Windows_Testing_Agent
             {
                 javascript = javascript + ";";
             }
+
             String value = "";
-            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)this.webDriver;
+            if (this.jsExecutor == null)
+            {
+                this.jsExecutor = (IJavaScriptExecutor)this.webDriver;
+            }
 
             if (jsExecutor.IsJavaScriptEnabled == true)
             {
 
-                this.log.message("executing javascript: " + javascript);
                 Object ret = jsExecutor.ExecuteScript(javascript);
                 value = ret.ToString();
-                this.log.message("end js_exec value: " + value);
+                
             }
 
             return value;
@@ -962,16 +847,18 @@ namespace Continuum_Windows_Testing_Agent
 
         public Boolean processSelenese(Selenium_Test_Trinome testCommand)
         {
+            DateTime startTime = System.DateTime.UtcNow;
+            DateTime stopTime = System.DateTime.UtcNow;
 
             if (testCommand.getCommand() == ":comment:")
             {
-                this.log.insertTestComment(testCommand.getTarget());
+                this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
                 return true;
             }
 
             if (this.testHadError == true)
             {
-                this.log.logFailure(testCommand, "not executed - failure already occurred.");
+                this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, "Command not executed: Failure already occurred");
                 return false;
             }
 
@@ -1000,49 +887,121 @@ namespace Continuum_Windows_Testing_Agent
                     args = null;
                 }
 
+                
+                String message = "Working...";
+                this.updateCommandStatus(testCommand.getId(), -1, startTime, stopTime, message);
+                    
                 try
                 {
-                    this.updateCommandStatus(testCommand.getId(), -1, "Working...");
-                    this.log.startTimer();                    
                     cmd.Apply(this.webDriver, args);
-                    this.log.logSuccess(testCommand, "");
-                    this.updateCommandStatus(testCommand.getId(), 1, "");
+                    stopTime = System.DateTime.UtcNow;
+                    this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
                     return true;
                 }
                 catch (Exception e)
                 {
-                    String message = "failed: " + e.Message;
-                    this.log.logFailure(testCommand, message);
-                    this.updateCommandStatus(testCommand.getId(), 0, message );
+                    message = "failed: " + e.Message;
+                    stopTime = System.DateTime.UtcNow;
+                    this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, message );
                     this.testHadError = true;
                     return false;
                 }
             }
 
-
-            /*
-            if (this.seleneseCommands.ContainsKey(testCommand.getCommand()))
-            {
-                Selenese_Command cmd = (Selenese_Command)this.seleneseCommands[testCommand.getCommand()];
-                testCommand = this.interpolateSeleneseVariables(testCommand);
-
-                if (cmd.run(testCommand) == true)
-                {
-                    return true;
-                }
-                else
-                {
-                    this.testHadError = true;
-                    return false;
-                }
-
-            }
-            */
 
             this.testHadError = true;
-            this.log.logFailure(testCommand, "unimplemented selenese");
+            this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, "Command not executed: Unimplemented selenese.");
             return false;
 
+        }
+
+        private ManualResetEvent testLocker = new ManualResetEvent(true);
+
+        private void pauseButton_Click(object sender, EventArgs e)
+        {
+            if (this.pauseButton.Text == "Pause")
+            {
+
+                this.testLocker.Reset();
+                this.pauseButton.Text = "Resume";
+            }
+            else
+            {
+                this.testLocker.Set();
+                this.pauseButton.Text = "Pause";
+            }
+
+        }
+
+        private void testRunWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // Parse up the suite and start sending it over to the server.
+            try
+            {
+                this.testLocker.WaitOne(1);
+
+                this.getTestsFromTestSuite();
+
+                this.updateTestRunProgress(0, this.tests.Count);
+
+               // loop across all the tests and run them.
+                String testBasedir = Path.GetDirectoryName(this.testRunIndexHtml);
+
+                int completedTestsCnt = 0;
+                foreach (String test in this.tests)
+                {
+                    String testFile = testBasedir + "\\" + test;
+
+                    String testTitle = this.getTestTitle(testFile);
+
+                    // Change the title of the test to our test we are currently working on.
+                    this.setTestNameBox(testTitle);
+
+                    // output the test title.
+                    this.log.startTestMessage(testTitle);
+
+                    // Reset the test table
+                    this.clearGrid();
+
+                    this.testCommands = this.getTestCommands(testFile);
+
+                    // Load the commands into the table
+                    foreach (Selenium_Test_Trinome testCommand in this.testCommands)
+                    {
+                        this.addCommandToGrid(testCommand);
+                    }
+
+                    // Run the commands.
+
+                    int testCmdCnt = 0;
+
+                    foreach (Selenium_Test_Trinome testCommand in this.testCommands)
+                    {
+
+                        Boolean selReturn = this.processSelenese(testCommand);
+
+                        if (this.haltOnError == true)
+                        {
+                            this.testLocker.Reset();
+                            this.pauseButton.Text = "Resume";
+                        }
+
+                        testCmdCnt++;
+
+                    }
+
+                    completedTestsCnt++;
+                    this.updateTestRunProgress(completedTestsCnt, this.tests.Count);
+                }
+
+                // webDriver.Quit();
+
+                
+            }
+            catch (Exception ex)
+            {
+                this.testHadError = true;
+            }            
         }
 
     }

@@ -18,7 +18,7 @@ namespace Continuum_Windows_Testing_Agent
 
         #region Private Variables
         delegate void SetLastRunLogBoxCallback(string text);
-        delegate void ctmTestCleanupCallback();
+        delegate void ctmTestExecuteCallback();
 
         private CTM_Agent_Log log;
         private String guid;
@@ -286,51 +286,25 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
-        private void ctmTestCleanup()
+        private void ctmTestExecute()
         {
             if (this.currentTest.InvokeRequired == true)
             {
-                ctmTestCleanupCallback d = new ctmTestCleanupCallback(ctmTestCleanup);
+                ctmTestExecuteCallback d = new ctmTestExecuteCallback(ctmTestExecute);
                 this.Invoke(d, new object[] { });
             }
             else
             {
-                try
-                {
-
-                    this.currentTest.runWork();
-
-                    NameValueCollection resultPostValues = new NameValueCollection();
-                    resultPostValues.Add("testRunBrowserId", this.currentTest.getTestRunBrowserId().ToString());
-                    // TODO: jeo - we need to make a better timeElapsed tracker.
-                    // resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
-                    resultPostValues.Add("testStatus", this.currentTest.getTestStatus().ToString());
-                    resultPostValues.Add("runLog", "");
-                    resultPostValues.Add("seleniumLog", this.currentTest.getSeleniumTestLog().getLogContents());
-
-                    String logUrl = "http://" + this.ctmHostname + "/et/log/";
-                    WebClient resultClient = new WebClient();
-                    resultClient.UploadValues(logUrl, resultPostValues);
-
-                    this.log.message("Completed test run: " + this.currentTest.getTestRunId());
-                }
-                catch (Exception ex)
-                {
-                    this.log.message("uncaught run work exception message: " + ex.Message);
-                }
-                finally
-                {
-                    this.currentTest.cleanup();
-                }               
+                this.currentTest.Activate();
+                this.currentTest.runWork();
             }
-
         }
 
         #region Call Home Timer
         private void callHomeTimer_Tick(object sender, EventArgs e)
         {
             // Check to see if we are already doing work, otherwise reset our poll interval to 30s
-            if (this.agentBackgroundWorker.IsBusy == true)
+            if (this.agentBackgroundWorker.IsBusy == true && this.currentTest != null)
             {
                 this.ctmStatusLabel.Text = "Running tests..";
                 this.callHomeTimer.Interval = 60 * 5 * 1000;
@@ -349,16 +323,47 @@ namespace Continuum_Windows_Testing_Agent
             }
 
             this.requestWork();
-
-
-
         }
         #endregion Call Home Timer
 
+        void testRunWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                this.currentTest.getSeleniumTestLog().closeLogFile();
+
+                NameValueCollection resultPostValues = new NameValueCollection();
+                resultPostValues.Add("testRunBrowserId", this.currentTest.getTestRunBrowserId().ToString());
+                // TODO: jeo - we need to make a better timeElapsed tracker.
+                // resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
+                resultPostValues.Add("testStatus", this.currentTest.getTestHadError().ToString());
+                resultPostValues.Add("runLog", "");
+                resultPostValues.Add("seleniumLog", this.currentTest.getSeleniumTestLog().getLogContents());
+
+                String logUrl = "http://" + this.ctmHostname + "/et/log/";
+                WebClient resultClient = new WebClient();
+                resultClient.UploadValues(logUrl, resultPostValues);
+
+                this.log.message("Completed test run: " + this.currentTest.getTestRunId());
+            }
+            catch (Exception ex)
+            {
+                this.log.message("uncaught run work exception message: " + ex.Message);
+            }
+            finally
+            {
+                this.updateLastRunLogBox(this.log.getLastLogLines());
+
+                this.currentTest.cleanup();
+                
+                this.currentTest = null;
+
+            }               
+        }
+
         void ctmAgentBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            this.ctmTestCleanup();
-            this.updateLastRunLogBox( this.log.getLastLogLines() );
+            this.ctmTestExecute();
         }
 
         private void requestWork_Completed(object sender, UploadValuesCompletedEventArgs args)
@@ -395,7 +400,7 @@ namespace Continuum_Windows_Testing_Agent
 
                         foreach (XmlNode testRun in testRuns)
                         {
-                            if (this.agentBackgroundWorker.IsBusy != true)
+                            if (this.agentBackgroundWorker.IsBusy != true && this.currentTest == null )
                             {
 
                                 this.currentTest = new CTM_Test();
@@ -421,8 +426,8 @@ namespace Continuum_Windows_Testing_Agent
 
                                 this.currentTest.Visible = true;
 
-                                this.currentTest.Activate();
-
+                                this.currentTest.testRunWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(testRunWorker_RunWorkerCompleted);
+                    
                                 this.agentBackgroundWorker.RunWorkerAsync();
 
                             }
@@ -477,7 +482,7 @@ namespace Continuum_Windows_Testing_Agent
                 return;
             }
 
-            if (this.agentBackgroundWorker.IsBusy == true)
+            if (this.agentBackgroundWorker.IsBusy == true && this.currentTest != null)
             {
                 this.log.message("Agent is actively running a test");
                 return;

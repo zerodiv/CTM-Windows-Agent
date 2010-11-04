@@ -114,8 +114,6 @@
     <Compile Include="Selenese\CTM_Open.cs" />
     <Compile Include="Selenese\CTM_Store.cs" />
     <Compile Include="Selenese\CTM_Pause.cs" />
-    <Compile Include="Selenese_Locator.cs" />
-    <Compile Include="Selenese_Command.cs" />
     <Compile Include="LocalWebBrowser.cs" />
     <Compile Include="OSInfo.cs" />
     <Compile Include="CTM_Agent.cs">

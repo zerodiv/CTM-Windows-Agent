@@ -3,7 +3,7 @@
   <asmv1:assemblyIdentity name="Continuum_Windows_Testing_Agent.exe" version="1.0.0.20" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.3958.37471" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.3959.30431" language="neutral" processorArchitecture="msil" />
     <commandLine file="Continuum_Windows_Testing_Agent.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Continuum_Windows_Testing_Agent.exe" size="122880">
-      <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.3958.37471" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Continuum_Windows_Testing_Agent.exe" size="119808">
+      <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.3959.30431" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>A2ex3Slh+2yR4DHhxHk35JUEQeo=</dsig:DigestValue>
+        <dsig:DigestValue>35GgmRFr1H1S9iEKJyL9LR/N1R0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

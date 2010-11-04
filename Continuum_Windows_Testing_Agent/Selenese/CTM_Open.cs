@@ -12,20 +12,31 @@ namespace Selenium.Internal.SeleniumEmulation
     internal class CTM_Open : SeleneseCommand
     {
         private Uri baseUri;
+        private String currentUrl;
         private NameValueCollection baseParams;
 
         public CTM_Open()
         {
             this.baseUri = null;
+            this.currentUrl = null;
             this.baseParams = new NameValueCollection();
         }
 
         protected override object HandleSeleneseCommand(IWebDriver driver, string url, string ignored)
         {
             String uUrl = this.createUrl(url);
-                
-            driver.Navigate().GoToUrl(uUrl);
 
+            // is the currentUrl the same as the new url
+            if (this.currentUrl == uUrl)
+            {
+                // the url is the same as the current url, just refresh.
+                driver.Navigate().Refresh();
+            } else {
+                this.currentUrl = uUrl;
+                driver.Navigate().GoToUrl(uUrl);
+            }
+
+            
             // JEO: To emulate the IDE's load behavior you need to do a waitforpagetoload 30s
             PageLoadWaiter pageWaiter = new PageLoadWaiter(driver, 30000);
             pageWaiter.Wait("Page load timeout exceeded");
@@ -36,7 +47,8 @@ namespace Selenium.Internal.SeleniumEmulation
 
         private String createUrl(string rawUrl)
         {
-            if (rawUrl.StartsWith("http:") == false && rawUrl.StartsWith("http:") == false)
+
+            if (rawUrl.StartsWith("http:") == false && rawUrl.StartsWith("https:") == false)
             {
                 // fragment url add in our existing baseurl params.
                 String tUrl = this.baseUri.Scheme + "://" + this.baseUri.Host;

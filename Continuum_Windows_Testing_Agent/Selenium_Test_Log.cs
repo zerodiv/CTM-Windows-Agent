@@ -14,12 +14,6 @@ namespace Continuum_Windows_Testing_Agent
         private StreamWriter fh;
         private StreamWriter bodyFh;
 
-        private DateTime startTime;
-        private DateTime stopTime;
-
-        private DateTime startTest;
-        private DateTime stopTest;
-
         private Boolean useVerboseTestLogs;
 
         private long totalCommands;
@@ -43,12 +37,6 @@ namespace Continuum_Windows_Testing_Agent
                 {
                     File.Delete(this.bodyFile);
                 }
-
-                this.startTime = System.DateTime.UtcNow;
-                this.stopTime = System.DateTime.UtcNow;
-
-                this.startTest = System.DateTime.UtcNow;
-                this.stopTime = System.DateTime.UtcNow;
 
                 this.totalCommands = 0;
                 this.totalFailedCommands = 0;
@@ -85,8 +73,6 @@ namespace Continuum_Windows_Testing_Agent
                 {
                     return true;
                 }
-
-                this.stopTest = System.DateTime.UtcNow;
 
                 // write header 
                 String cssFile = "http://jorcutt-desktop/css/common.css";
@@ -152,29 +138,6 @@ namespace Continuum_Windows_Testing_Agent
             return true;
         }
 
-        public void startTimer()
-        {
-            this.startTime = System.DateTime.UtcNow;
-            this.stopTime = System.DateTime.UtcNow;
-        }
-
-        public void stopTimer()
-        {
-            this.stopTime = System.DateTime.UtcNow;
-        }
-
-        public void logSuccess(Selenium_Test_Trinome triNome, String message)
-        {
-            this.stopTimer();
-            this.logTrinome(triNome, true, message);
-        }
-
-        public void logFailure(Selenium_Test_Trinome triNome, String message)
-        {
-            this.stopTimer();
-            this.logTrinome(triNome, false, message);
-        }
-
         public String getLogContents()
         {
             try
@@ -213,6 +176,7 @@ namespace Continuum_Windows_Testing_Agent
             this.bodyFh.WriteLine("</tr>");
         }
 
+        /*
         public void message(String message)
         {
             if (this.useVerboseTestLogs == false)
@@ -223,12 +187,10 @@ namespace Continuum_Windows_Testing_Agent
             this.bodyFh.WriteLine("<td colspan=\"8\">" + System.DateTime.Now.ToString() + " - " + System.Web.HttpUtility.HtmlEncode(message) + "</td>");
             this.bodyFh.WriteLine("</tr>");
         }
+        */
 
-        public void logTrinome(Selenium_Test_Trinome triNome, Boolean sucessful, String message )
+        public void logTrinome(Boolean sucessful, String command, String target, String value, String startTime, String stopTime, String elapsed, String message )
         {
-            // yes, I trust you the programmer to engage stop time.
-            TimeSpan elapsed = this.stopTime - this.startTime;
-
             String cssClass = "failure";
 
             if (sucessful == true)
@@ -245,11 +207,11 @@ namespace Continuum_Windows_Testing_Agent
             
             this.bodyFh.WriteLine("<tr class=\"" + cssClass + "\">");
             this.bodyFh.WriteLine("<td>" + this.totalCommands + "</td>");
-            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.getCommand()) + "</td>");
-            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.getTarget()) + "</td>");
-            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(triNome.getValue()) + "</td>");
-            this.bodyFh.WriteLine("<td>" + this.startTime + "</td>");
-            this.bodyFh.WriteLine("<td>" + this.stopTime + "</td>");
+            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(command) + "</td>");
+            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(target) + "</td>");
+            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(value) + "</td>");
+            this.bodyFh.WriteLine("<td>" + startTime + "</td>");
+            this.bodyFh.WriteLine("<td>" + stopTime + "</td>");
             this.bodyFh.WriteLine("<td>" + elapsed + "</td>");
             this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(message) + "</td>");
             this.bodyFh.WriteLine("</tr>");
