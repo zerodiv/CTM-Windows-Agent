@@ -304,9 +304,11 @@ namespace Continuum_Windows_Testing_Agent
         private void callHomeTimer_Tick(object sender, EventArgs e)
         {
             // Check to see if we are already doing work, otherwise reset our poll interval to 30s
-            if (this.agentBackgroundWorker.IsBusy == true && this.currentTest != null)
+            if (this.agentBackgroundWorker.IsBusy == true || this.currentTest != null )
             {
-                this.ctmStatusLabel.Text = "Running tests..";
+                String message = "Running test: " + this.currentTest.getTestRunId() + " going to sleep for 5 minutes";
+                this.log.message(message);
+                this.ctmStatusLabel.Text = message;
                 this.callHomeTimer.Interval = 60 * 5 * 1000;
                 return;
             }
@@ -370,6 +372,8 @@ namespace Continuum_Windows_Testing_Agent
         {
             try
             {
+                if ( this.agentBackgroundWorker.IsBusy != true && this.currentTest == null ) {
+                }
                 if (args.Result != null)
                 {
                     this.isRegistered = true;
@@ -400,6 +404,7 @@ namespace Continuum_Windows_Testing_Agent
 
                         foreach (XmlNode testRun in testRuns)
                         {
+
                             if (this.agentBackgroundWorker.IsBusy != true && this.currentTest == null )
                             {
 
@@ -433,7 +438,7 @@ namespace Continuum_Windows_Testing_Agent
                             }
                             else
                             {
-                                this.log.message("ctmBgWorker is busy, we will come back later.");
+                                this.log.message("ctmBgWorker is busy with: " + this.currentTest.getTestRunId() + " we will come back later to run: " + testRun.SelectSingleNode("testRunId").InnerText);
                             }
 
                         }
@@ -470,6 +475,7 @@ namespace Continuum_Windows_Testing_Agent
 
         public void requestWork()
         {
+
             if (this.readyToAttatchToServer() != true)
             {
                 this.log.message("We are not ready to attatch to a CTM server.");
@@ -482,12 +488,18 @@ namespace Continuum_Windows_Testing_Agent
                 return;
             }
 
-            if (this.agentBackgroundWorker.IsBusy == true && this.currentTest != null)
+            if (this.agentBackgroundWorker.IsBusy == true)
             {
                 this.log.message("Agent is actively running a test");
                 return;
             }
-            
+
+            if (this.currentTest != null)
+            {
+                this.log.message("Agent is actively running a test");
+                return;
+            }
+
             this.ctmStatusLabel.Text = "Phoning home now";
            
             NameValueCollection postValues = new NameValueCollection();

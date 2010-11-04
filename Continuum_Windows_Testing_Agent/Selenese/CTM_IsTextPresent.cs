@@ -10,12 +10,12 @@ namespace Selenium.Internal.SeleniumEmulation
     internal class CTM_IsTextPresent : SeleneseCommand
     {
         private Regex TextMatchingStrategyAndValueRegex;
-        private Hashtable textMatchingStrategies;
+        private Dictionary<String,ITextMatchingStrategy> textMatchingStrategies;
         
         public CTM_IsTextPresent()
         {
             this.TextMatchingStrategyAndValueRegex = new Regex("^([glob|regexp|exact]):(.*)");
-            this.textMatchingStrategies = new Hashtable();
+            this.textMatchingStrategies = new Dictionary<String,ITextMatchingStrategy>();
 
             this.SetUpTextMatchingStrategies();
         }

@@ -9,11 +9,11 @@ namespace Continuum_Windows_Testing_Agent
 
     class Selenium_Test_Suite_Variables
     {
-        private Hashtable vars;
+        private Dictionary<String,String> vars;
 
         public Selenium_Test_Suite_Variables()
         {
-            this.vars = new Hashtable();
+            this.vars = new Dictionary<String,String>();
         }
 
         public void consumeCommand(String value, String target)

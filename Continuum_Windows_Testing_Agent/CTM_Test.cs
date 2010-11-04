@@ -46,9 +46,7 @@ namespace Continuum_Windows_Testing_Agent
         private IWebDriver webDriver;
         private Selenium_Test_Suite_Variables testVariables;
         private Selenium_Test_Log log;
-        private Hashtable seleneseCommands;
-
-        private Hashtable seleneseMethods;
+        private Dictionary<String,SeleneseCommand> seleneseMethods;
         private ElementFinder elementFinder;
         private SeleniumOptionSelector select;
         private KeyState keyState;
@@ -78,9 +76,7 @@ namespace Continuum_Windows_Testing_Agent
             
             this.testVariables = new Selenium_Test_Suite_Variables();
             
-            this.seleneseCommands = new Hashtable();
-
-            this.seleneseMethods = new Hashtable();
+            this.seleneseMethods = new Dictionary<String,SeleneseCommand>();
             this.elementFinder = new ElementFinder();
             this.select = new SeleniumOptionSelector(this.elementFinder);
 
@@ -89,7 +85,8 @@ namespace Continuum_Windows_Testing_Agent
             this.tests = new ArrayList();
             this.testCommands = new ArrayList();
 
-            this.testRunWorker.DoWork += new DoWorkEventHandler(testRunWorker_DoWork);
+            // Is this jorcutt's fault?
+            // this.testRunWorker.DoWork += new DoWorkEventHandler(testRunWorker_DoWork);
 
         }
         #endregion Constructor
@@ -152,11 +149,11 @@ namespace Continuum_Windows_Testing_Agent
         {
             if (this.testHadError == true)
             {
-                return 1;
+                return 0;
             }
-            return 0;
+            return 1;
         }
-#endregion Getter / Setters
+        #endregion Getter / Setters
 
         #region Async Delegates
         private void setTestNameBox(String text)

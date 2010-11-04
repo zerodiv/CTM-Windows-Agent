@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Collections;
 
 namespace Continuum_Windows_Testing_Agent
 {
@@ -19,6 +20,8 @@ namespace Continuum_Windows_Testing_Agent
         private long totalCommands;
         private long totalSuccessfulCommands;
         private long totalFailedCommands;
+        private SortedDictionary<String,TimeSpan> totalTimeByCommand;
+        private Dictionary<String, ulong> totalCommandCount;
 
         public Selenium_Test_Log(Boolean useVerboseTestLogs, String logFile ) {
             try
@@ -41,6 +44,9 @@ namespace Continuum_Windows_Testing_Agent
                 this.totalCommands = 0;
                 this.totalFailedCommands = 0;
                 this.totalSuccessfulCommands = 0;
+
+                this.totalTimeByCommand = new SortedDictionary<String,TimeSpan>();
+                this.totalCommandCount = new Dictionary<string,ulong>();
 
                 this.initLogFile();
                 
@@ -122,8 +128,45 @@ namespace Continuum_Windows_Testing_Agent
 
                 // write footer
                 this.fh.WriteLine("</table>");
-                this.fh.WriteLine("</div>");
 
+                // create the table for time spent.
+                String cssClass = "odd";
+                
+                this.fh.WriteLine("<table class=\"ctmTable aiFullWidth\">");
+                
+                this.fh.WriteLine("<tr>");
+                this.fh.WriteLine("<th colspan=\"4\">Selenese Command Breakdown:</th>");
+                this.fh.WriteLine("</tr>");
+
+                this.fh.WriteLine("<tr>");
+                this.fh.WriteLine("<th>Command:</th>");
+                this.fh.WriteLine("<th>Total:</th>");
+                this.fh.WriteLine("<th>Time Spent:</th>");
+                this.fh.WriteLine("<th>Avg Spent:</th>");
+                this.fh.WriteLine("</tr>");
+
+                foreach (String cmd in this.totalTimeByCommand.Keys)
+                {
+                    this.fh.WriteLine("<tr class=\"" + cssClass + "\">");
+                    this.fh.WriteLine("<td>" + cmd + "</td>" );
+                    this.fh.WriteLine("<td>" + this.totalCommandCount[cmd] + "</td>");
+                    this.fh.WriteLine("<td>" + this.totalTimeByCommand[cmd] + "</td>");
+                    this.fh.WriteLine("<td>" + System.TimeSpan.FromSeconds(this.totalTimeByCommand[cmd].TotalSeconds / this.totalCommandCount[cmd]) + "</td>");
+                    this.fh.WriteLine("</tr>");
+
+                    if (cssClass == "odd")
+                    {
+                        cssClass = "even";
+                    }
+                    else
+                    {
+                        cssClass = "odd";
+                    }
+                }
+                this.fh.WriteLine("</table>");
+
+                this.fh.WriteLine("</div>");
+                               
                 this.fh.WriteLine("</body>");
                 this.fh.WriteLine("</html>");
 
@@ -176,19 +219,6 @@ namespace Continuum_Windows_Testing_Agent
             this.bodyFh.WriteLine("</tr>");
         }
 
-        /*
-        public void message(String message)
-        {
-            if (this.useVerboseTestLogs == false)
-            {
-                return;
-            }
-            this.bodyFh.WriteLine("<tr class=\"odd\">");
-            this.bodyFh.WriteLine("<td colspan=\"8\">" + System.DateTime.Now.ToString() + " - " + System.Web.HttpUtility.HtmlEncode(message) + "</td>");
-            this.bodyFh.WriteLine("</tr>");
-        }
-        */
-
         public void logTrinome(Boolean sucessful, String command, String target, String value, String startTime, String stopTime, String elapsed, String message )
         {
             String cssClass = "failure";
@@ -202,6 +232,25 @@ namespace Continuum_Windows_Testing_Agent
             {
                 this.totalFailedCommands++;
             }
+
+            TimeSpan elap = System.TimeSpan.Parse(elapsed);
+
+            if (this.totalTimeByCommand.ContainsKey(command))
+            {
+                elap = elap.Add(this.totalTimeByCommand[command]);
+            }
+
+            // Add the elapsed time to the total time for this command.
+            this.totalTimeByCommand[command] = elap;
+
+            if (this.totalCommandCount.ContainsKey(command) == false)
+            {
+                ulong l = new ulong();
+                l = 0;
+                this.totalCommandCount.Add(command, l );
+            }
+
+            this.totalCommandCount[command]++;
 
             this.totalCommands++;
             
