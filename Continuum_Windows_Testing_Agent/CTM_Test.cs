@@ -85,8 +85,6 @@ namespace Continuum_Windows_Testing_Agent
             this.tests = new ArrayList();
             this.testCommands = new ArrayList();
 
-            // Is this jorcutt's fault?
-            // this.testRunWorker.DoWork += new DoWorkEventHandler(testRunWorker_DoWork);
 
         }
         #endregion Constructor
@@ -670,6 +668,7 @@ namespace Continuum_Windows_Testing_Agent
             // this.seleneseCommands.Add("waitForPageToLoad", new SeleneseWaitForPageToLoad(this.log, this.webDriver)); - might need to jiggle this, don't know yet.
 
             // Code we have added or modified
+            this.seleneseMethods.Add("addSelection", new CTM_AddSelection(this.elementFinder));                 // Vendor provided version had performance issues, replaced with simpler version.
             this.seleneseMethods.Add("assertElementPresent", new IsElementPresent(this.elementFinder));         // reused from mainline code.
             this.seleneseMethods.Add("assertTextPresent", new CTM_IsTextPresent());                             // reused from mainline code.
             this.seleneseMethods.Add("click", new CTM_Click(this.elementFinder));                               // Modified to include teh pageload wait.
@@ -684,7 +683,6 @@ namespace Continuum_Windows_Testing_Agent
             // Vendor provided code we haven't modified.
             // Note the we use the names used by the CommandProcessor
             //seleneseMethods.Add("addLocationStrategy", new AddLocationStrategy(elementFinder));
-            this.seleneseMethods.Add("addSelection", new AddSelection(elementFinder, select));
             //seleneseMethods.Add("altKeyDown", new AltKeyDown(keyState));
             //seleneseMethods.Add("altKeyUp", new AltKeyUp(keyState));
             //seleneseMethods.Add("assignId", new AssignId(elementFinder));

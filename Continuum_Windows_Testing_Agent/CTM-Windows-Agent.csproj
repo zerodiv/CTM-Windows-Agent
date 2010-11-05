@@ -146,7 +146,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AddLocationStrategy.cs" />
-    <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AddSelection.cs" />
+    <Compile Include="Selenese\CTM_AddSelection.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AltKeyDown.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AltKeyUp.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\AssignId.cs" />
