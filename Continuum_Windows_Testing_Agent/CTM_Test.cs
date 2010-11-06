@@ -24,13 +24,14 @@ namespace Continuum_Windows_Testing_Agent
     {
 
         #region Private Variables
-        delegate void SetTestNameCallback(string text);
-
+        delegate void setTestNameCallback(string text);
+        delegate void setSuiteTitleBoxCallback(string text);
         delegate void clearGridCallback();
         delegate void addCommandToGridCallback(Selenium_Test_Trinome cmd);
         delegate void updateCommandStatusCallback(int id, int state, DateTime startTime, DateTime stopTime, String message);
         delegate void updateTestRunProgressCallback(int completed, int total);
-        
+        delegate void toggleTestStateCallback();
+
         private UInt64 testRunId;
         private UInt64 testRunBrowserId;
         private String testDownloadUrl;
@@ -46,14 +47,14 @@ namespace Continuum_Windows_Testing_Agent
         private IWebDriver webDriver;
         private Selenium_Test_Suite_Variables testVariables;
         private Selenium_Test_Log log;
-        private Dictionary<String,SeleneseCommand> seleneseMethods;
+        private Dictionary<String, SeleneseCommand> seleneseMethods;
         private ElementFinder elementFinder;
         private SeleniumOptionSelector select;
         private KeyState keyState;
 
         private ArrayList tests;
         private ArrayList testCommands;
-        
+
         private IJavaScriptExecutor jsExecutor;
 
         #endregion Private Variables
@@ -73,10 +74,10 @@ namespace Continuum_Windows_Testing_Agent
             this.haltOnError = false;
 
             this.testHadError = false;
-            
+
             this.testVariables = new Selenium_Test_Suite_Variables();
-            
-            this.seleneseMethods = new Dictionary<String,SeleneseCommand>();
+
+            this.seleneseMethods = new Dictionary<String, SeleneseCommand>();
             this.elementFinder = new ElementFinder();
             this.select = new SeleniumOptionSelector(this.elementFinder);
 
@@ -90,11 +91,13 @@ namespace Continuum_Windows_Testing_Agent
         #endregion Constructor
 
         #region Getter / Setters
-        public UInt64 getTestRunId() {
+        public UInt64 getTestRunId()
+        {
             return this.testRunId;
         }
 
-        public void setTestRunId(UInt64 testRunId) {
+        public void setTestRunId(UInt64 testRunId)
+        {
             this.testRunId = testRunId;
         }
 
@@ -158,12 +161,24 @@ namespace Continuum_Windows_Testing_Agent
         {
             if (this.testNameBox.InvokeRequired == true)
             {
-                SetTestNameCallback d = new SetTestNameCallback(setTestNameBox);
+                setTestNameCallback d = new setTestNameCallback(setTestNameBox);
                 this.Invoke(d, new object[] { text });
             }
             else
             {
                 this.testNameBox.Text = text;
+            }
+        }
+        private void setSuiteTitleBox(String text)
+        {
+            if (this.testRunNameBox.InvokeRequired == true)
+            {
+                setSuiteTitleBoxCallback d = new setSuiteTitleBoxCallback(setSuiteTitleBox);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.testRunNameBox.Text = text;
             }
         }
 
@@ -172,7 +187,7 @@ namespace Continuum_Windows_Testing_Agent
             if (this.activeTestGrid.InvokeRequired == true)
             {
                 clearGridCallback d = new clearGridCallback(clearGrid);
-                this.Invoke(d, new object[] {});
+                this.Invoke(d, new object[] { });
             }
             else
             {
@@ -189,34 +204,50 @@ namespace Continuum_Windows_Testing_Agent
             }
             else
             {
-                this.activeTestGrid.Rows.Add(new string[] { cmd.getCommand(), cmd.getTarget(), cmd.getValue(), "" });
+                this.activeTestGrid.Rows.Add(new string[] { 
+                    cmd.getCommand(), 
+                    cmd.getTarget(), 
+                    cmd.getValue(), 
+                    "",
+                    "",
+                    "",
+                    ""
+                });
             }
         }
 
         private void updateCommandStatus(int id, int state, DateTime startTime, DateTime stopTime, String message)
         {
-           if (this.activeTestGrid.InvokeRequired == true)
+            if (this.activeTestGrid.InvokeRequired == true)
             {
                 updateCommandStatusCallback d = new updateCommandStatusCallback(updateCommandStatus);
                 this.Invoke(d, new object[] { id, state, startTime, stopTime, message });
             }
             else
             {
+
                 int rowId = id - 1;
+
+                /*
+                 if (id > 0)
+                 {
+                     rowId = rowId - 1;
+                 }
+                 */
 
                 // Move the selected row to the next item on the stack.
                 if (rowId > 0)
                 {
-                    this.activeTestGrid.Rows[(rowId-1)].Selected = false;
+                    this.activeTestGrid.Rows[(rowId - 1)].Selected = false;
                 }
 
                 this.activeTestGrid.CurrentCell = this.activeTestGrid.Rows[rowId].Cells[0];
 
                 this.activeTestGrid.Rows[rowId].Selected = true;
-                
+
                 // Set the message (we have to allow empty to move the "Working.." message.
                 this.activeTestGrid.Rows[rowId].Cells[6].Value = message;
-                
+
                 // Set the date / time fields.
                 this.activeTestGrid.Rows[rowId].Cells[3].Value = startTime;
                 this.activeTestGrid.Rows[rowId].Cells[4].Value = stopTime;
@@ -229,9 +260,22 @@ namespace Continuum_Windows_Testing_Agent
                 {
                     this.activeTestGrid.Rows[rowId].DefaultCellStyle.BackColor = System.Drawing.Color.LightYellow;
                 }
-                if (state == 0 ) 
-                {                   
+                if (state == 0)
+                {
                     this.activeTestGrid.Rows[rowId].DefaultCellStyle.BackColor = System.Drawing.Color.Red;
+
+                    if (this.haltOnError == true)
+                    {
+                        // Move the selected row so you can see the failure. 
+                        int nextRow = rowId + 1;
+
+                        this.activeTestGrid.Rows[rowId].Selected = false;
+                         
+                        if (nextRow <= this.activeTestGrid.RowCount)
+                        {
+                            this.activeTestGrid.Rows[nextRow].Selected = true;
+                        }
+                    }
                 }
                 if (state == 1)
                 {
@@ -251,7 +295,7 @@ namespace Continuum_Windows_Testing_Agent
 
                 // Bring the form to the for front.
                 this.Activate();
-                
+
             }
         }
 
@@ -298,9 +342,31 @@ namespace Continuum_Windows_Testing_Agent
                 }
                 this.testRunProgressBar.Value = completed;
             }
-            
+
         }
 
+        private void toggleTestState()
+        {
+            if (this.pauseButton.InvokeRequired == true)
+            {
+                toggleTestStateCallback d = new toggleTestStateCallback(toggleTestState);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                if (this.pauseButton.Text == "Pause")
+                {
+
+                    this.testLocker.Reset();
+                    this.pauseButton.Text = "Resume";
+                }
+                else
+                {
+                    this.testLocker.Set();
+                    this.pauseButton.Text = "Pause";
+                }
+            }
+        }
         #endregion Async Delegates
 
         #region Init Testing
@@ -320,7 +386,7 @@ namespace Continuum_Windows_Testing_Agent
             {
                 return false;
             }
-            
+
             return true;
 
         }
@@ -343,7 +409,7 @@ namespace Continuum_Windows_Testing_Agent
             // download the file.
             WebClient masterClient = new WebClient();
             masterClient.DownloadFile(this.testDownloadUrl, this.tempZipFile);
-            
+
             // unzip the file into the temp directory.
             try
             {
@@ -454,6 +520,37 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
+        public String getSuiteTitle()
+        {
+            String suiteTitle = "";
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+
+            doc.OptionFixNestedTags = true;
+
+            doc.Load(this.testRunIndexHtml);
+
+            if (doc.ParseErrors != null && doc.ParseErrors.Count() > 0)
+            {
+                foreach (HtmlParseError htmlError in doc.ParseErrors)
+                {
+                    Console.WriteLine("error parsing file: " + htmlError.SourceText);
+                }
+                return suiteTitle;
+            }
+
+            foreach (HtmlNode suiteTitleTag in doc.DocumentNode.SelectNodes("/html/head/title"))
+            {
+                if (suiteTitleTag.InnerText != "")
+                {
+                    suiteTitle = suiteTitleTag.InnerText;
+                }
+            }
+
+            return suiteTitle;
+
+        }
+
         public String getTestTitle(String testFile)
         {
             String testTitle = "Unknown Test";
@@ -466,7 +563,7 @@ namespace Continuum_Windows_Testing_Agent
 
             if (doc.ParseErrors != null && doc.ParseErrors.Count() > 0)
             {
-                 return testTitle;
+                return testTitle;
             }
             foreach (HtmlNode testTitleRow in doc.DocumentNode.SelectNodes("/html/body/table/thead/*"))
             {
@@ -510,6 +607,8 @@ namespace Continuum_Windows_Testing_Agent
                         comment = comment.Replace("<!-- ", "");
                         comment = comment.Replace(" -->", "");
                         triNome.setTarget(comment);
+                        commandId++;
+                        triNome.setId(commandId);
                         testCommands.Add(triNome);
                     }
                     if (testNode.Name == "tr")
@@ -648,7 +747,7 @@ namespace Continuum_Windows_Testing_Agent
         }
 
         public void cleanup()
-        {            
+        {
             if (Directory.Exists(this.tempTestDir) == true)
             {
                 Directory.Delete(this.tempTestDir, true);
@@ -679,7 +778,7 @@ namespace Continuum_Windows_Testing_Agent
             this.seleneseMethods.Add("store", new CTM_Store(this.testVariables));                               // New our version of store has to talk to the local testVariables stack.
             this.seleneseMethods.Add("type", new CTM_Type(elementFinder, this.keyState));                       // Removed the javascript based replacement. 
             this.seleneseMethods.Add("verifyTextPresent", new CTM_IsTextPresent());                             // reused from mainline code.
-            
+
             // Vendor provided code we haven't modified.
             // Note the we use the names used by the CommandProcessor
             //seleneseMethods.Add("addLocationStrategy", new AddLocationStrategy(elementFinder));
@@ -818,7 +917,7 @@ namespace Continuum_Windows_Testing_Agent
 
                 Object ret = jsExecutor.ExecuteScript(javascript);
                 value = ret.ToString();
-                
+
             }
 
             return value;
@@ -882,10 +981,10 @@ namespace Continuum_Windows_Testing_Agent
                     args = null;
                 }
 
-                
+
                 String message = "Working...";
                 this.updateCommandStatus(testCommand.getId(), -1, startTime, stopTime, message);
-                    
+
                 try
                 {
                     cmd.Apply(this.webDriver, args);
@@ -897,7 +996,7 @@ namespace Continuum_Windows_Testing_Agent
                 {
                     message = "failed: " + e.Message;
                     stopTime = System.DateTime.UtcNow;
-                    this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, message );
+                    this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, message);
                     this.testHadError = true;
                     return false;
                 }
@@ -914,18 +1013,7 @@ namespace Continuum_Windows_Testing_Agent
 
         private void pauseButton_Click(object sender, EventArgs e)
         {
-            if (this.pauseButton.Text == "Pause")
-            {
-
-                this.testLocker.Reset();
-                this.pauseButton.Text = "Resume";
-            }
-            else
-            {
-                this.testLocker.Set();
-                this.pauseButton.Text = "Pause";
-            }
-
+            this.toggleTestState();
         }
 
         private void testRunWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -937,9 +1025,12 @@ namespace Continuum_Windows_Testing_Agent
 
                 this.getTestsFromTestSuite();
 
+                String suiteTitle = this.getSuiteTitle();
+                this.setSuiteTitleBox(suiteTitle);
+
                 this.updateTestRunProgress(0, this.tests.Count);
 
-               // loop across all the tests and run them.
+                // loop across all the tests and run them.
                 String testBasedir = Path.GetDirectoryName(this.testRunIndexHtml);
 
                 int completedTestsCnt = 0;
@@ -973,12 +1064,14 @@ namespace Continuum_Windows_Testing_Agent
                     foreach (Selenium_Test_Trinome testCommand in this.testCommands)
                     {
 
+                        this.testLocker.WaitOne();
+
                         Boolean selReturn = this.processSelenese(testCommand);
 
-                        if (this.haltOnError == true)
+
+                        if (this.haltOnError == true && selReturn == false)
                         {
-                            this.testLocker.Reset();
-                            this.pauseButton.Text = "Resume";
+                            this.toggleTestState();
                         }
 
                         testCmdCnt++;
@@ -991,12 +1084,12 @@ namespace Continuum_Windows_Testing_Agent
 
                 // webDriver.Quit();
 
-                
+
             }
             catch (Exception ex)
             {
                 this.testHadError = true;
-            }            
+            }
         }
 
     }

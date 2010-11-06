@@ -26,17 +26,9 @@ namespace Selenium.Internal.SeleniumEmulation
         {
             String uUrl = this.createUrl(url);
 
-            // is the currentUrl the same as the new url
-            if (this.currentUrl == uUrl)
-            {
-                // the url is the same as the current url, just refresh.
-                driver.Navigate().Refresh();
-            } else {
-                this.currentUrl = uUrl;
-                driver.Navigate().GoToUrl(uUrl);
-            }
-
-            
+            this.currentUrl = uUrl;
+            driver.Navigate().GoToUrl(uUrl);
+             
             // JEO: To emulate the IDE's load behavior you need to do a waitforpagetoload 30s
             PageLoadWaiter pageWaiter = new PageLoadWaiter(driver, 30000);
             pageWaiter.Wait("Page load timeout exceeded");

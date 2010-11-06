@@ -233,25 +233,29 @@ namespace Continuum_Windows_Testing_Agent
                 this.totalFailedCommands++;
             }
 
-            TimeSpan elap = System.TimeSpan.Parse(elapsed);
-
-            if (this.totalTimeByCommand.ContainsKey(command))
+            if (elapsed != "")
             {
-                elap = elap.Add(this.totalTimeByCommand[command]);
+                TimeSpan elap = System.TimeSpan.Parse(elapsed);
+
+                if (this.totalTimeByCommand.ContainsKey(command))
+                {
+                    elap = elap.Add(this.totalTimeByCommand[command]);
+                }
+
+                // Add the elapsed time to the total time for this command.
+                this.totalTimeByCommand[command] = elap;
+                if (this.totalCommandCount.ContainsKey(command) == false)
+                {
+                    ulong l = new ulong();
+                    l = 0;
+                    this.totalCommandCount.Add(command, l);
+                }
+ 
+                this.totalCommandCount[command]++;
+
             }
 
-            // Add the elapsed time to the total time for this command.
-            this.totalTimeByCommand[command] = elap;
-
-            if (this.totalCommandCount.ContainsKey(command) == false)
-            {
-                ulong l = new ulong();
-                l = 0;
-                this.totalCommandCount.Add(command, l );
-            }
-
-            this.totalCommandCount[command]++;
-
+            
             this.totalCommands++;
             
             this.bodyFh.WriteLine("<tr class=\"" + cssClass + "\">");

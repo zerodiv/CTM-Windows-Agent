@@ -110,25 +110,59 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
+        private String findFirefoxBrowserApplicationManifest()
+        {
+            // Hunt for a 64 bit version of firefox.
+            String ff64bitApplicationFile = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + @"\Mozilla Firefox\application.ini";
+
+            if (File.Exists(ff64bitApplicationFile))
+            {
+                return ff64bitApplicationFile;
+            }
+
+            // Hunt for a 32 bit version of firefox.
+            String ff32bitApplicationFile = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + @"\Mozilla Firefox\application.ini";
+            if (File.Exists(ff32bitApplicationFile))
+            {
+                return ff64bitApplicationFile;
+            }
+
+            return null;
+        }
+        
         private void findFirefoxBrowser()
         {
-            RegistryKey dkey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Mozilla\\Mozilla Firefox");
-            if (dkey != null)
+            String versionData = null;
+
+            // Windows 7 Compatibility.
+            String appManifestFile = this.findFirefoxBrowserApplicationManifest();
+
+            if (versionData == null && appManifestFile != null)
             {
-                string bVersion = dkey.GetValue("CurrentVersion").ToString();
-                if (bVersion != null)
+                // Version=3.6.12
+                CTM_Ini appManifest = new CTM_Ini(appManifestFile);
+                versionData = appManifest.ReadValue("App", "Version");
+            }
+
+            RegistryKey dkey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Mozilla\\Mozilla Firefox");
+            if (versionData == null && dkey != null)
+            {
+                versionData = dkey.GetValue("CurrentVersion").ToString();
+            }
+
+            if (versionData != null)
+            {
+                Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)");
+                Match versionMatch = versionRegex.Match(versionData);
+                if (versionMatch != null)
                 {
-                    Regex versionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)");
-                    Match versionMatch = versionRegex.Match(bVersion);
-                    if (versionMatch != null)
-                    {
-                        this.exists = true;
-                        this.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
-                        this.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
-                        this.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
-                    }
+                    this.exists = true;
+                    this.major = Convert.ToInt32(versionMatch.Groups["major"].Value);
+                    this.minor = Convert.ToInt32(versionMatch.Groups["minor"].Value);
+                    this.patch = Convert.ToInt32(versionMatch.Groups["patch"].Value);
                 }
             }
+
         }
 
         private void findIEBrowser()
