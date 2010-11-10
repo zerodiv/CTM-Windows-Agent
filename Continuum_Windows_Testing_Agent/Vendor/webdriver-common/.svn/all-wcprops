@@ -1,0 +1,185 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/10183/trunk/common/src/csharp/webdriver-common
+END
+Keys.cs
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Keys.cs
+END
+WebDriver.Common.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/10181/trunk/common/src/csharp/webdriver-common/WebDriver.Common.csproj
+END
+NotFoundException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/NotFoundException.cs
+END
+IllegalLocatorException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/IllegalLocatorException.cs
+END
+Screenshot.cs
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/8137/trunk/common/src/csharp/webdriver-common/Screenshot.cs
+END
+ITakesScreenshot.cs
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/8101/trunk/common/src/csharp/webdriver-common/ITakesScreenshot.cs
+END
+StaleElementReferenceException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/StaleElementReferenceException.cs
+END
+ITimeouts.cs
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/8754/trunk/common/src/csharp/webdriver-common/ITimeouts.cs
+END
+ISearchContext.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/ISearchContext.cs
+END
+ITargetLocator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/ITargetLocator.cs
+END
+Platform.cs
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/10104/trunk/common/src/csharp/webdriver-common/Platform.cs
+END
+WebDriverResult.cs
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/8500/trunk/common/src/csharp/webdriver-common/WebDriverResult.cs
+END
+NoSuchElementException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/NoSuchElementException.cs
+END
+NoSuchFrameException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/NoSuchFrameException.cs
+END
+XPathLookupException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/XPathLookupException.cs
+END
+IJavascriptExecutor.cs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/8962/trunk/common/src/csharp/webdriver-common/IJavascriptExecutor.cs
+END
+GlobalSuppressions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/8101/trunk/common/src/csharp/webdriver-common/GlobalSuppressions.cs
+END
+ILocatable.cs
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/ILocatable.cs
+END
+Speed.cs
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/8312/trunk/common/src/csharp/webdriver-common/Speed.cs
+END
+IWebElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/8041/trunk/common/src/csharp/webdriver-common/IWebElement.cs
+END
+IWebDriver.cs
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/IWebDriver.cs
+END
+IOptions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/8754/trunk/common/src/csharp/webdriver-common/IOptions.cs
+END
+NoSuchWindowException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/NoSuchWindowException.cs
+END
+ElementNotVisibleException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/ElementNotVisibleException.cs
+END
+INavigation.cs
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/INavigation.cs
+END
+WebDriverException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/WebDriverException.cs
+END
+Cookie.cs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/9665/trunk/common/src/csharp/webdriver-common/Cookie.cs
+END
+IRenderedWebElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/IRenderedWebElement.cs
+END
+By.cs
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/10183/trunk/common/src/csharp/webdriver-common/By.cs
+END
+webdriver-common.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/7806/trunk/common/src/csharp/webdriver-common/webdriver-common.csproj
+END

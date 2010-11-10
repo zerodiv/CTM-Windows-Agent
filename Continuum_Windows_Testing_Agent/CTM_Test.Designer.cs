@@ -29,6 +29,13 @@
         private void InitializeComponent()
         {
             this.activeTestGrid = new System.Windows.Forms.DataGridView();
+            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.start = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.stop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.elapsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.message = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pauseButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.testRunNameBox = new System.Windows.Forms.TextBox();
@@ -37,13 +44,6 @@
             this.testNameBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.testRunWorker = new System.ComponentModel.BackgroundWorker();
-            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.target = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.start = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.stop = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.elapsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.message = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.activeTestGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,8 +65,58 @@
             this.message});
             this.activeTestGrid.Location = new System.Drawing.Point(11, 66);
             this.activeTestGrid.Name = "activeTestGrid";
+            this.activeTestGrid.ReadOnly = true;
             this.activeTestGrid.Size = new System.Drawing.Size(677, 506);
             this.activeTestGrid.TabIndex = 0;
+            // 
+            // command
+            // 
+            this.command.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.command.HeaderText = "Command";
+            this.command.Name = "command";
+            this.command.ReadOnly = true;
+            // 
+            // target
+            // 
+            this.target.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.target.HeaderText = "Target";
+            this.target.Name = "target";
+            this.target.ReadOnly = true;
+            // 
+            // value
+            // 
+            this.value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.value.HeaderText = "Value";
+            this.value.Name = "value";
+            this.value.ReadOnly = true;
+            // 
+            // start
+            // 
+            this.start.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.start.HeaderText = "Start";
+            this.start.Name = "start";
+            this.start.ReadOnly = true;
+            // 
+            // stop
+            // 
+            this.stop.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.stop.HeaderText = "Stop";
+            this.stop.Name = "stop";
+            this.stop.ReadOnly = true;
+            // 
+            // elapsed
+            // 
+            this.elapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.elapsed.HeaderText = "Elapsed";
+            this.elapsed.Name = "elapsed";
+            this.elapsed.ReadOnly = true;
+            // 
+            // message
+            // 
+            this.message.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.message.HeaderText = "Message";
+            this.message.Name = "message";
+            this.message.ReadOnly = true;
             // 
             // pauseButton
             // 
@@ -132,55 +182,6 @@
             // 
             this.testRunWorker.WorkerReportsProgress = true;
             this.testRunWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.testRunWorker_DoWork);
-            // 
-            // command
-            // 
-            this.command.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.command.HeaderText = "Command";
-            this.command.Name = "command";
-            this.command.ReadOnly = true;
-            // 
-            // target
-            // 
-            this.target.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.target.HeaderText = "Target";
-            this.target.Name = "target";
-            this.target.ReadOnly = true;
-            // 
-            // value
-            // 
-            this.value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.value.HeaderText = "Value";
-            this.value.Name = "value";
-            this.value.ReadOnly = true;
-            // 
-            // start
-            // 
-            this.start.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.start.HeaderText = "Start";
-            this.start.Name = "start";
-            this.start.ReadOnly = true;
-            // 
-            // stop
-            // 
-            this.stop.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.stop.HeaderText = "Stop";
-            this.stop.Name = "stop";
-            this.stop.ReadOnly = true;
-            // 
-            // elapsed
-            // 
-            this.elapsed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.elapsed.HeaderText = "Elapsed";
-            this.elapsed.Name = "elapsed";
-            this.elapsed.ReadOnly = true;
-            // 
-            // message
-            // 
-            this.message.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.message.HeaderText = "Message";
-            this.message.Name = "message";
-            this.message.ReadOnly = true;
             // 
             // CTM_Test
             // 

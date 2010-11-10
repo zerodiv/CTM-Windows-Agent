@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/10181/trunk/remote/client/src/csharp/webdriver-remote-client
+END
+RenderedRemoteWebElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/8522/trunk/remote/client/src/csharp/webdriver-remote-client/RenderedRemoteWebElement.cs
+END
+HttpCommandExecutor.cs
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/10107/trunk/remote/client/src/csharp/webdriver-remote-client/HttpCommandExecutor.cs
+END
+GlobalSuppressions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/9058/trunk/remote/client/src/csharp/webdriver-remote-client/GlobalSuppressions.cs
+END
+WebDriver.Remote.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/10181/trunk/remote/client/src/csharp/webdriver-remote-client/WebDriver.Remote.csproj
+END
+RemoteWebElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/8522/trunk/remote/client/src/csharp/webdriver-remote-client/RemoteWebElement.cs
+END
+RemoteWebDriver.cs
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/9635/trunk/remote/client/src/csharp/webdriver-remote-client/RemoteWebDriver.cs
+END

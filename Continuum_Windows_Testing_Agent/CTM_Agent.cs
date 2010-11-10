@@ -25,14 +25,12 @@ namespace Continuum_Windows_Testing_Agent
         private String ctmHostname;
         private String localIp;
         private String machineName;
-        private Boolean useVerboseTestLogs;
         private Boolean isRegistered;
         private WebClient ctmClient;
         private Boolean haltOnError;
-        private CTM_LocalWebBrowser googlechrome;
-        private CTM_LocalWebBrowser firefox;
-        private CTM_LocalWebBrowser ie;
-        private CTM_LocalWebBrowser safari;
+
+        private Dictionary<string, CTM_WebBrowser> webBrowsers;
+  
         private CTM_Test currentTest;
 
         #endregion Private Variables
@@ -45,32 +43,49 @@ namespace Continuum_Windows_Testing_Agent
             this.ctmHostname = "";
             this.localIp = "";
             this.machineName = "";
-            this.useVerboseTestLogs = false;
             this.isRegistered = false;
             this.haltOnError = false;
-
-            InitializeComponent();
 
             // initalize the logging for the phone home agent.
             this.log = new CTM_Agent_Log();
 
             this.isRegistered = false;
 
+            // init the various browsers
+            this.webBrowsers = new Dictionary<string, CTM_WebBrowser>();
+
+            this.webBrowsers.Add("googlechrome", CTM_WebBrowser_Factory.factory("googlechrome") );
+            this.webBrowsers.Add("firefox", CTM_WebBrowser_Factory.factory("firefox") );
+            this.webBrowsers.Add("iexplore", CTM_WebBrowser_Factory.factory("iexplore"));
+            
+            // These phones are not local, so therefor we have stored registry keys for their settings.
+            this.webBrowsers.Add("android", CTM_WebBrowser_Factory.factory("android"));
+            this.webBrowsers.Add("iphone", CTM_WebBrowser_Factory.factory("iphone"));
+
+            this.loadRegistryKeys();
+            
+            // attempt to connect to the settings if we have any.
+            if (this.webBrowsers["android"].getHostname().Length > 0)
+            {
+                this.webBrowsers["android"].verify();
+            }
+            
+            if (this.webBrowsers["iphone"].getHostname().Length > 0)
+            {
+                this.webBrowsers["iphone"].verify();
+            }
+                                   
+            this.currentTest = null;
+
+            InitializeComponent();
+
             this.ctmClient = new WebClient();
             this.ctmClient.UploadValuesCompleted += new UploadValuesCompletedEventHandler(requestWork_Completed);
 
             this.agentBackgroundWorker.DoWork += new DoWorkEventHandler(ctmAgentBackgroundWorker_DoWork);
 
-            this.loadRegistryKeys();
-
-            // init the various browsers
-            this.googlechrome = new CTM_LocalWebBrowser("googlechrome");
-            this.firefox = new CTM_LocalWebBrowser("firefox");
-            this.ie = new CTM_LocalWebBrowser("ie");
-            this.safari = new CTM_LocalWebBrowser("safari");
-
-            this.currentTest = null;
-
+            
+            
         }
         #endregion Constructor
 
@@ -137,6 +152,18 @@ namespace Continuum_Windows_Testing_Agent
                 }
             }
 
+            if (key.GetValue("iphoneHostname") != null)
+            {
+                this.webBrowsers["iphone"].setHostname(key.GetValue("iphoneHostname").ToString());
+                this.webBrowsers["iphone"].setPort(Int32.Parse(key.GetValue("iphonePort").ToString()));
+            }
+
+            if (key.GetValue("androidHostname") != null)
+            {
+                this.webBrowsers["android"].setHostname(key.GetValue("androidHostname").ToString());
+                this.webBrowsers["android"].setPort(Int32.Parse(key.GetValue("androidPort").ToString()));
+            }
+
         }
 
         public void saveRegistryKeys()
@@ -146,6 +173,15 @@ namespace Continuum_Windows_Testing_Agent
             key.SetValue("ctmHostname", this.ctmHostname);
             key.SetValue("localIp", this.localIp);
             key.SetValue("machineName", this.machineName);
+            
+            // iphone 
+            key.SetValue("iphoneHostname", this.webBrowsers["iphone"].getHostname());
+            key.SetValue("iphonePort", this.webBrowsers["iphone"].getPort());
+
+            // android
+            key.SetValue("androidHostname", this.webBrowsers["android"].getHostname());
+            key.SetValue("androidPort", this.webBrowsers["android"].getPort());
+
         }
         #endregion Registry Settings
 
@@ -181,14 +217,76 @@ namespace Continuum_Windows_Testing_Agent
             this.ctmHostnameBox.Text = this.ctmHostname;
             this.guidBox.Text = this.guid;
             this.machineNameBox.Text = this.machineName;
-            this.buildBox.Text = this.getCTMBuild();
+            
+            this.Text = "Continuum Testing Agent - " + this.getCTMBuild();
 
-            this.ieVersionBox.Text = this.ie.getVersion();
-            this.chromeVersionBox.Text = this.googlechrome.getVersion();
-            this.firefoxVersionBox.Text = this.firefox.getVersion();
-            this.safariVersionBox.Text = this.safari.getVersion();
             this.osVersionBox.Text = this.determineWindowsVersion();
+
+            // Load up the inital state of all the browsers available to this box.
+
+            // Load up IE.
+            foreach (string browserName in this.webBrowsers.Keys)
+            {
+                Boolean canEdit = false;
+
+                if (this.webBrowsers[browserName].getIsRemote() == true)
+                {
+                    canEdit = true;
+                }
+
+                this.addBrowserToGrid(this.webBrowsers[browserName], canEdit);
+            }
         }
+
+        private void addBrowserToGrid(CTM_WebBrowser browser, Boolean canEdit)
+        {
+            String bHostname = browser.getHostname();
+            String bPort = browser.getPort().ToString();
+
+            if (browser.getIsRemote() == false)
+            {
+                bHostname = "";
+                bPort = "";
+            }
+
+            int bRowOffset = browser.getGridRowId();
+
+            if (bRowOffset >= 0)
+            {
+                this.browserGrid.Rows[bRowOffset].Cells["isAvailable"].Value = browser.getIsAvailable().ToString();
+                this.browserGrid.Rows[bRowOffset].Cells["browserName"].Value = browser.getPrettyName();
+                this.browserGrid.Rows[bRowOffset].Cells["browserVersion"].Value = browser.getVersion();
+            }
+            else
+            {
+                bRowOffset = this.browserGrid.Rows.Add(new string[] {
+                browser.getIsAvailable().ToString(),  // available.
+                browser.getPrettyName(),        // browser name
+                browser.getVersion(),       // browser version
+                bHostname,
+                bPort,
+                browser.getInternalName()
+                });
+            }
+
+            if (canEdit != true)
+            {
+                this.browserGrid.Rows[bRowOffset].ReadOnly = true;
+            }
+
+            if (browser.getIsAvailable())
+            {
+                this.browserGrid.Rows[bRowOffset].DefaultCellStyle.BackColor = System.Drawing.Color.LightGreen;
+            }
+            else
+            {
+                this.browserGrid.Rows[bRowOffset].DefaultCellStyle.BackColor = System.Drawing.Color.LightSteelBlue;
+            }
+
+            browser.setGridRowId(bRowOffset);
+
+        }
+
         #endregion Form Load
 
         #region Button Actions
@@ -198,6 +296,39 @@ namespace Continuum_Windows_Testing_Agent
             this.ctmHostname = this.ctmHostnameBox.Text;
             this.localIp = this.localIpBox.Text;
             this.machineName = this.machineNameBox.Text;
+
+            // set the entries for the iphone and android browsers.
+            foreach (string browserName in this.webBrowsers.Keys)
+            {
+                if (this.webBrowsers[browserName].getIsRemote() == true)
+                {
+                    // Suck in the settings from the datagrid.
+                    int gridId = this.webBrowsers[browserName].getGridRowId();
+                    string hostname = this.browserGrid.Rows[gridId].Cells["hostname"].Value.ToString();
+                    int port = System.Int32.Parse(this.browserGrid.Rows[gridId].Cells["port"].Value.ToString());
+                    this.webBrowsers[browserName].setHostname(hostname);
+                    this.webBrowsers[browserName].setPort(port);
+
+                    // Verify that the browser is available.
+                    this.webBrowsers[browserName].verify();
+
+                    // Add it to the grid / refresh the value.
+                    this.addBrowserToGrid(this.webBrowsers[browserName], true);
+
+                    // If it failed to verify, notify the user via the log entries.
+                    if (this.webBrowsers[browserName].getIsAvailable() == false)
+                    {
+                        this.log.message(
+                            "Unable to connect to " +
+                                this.webBrowsers[browserName].getPrettyName() +
+                            " webdriver service on: " +
+                                this.webBrowsers[browserName].getHostname() +
+                                ":" + this.webBrowsers[browserName].getPort()
+                        );
+                        return;
+                    }
+                }
+            }
 
             this.saveRegistryKeys();
 
@@ -219,11 +350,6 @@ namespace Continuum_Windows_Testing_Agent
         private void forcePollBtn_Click(object sender, EventArgs e)
         {
             this.callHomeTimer.Interval = 1;
-        }
-
-        private void useVerboseTestLogsCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            this.useVerboseTestLogs = this.useVerboseTestLogsCheckbox.Checked;
         }
 
         private void haltOnErrorBox_CheckedChanged(object sender, EventArgs e)
@@ -415,9 +541,8 @@ namespace Continuum_Windows_Testing_Agent
                                 this.currentTest.setTestRunBrowserId( UInt64.Parse(testRun.SelectSingleNode("id").InnerText) );
 
                                 XmlNode ctmTestBrowser = testRun.SelectSingleNode("CTM_Test_Browser");
-                                this.currentTest.setTestBrowser( ctmTestBrowser.SelectSingleNode("name").InnerText );
 
-                                this.currentTest.setUseVerboseTestLogs(this.useVerboseTestLogs);
+                                this.currentTest.setTestBrowser(this.webBrowsers[ctmTestBrowser.SelectSingleNode("name").InnerText]);
 
                                 // create the download url.
                                 this.currentTest.setTestDownloadUrl( "http://" + this.ctmHostname + "/test/run/download/?id=" + this.currentTest.getTestRunId() );
@@ -513,36 +638,21 @@ namespace Continuum_Windows_Testing_Agent
             postValues.Add("machine_name", this.machineName);
 
             // add the browsers into our post params
-            if (this.ie.exists == true)
+            foreach (string browserName in this.webBrowsers.Keys)
             {
-                postValues.Add("iexplore", "yes");
-                postValues.Add("iexplore_version", this.ie.getVersion());
-            }
-
-            if (this.googlechrome.exists == true)
-            {
-                postValues.Add("googlechrome", "yes");
-                postValues.Add("googlechrome_version", this.googlechrome.getVersion());
-            }
-
-            if (this.firefox.exists == true)
-            {
-                postValues.Add("firefox", "yes");
-                postValues.Add("firefox_version", this.firefox.getVersion());
-            }
-
-            if (this.safari.exists == true)
-            {
-                postValues.Add("safari", "yes");
-                postValues.Add("safari_version", this.safari.getVersion());
+                if (this.webBrowsers[browserName].getIsAvailable() == true)
+                {
+                    postValues.Add(browserName, "yes");
+                    postValues.Add(browserName + "_version", this.webBrowsers[browserName].getVersion());
+                }
             }
 
             String pollUrl = "http://" + this.ctmHostname + "/agent/poll/";
             ctmClient.UploadValuesAsync(new Uri(pollUrl), postValues);
 
-            // this.updateLastRunLogBox();
-
         }
+
+        
 
     }
 }

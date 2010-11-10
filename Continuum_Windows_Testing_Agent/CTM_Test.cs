@@ -17,6 +17,7 @@ using System.Threading;
 using Selenium.Internal.SeleniumEmulation;
 using Continuum_Windows_Testing_Agent.Selenese;
 using System.Text.RegularExpressions;
+using OpenQA.Selenium.Remote;
 
 namespace Continuum_Windows_Testing_Agent
 {
@@ -35,8 +36,7 @@ namespace Continuum_Windows_Testing_Agent
         private UInt64 testRunId;
         private UInt64 testRunBrowserId;
         private String testDownloadUrl;
-        private String testBrowser;
-        private Boolean useVerboseTestLogs;
+        private CTM_WebBrowser testBrowser;
         private Boolean haltOnError;
 
         private String tempTestDir;
@@ -69,8 +69,7 @@ namespace Continuum_Windows_Testing_Agent
             this.testRunId = 0;
             this.testRunBrowserId = 0;
             this.testDownloadUrl = "";
-            this.testBrowser = "";
-            this.useVerboseTestLogs = false;
+            this.testBrowser = null;
             this.haltOnError = false;
 
             this.testHadError = false;
@@ -121,19 +120,14 @@ namespace Continuum_Windows_Testing_Agent
             this.testDownloadUrl = url;
         }
 
-        public string getTestBrowser()
+        public CTM_WebBrowser getTestBrowser()
         {
             return this.testBrowser;
         }
 
-        public void setTestBrowser(string browser)
+        public void setTestBrowser(CTM_WebBrowser browser)
         {
             this.testBrowser = browser;
-        }
-
-        public void setUseVerboseTestLogs(Boolean use)
-        {
-            this.useVerboseTestLogs = use;
         }
 
         public void setHaltOnError(Boolean use)
@@ -434,7 +428,7 @@ namespace Continuum_Windows_Testing_Agent
         {
 
             String seleniumLogFile = Environment.GetEnvironmentVariable("TEMP") + "\\selenium_" + this.testRunId + ".html";
-            this.log = new Selenium_Test_Log(this.useVerboseTestLogs, seleniumLogFile);
+            this.log = new Selenium_Test_Log(seleniumLogFile);
             return true;
         }
         #endregion Init Testing
@@ -659,7 +653,7 @@ namespace Continuum_Windows_Testing_Agent
             }
 
             // start up the requested browser.
-            switch (this.testBrowser)
+            switch (this.testBrowser.getInternalName())
             {
                 case "chrome":
                     this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
@@ -672,6 +666,13 @@ namespace Continuum_Windows_Testing_Agent
                     break;
                 case "iexplore":
                     this.webDriver = new OpenQA.Selenium.IE.InternetExplorerDriver();
+                    break;
+                case "iphone":
+                    DesiredCapabilities remoteCap = new DesiredCapabilities(); 
+                    this.webDriver = new RemoteWebDriver(
+                        new Uri("http://" + this.testBrowser.getHostname() + ":" + this.testBrowser.getPort() + "/hub/" ),
+                        remoteCap
+                    );
                     break;
                 default:
                     return false;

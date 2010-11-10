@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/9458/trunk/common/src/csharp/webdriver-common/Internal
+END
+IFindsByXPath.cs
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Internal/IFindsByXPath.cs
+END
+IFindsByClassName.cs
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Internal/IFindsByClassName.cs
+END
+IWrapsElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Internal/IWrapsElement.cs
+END
+IFindsByCssSelector.cs
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/8099/trunk/common/src/csharp/webdriver-common/Internal/IFindsByCssSelector.cs
+END
+IWrapsDriver.cs
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/8372/trunk/common/src/csharp/webdriver-common/Internal/IWrapsDriver.cs
+END
+ReturnedCookie.cs
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/9458/trunk/common/src/csharp/webdriver-common/Internal/ReturnedCookie.cs
+END
+ResourceUtilities.cs
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/9322/trunk/common/src/csharp/webdriver-common/Internal/ResourceUtilities.cs
+END
+IFindsByTagName.cs
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Internal/IFindsByTagName.cs
+END
+IFindsById.cs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Internal/IFindsById.cs
+END
+IFindsByPartialLinkText.cs
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Internal/IFindsByPartialLinkText.cs
+END
+IFindsByName.cs
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Internal/IFindsByName.cs
+END
+IFindsByLinkText.cs
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/8023/trunk/common/src/csharp/webdriver-common/Internal/IFindsByLinkText.cs
+END

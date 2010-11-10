@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/10181/trunk/remote/common/src/csharp/webdriver-remote-common
+END
+Command.cs
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/Command.cs
+END
+StackTraceElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/StackTraceElement.cs
+END
+Response.cs
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/9182/trunk/remote/common/src/csharp/webdriver-remote-common/Response.cs
+END
+GlobalSuppressions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/9182/trunk/remote/common/src/csharp/webdriver-remote-common/GlobalSuppressions.cs
+END
+SessionId.cs
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/SessionId.cs
+END
+ICapabilities.cs
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/ICapabilities.cs
+END
+WebDriver.Remote.Common.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/10181/trunk/remote/common/src/csharp/webdriver-remote-common/WebDriver.Remote.Common.csproj
+END
+ICommandExecutor.cs
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/ICommandExecutor.cs
+END
+ErrorResponse.cs
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/ErrorResponse.cs
+END
+DesiredCapabilities.cs
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/10180/trunk/remote/common/src/csharp/webdriver-remote-common/DesiredCapabilities.cs
+END
+CommandInfoRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/CommandInfoRepository.cs
+END
+DriverCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/DriverCommand.cs
+END
+CommandInfo.cs
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/9058/trunk/remote/common/src/csharp/webdriver-remote-common/CommandInfo.cs
+END

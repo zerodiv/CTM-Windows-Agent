@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/10181/trunk/remote/common/src/csharp/webdriver-remote-common/JsonConverters
+END
+CookieJsonConverter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/10181/trunk/remote/common/src/csharp/webdriver-remote-common/JsonConverters/CookieJsonConverter.cs
+END
+ResponseValueJsonConverter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/10181/trunk/remote/common/src/csharp/webdriver-remote-common/JsonConverters/ResponseValueJsonConverter.cs
+END
+CharArrayJsonConverter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/10181/trunk/remote/common/src/csharp/webdriver-remote-common/JsonConverters/CharArrayJsonConverter.cs
+END
+PlatformJsonConverter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/10181/trunk/remote/common/src/csharp/webdriver-remote-common/JsonConverters/PlatformJsonConverter.cs
+END
