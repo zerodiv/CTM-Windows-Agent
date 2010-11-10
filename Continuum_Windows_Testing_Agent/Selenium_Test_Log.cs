@@ -15,19 +15,15 @@ namespace Continuum_Windows_Testing_Agent
         private StreamWriter fh;
         private StreamWriter bodyFh;
 
-        private Boolean useVerboseTestLogs;
-
         private long totalCommands;
         private long totalSuccessfulCommands;
         private long totalFailedCommands;
         private SortedDictionary<String,TimeSpan> totalTimeByCommand;
         private Dictionary<String, ulong> totalCommandCount;
 
-        public Selenium_Test_Log(Boolean useVerboseTestLogs, String logFile ) {
+        public Selenium_Test_Log(String logFile ) {
             try
             {
-                this.useVerboseTestLogs = useVerboseTestLogs;
-
                 this.logFile = logFile;
                 this.bodyFile = this.logFile + ".body";
 

@@ -61,9 +61,8 @@
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL" />
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
-    <Reference Include="Newtonsoft.Json.Net20, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a6\Newtonsoft.Json.Net20.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Vendor\json-net-3.5r6\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -81,13 +80,12 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ThoughtWorks.Selenium.Core">
+      <HintPath>Vendor\selenium-dotnet-2.0a6\ThoughtWorks.Selenium.Core.dll</HintPath>
+    </Reference>
     <Reference Include="WebDriver.Chrome, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Chrome.dll</HintPath>
-    </Reference>
-    <Reference Include="WebDriver.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Common.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Firefox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,10 +94,6 @@
     <Reference Include="WebDriver.IE, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.IE.dll</HintPath>
-    </Reference>
-    <Reference Include="WebDriver.Remote, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Remote.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -110,12 +104,13 @@
     <Compile Include="CTM_Test.Designer.cs">
       <DependentUpon>CTM_Test.cs</DependentUpon>
     </Compile>
+    <Compile Include="CTM_WebBrowser_Factory.cs" />
     <Compile Include="PageLoadWaiter.cs" />
     <Compile Include="Selenese\CTM_ClickAndWait.cs" />
     <Compile Include="Selenese\CTM_Open.cs" />
     <Compile Include="Selenese\CTM_Store.cs" />
     <Compile Include="Selenese\CTM_Pause.cs" />
-    <Compile Include="LocalWebBrowser.cs" />
+    <Compile Include="CTM_WebBrowser.cs" />
     <Compile Include="OSInfo.cs" />
     <Compile Include="CTM_Agent.cs">
       <SubType>Form</SubType>
@@ -329,6 +324,20 @@
     <Content Include="injectableSelenium.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Vendor\webdriver-common\WebDriver.Common.csproj">
+      <Project>{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}</Project>
+      <Name>WebDriver.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="Vendor\webdriver-remote-client\WebDriver.Remote.csproj">
+      <Project>{32122F8D-CD64-495A-B9B0-5516FF67C79F}</Project>
+      <Name>WebDriver.Remote</Name>
+    </ProjectReference>
+    <ProjectReference Include="Vendor\webdriver-remote-common\WebDriver.Remote.Common.csproj">
+      <Project>{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}</Project>
+      <Name>WebDriver.Remote.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

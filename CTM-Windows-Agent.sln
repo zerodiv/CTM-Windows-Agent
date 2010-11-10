@@ -2,17 +2,52 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTM-Windows-Agent", "Continuum_Windows_Testing_Agent\CTM-Windows-Agent.csproj", "{EEE80527-F194-4E7B-84F5-5F4AA83A4288}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0} = {ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}
+		{32122F8D-CD64-495A-B9B0-5516FF67C79F} = {32122F8D-CD64-495A-B9B0-5516FF67C79F}
+		{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17} = {C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDriver.Remote", "Continuum_Windows_Testing_Agent\Vendor\webdriver-remote-client\WebDriver.Remote.csproj", "{32122F8D-CD64-495A-B9B0-5516FF67C79F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDriver.Common", "Continuum_Windows_Testing_Agent\Vendor\webdriver-common\WebDriver.Common.csproj", "{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDriver.Remote.Common", "Continuum_Windows_Testing_Agent\Vendor\webdriver-remote-common\WebDriver.Remote.Common.csproj", "{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EEE80527-F194-4E7B-84F5-5F4AA83A4288}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEE80527-F194-4E7B-84F5-5F4AA83A4288}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE80527-F194-4E7B-84F5-5F4AA83A4288}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{EEE80527-F194-4E7B-84F5-5F4AA83A4288}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE80527-F194-4E7B-84F5-5F4AA83A4288}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE80527-F194-4E7B-84F5-5F4AA83A4288}.Release|x64.ActiveCfg = Release|Any CPU
+		{32122F8D-CD64-495A-B9B0-5516FF67C79F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32122F8D-CD64-495A-B9B0-5516FF67C79F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32122F8D-CD64-495A-B9B0-5516FF67C79F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{32122F8D-CD64-495A-B9B0-5516FF67C79F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32122F8D-CD64-495A-B9B0-5516FF67C79F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32122F8D-CD64-495A-B9B0-5516FF67C79F}.Release|x64.ActiveCfg = Release|Any CPU
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}.Debug|x64.ActiveCfg = Debug|x64
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}.Debug|x64.Build.0 = Debug|x64
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}.Release|x64.ActiveCfg = Release|x64
+		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}.Release|x64.Build.0 = Release|x64
+		{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
