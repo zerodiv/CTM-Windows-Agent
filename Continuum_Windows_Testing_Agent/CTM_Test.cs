@@ -415,7 +415,7 @@ namespace Continuum_Windows_Testing_Agent
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
@@ -505,7 +505,7 @@ namespace Continuum_Windows_Testing_Agent
                 }
 
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
@@ -740,7 +740,7 @@ namespace Continuum_Windows_Testing_Agent
                 return true;
 
             }
-            catch (Exception e)
+            catch
             {
                 this.cleanup();
                 return false;
@@ -1087,7 +1087,7 @@ namespace Continuum_Windows_Testing_Agent
 
 
             }
-            catch (Exception ex)
+            catch
             {
                 this.testHadError = true;
             }

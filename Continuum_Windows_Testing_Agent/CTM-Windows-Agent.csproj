@@ -111,7 +111,6 @@
     <Compile Include="Selenese\CTM_Store.cs" />
     <Compile Include="Selenese\CTM_Pause.cs" />
     <Compile Include="CTM_WebBrowser.cs" />
-    <Compile Include="OSInfo.cs" />
     <Compile Include="CTM_Agent.cs">
       <SubType>Form</SubType>
     </Compile>

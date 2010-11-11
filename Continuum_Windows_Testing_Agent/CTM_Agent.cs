@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Collections.Specialized;
 using System.Xml;
-
+using OpenQA.Selenium;
 
 namespace Continuum_Windows_Testing_Agent
 {
@@ -59,16 +59,18 @@ namespace Continuum_Windows_Testing_Agent
             this.webBrowsers.Add("iexplore", CTM_WebBrowser_Factory.factory("iexplore"));
             
             // These phones are not local, so therefor we have stored registry keys for their settings.
-            this.webBrowsers.Add("android", CTM_WebBrowser_Factory.factory("android"));
+            // Disabling the droid for now.
+            // this.webBrowsers.Add("android", CTM_WebBrowser_Factory.factory("android"));
+            
             this.webBrowsers.Add("iphone", CTM_WebBrowser_Factory.factory("iphone"));
 
             this.loadRegistryKeys();
             
             // attempt to connect to the settings if we have any.
-            if (this.webBrowsers["android"].getHostname().Length > 0)
-            {
-                this.webBrowsers["android"].verify();
-            }
+            // if (this.webBrowsers["android"].getHostname().Length > 0)
+            //{
+            //    this.webBrowsers["android"].verify();
+            //}
             
             if (this.webBrowsers["iphone"].getHostname().Length > 0)
             {
@@ -158,11 +160,13 @@ namespace Continuum_Windows_Testing_Agent
                 this.webBrowsers["iphone"].setPort(Int32.Parse(key.GetValue("iphonePort").ToString()));
             }
 
+            /*
             if (key.GetValue("androidHostname") != null)
             {
                 this.webBrowsers["android"].setHostname(key.GetValue("androidHostname").ToString());
                 this.webBrowsers["android"].setPort(Int32.Parse(key.GetValue("androidPort").ToString()));
             }
+            */
 
         }
 
@@ -178,9 +182,11 @@ namespace Continuum_Windows_Testing_Agent
             key.SetValue("iphoneHostname", this.webBrowsers["iphone"].getHostname());
             key.SetValue("iphonePort", this.webBrowsers["iphone"].getPort());
 
+            /*
             // android
             key.SetValue("androidHostname", this.webBrowsers["android"].getHostname());
             key.SetValue("androidPort", this.webBrowsers["android"].getPort());
+            */
 
         }
         #endregion Registry Settings
@@ -203,9 +209,10 @@ namespace Continuum_Windows_Testing_Agent
 
         private String determineWindowsVersion()
         {
-            String windowsVersion = "";
-            windowsVersion += OSInfo.Name + " - " + OSInfo.Edition + " - " + OSInfo.ServicePack;
-            return windowsVersion;
+            
+            Platform p = Platform.CurrentPlatform;
+            return p.Type.ToString();
+
         }
         #endregion Helper Functions
 
@@ -325,6 +332,7 @@ namespace Continuum_Windows_Testing_Agent
                                 this.webBrowsers[browserName].getHostname() +
                                 ":" + this.webBrowsers[browserName].getPort()
                         );
+                        this.updateLastRunLogBox(this.log.getLastLogLines());
                         return;
                     }
                 }
