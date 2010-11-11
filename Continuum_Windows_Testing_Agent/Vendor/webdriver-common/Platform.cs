@@ -61,9 +61,6 @@ namespace OpenQA.Selenium
         /// Any version of the Macintosh OS X
         /// </summary>
         MacOSX,
-        
-        // JEO: There is a bug in the iphone emulator where it returns MAC instead of osx.
-        MAC = MacOSX,
 
         /// <summary>
         /// Any version of the Unix operating system.
@@ -75,6 +72,9 @@ namespace OpenQA.Selenium
         /// </summary>
         Linux,
 		
+        /// <summary>
+        /// Any version using the Darwin packaging system (OS X).
+        /// </summary>
 		Darwin
     }
 
