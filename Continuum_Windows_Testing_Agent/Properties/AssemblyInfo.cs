@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Adicio")]
-[assembly: AssemblyProduct("Continuum_Windows_Testing_Agent")]
+[assembly: AssemblyProduct("Continuum Windows Testing Agent")]
 [assembly: AssemblyCopyright("Copyright © Adicio 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

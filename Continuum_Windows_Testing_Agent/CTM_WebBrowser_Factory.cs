@@ -177,7 +177,7 @@ namespace Continuum_Windows_Testing_Agent
         private static CTM_WebBrowser findIEBrowser()
         {
             CTM_WebBrowser browser = new CTM_WebBrowser();
-            browser.setInternalName("ie");
+            browser.setInternalName("iexplore");
             browser.setPrettyName("Internet Explorer");
 
             RegistryKey dkey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Internet Explorer");

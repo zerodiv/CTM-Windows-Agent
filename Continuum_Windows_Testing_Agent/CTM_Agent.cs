@@ -307,7 +307,7 @@ namespace Continuum_Windows_Testing_Agent
             // set the entries for the iphone and android browsers.
             foreach (string browserName in this.webBrowsers.Keys)
             {
-                if (this.webBrowsers[browserName].getIsRemote() == true)
+                if (this.webBrowsers[browserName].getIsRemote() == true && this.webBrowsers[browserName].getHostname().Length > 0 )
                 {
                     // Suck in the settings from the datagrid.
                     int gridId = this.webBrowsers[browserName].getGridRowId();
