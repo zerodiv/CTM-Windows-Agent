@@ -884,44 +884,56 @@ namespace Continuum_Windows_Testing_Agent
 
         protected String runJavascriptValue(String javascriptValue)
         {
-            String javascript = "";
-            if (javascriptValue.StartsWith("javascript{"))
-            {
-                javascript = javascriptValue;
-                javascript = Regex.Replace(javascript, @"^javascript{", "");
-                javascript = Regex.Replace(javascript, @"}$", "");
-            }
-            else
+
+            if (javascriptValue.Length == 0)
             {
                 return javascriptValue;
             }
 
-            // quick fix for people forgetting to do a return.
-            if (javascript.Contains("return") == false)
+            if (javascriptValue.Contains("javascript") == false)
             {
-                javascript = "return " + javascript;
+                return javascriptValue;
             }
 
-            if (!javascript.EndsWith(";"))
+            MatchCollection matches = Regex.Matches(javascriptValue, @"javascript{(.*?)}");
+            
+            if (matches.Count == 0)
             {
-                javascript = javascript + ";";
+                return javascriptValue;
             }
 
-            String value = "";
             if (this.jsExecutor == null)
             {
                 this.jsExecutor = (IJavaScriptExecutor)this.webDriver;
             }
 
-            if (jsExecutor.IsJavaScriptEnabled == true)
+            foreach (Match match in matches)
             {
+                String js = match.Groups[1].Value;
+                
+                // quick fix for people forgetting to do a return.
+                if (js.Contains("return") == false)
+                {
+                    js = "return " + js;
+                }
 
-                Object ret = jsExecutor.ExecuteScript(javascript);
-                value = ret.ToString();
+                if (!js.EndsWith(";"))
+                {
+                    js = js + ";";
+                }
+
+                if (this.jsExecutor.IsJavaScriptEnabled == true)
+                {
+                   String val = this.jsExecutor.ExecuteScript(js).ToString();
+                    javascriptValue = javascriptValue.Replace(
+                        "javascript{" + match.Groups[1].ToString() + "}",
+                        val
+                    );
+                }
 
             }
 
-            return value;
+            return javascriptValue;
 
         }
 
