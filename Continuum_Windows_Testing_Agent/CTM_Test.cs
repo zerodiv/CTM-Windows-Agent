@@ -1060,22 +1060,53 @@ namespace Continuum_Windows_Testing_Agent
 
                     // Run the commands.
 
-                    int testCmdCnt = 0;
-
-                    foreach (Selenium_Test_Trinome testCommand in this.testCommands)
-                    {
+                   for( int testCmdCnt = 0; testCmdCnt < this.testCommands.Count; testCmdCnt++ ) {
+                       Selenium_Test_Trinome testCommand = (Selenium_Test_Trinome) this.testCommands[testCmdCnt];
 
                         this.testLocker.WaitOne();
 
                         Boolean selReturn = this.processSelenese(testCommand);
 
+                        if (testCommand.getCommand() == "click" ||
+                            testCommand.getCommand() == "clickAndWait" ||
+                            testCommand.getCommand() == "open")
+                        {
+                            // Find the next valid command.
+                            Selenium_Test_Trinome nextCommand = this.findNextTestCommand(testCmdCnt);
+
+                            // JEO: Pretty sure we need to limit this here to type and other commands
+                            if (nextCommand != null)
+                            {
+                                Boolean nextIsFound = false;
+                                for (int i = 0; i < 30; i++)
+                                {
+                                    if (nextIsFound != true)
+                                    {
+                                        try
+                                        {
+                                            IWebElement elem = this.elementFinder.FindElement(this.webDriver, nextCommand.getTarget());
+                                            if (elem != null)
+                                            {
+                                                nextIsFound = true;
+                                            }
+                                            else
+                                            {
+                                                System.Threading.Thread.Sleep(1000);
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            // It's okay if this fails we won't do anyting with it anyways.
+                                        }
+                                    }
+                                }
+                            } // Skinning the cat differntly by avoiding the use of waiter()
+                        }
 
                         if (this.haltOnError == true && selReturn == false)
                         {
                             this.toggleTestState();
                         }
-
-                        testCmdCnt++;
 
                     }
 
@@ -1093,5 +1124,17 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
+        private Selenium_Test_Trinome findNextTestCommand(int offset)
+        {
+            for (int i = offset; i < this.testCommands.Count; i++)
+            {
+                Selenium_Test_Trinome command = (Selenium_Test_Trinome)this.testCommands[i];
+                if (command.getCommand() != ":comment:")
+                {
+                    return command;
+                }
+            }
+            return null;
+        }
     }
 }

@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1">
-  <asmv1:assemblyIdentity name="Continuum_Windows_Testing_Agent.exe" version="1.0.0.24" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
+  <asmv1:assemblyIdentity name="Continuum_Windows_Testing_Agent.exe" version="1.0.0.25" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.3967.21332" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.3974.472" language="neutral" processorArchitecture="msil" />
     <commandLine file="Continuum_Windows_Testing_Agent.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -43,13 +43,13 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Continuum_Windows_Testing_Agent.exe" size="118272">
-      <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.3967.21332" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.3974.472" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>q47xdmrgYDV/VlPawmu8Xhz/1J4=</dsig:DigestValue>
+        <dsig:DigestValue>1yLHcOk8b6UGOcZ3nFNoSQkG7eA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -133,7 +133,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>GbAapnpWddQV3djqo0LwOcV06rI=</dsig:DigestValue>
+        <dsig:DigestValue>KuNdjL9z3dwneRk5gLGe5+toao4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -169,7 +169,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>gVhUK3jSWVmQk7nvP245vV4OHII=</dsig:DigestValue>
+        <dsig:DigestValue>sQnn/dxURXoKYdBiD0sUv0maYIE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -181,7 +181,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>RoOlHw6/pLH98e8xRw5dz/Pg2cc=</dsig:DigestValue>
+        <dsig:DigestValue>tm9k+xMEZdoiVEfEE8QZeTBUcxI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
