@@ -30,8 +30,8 @@ namespace Selenium.Internal.SeleniumEmulation
             driver.Navigate().GoToUrl(uUrl);
              
             // JEO: To emulate the IDE's load behavior you need to do a waitforpagetoload 30s
-            PageLoadWaiter pageWaiter = new PageLoadWaiter(driver, 30000);
-            pageWaiter.Wait("Page load timeout exceeded");
+            // PageLoadWaiter pageWaiter = new PageLoadWaiter(driver, 30000);
+            // pageWaiter.Wait("Page load timeout exceeded");
 
             return null;
         }

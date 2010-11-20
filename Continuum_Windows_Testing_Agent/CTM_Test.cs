@@ -952,8 +952,9 @@ namespace Continuum_Windows_Testing_Agent
             return testCommand;
         }
 
-        public Boolean processSelenese(Selenium_Test_Trinome testCommand)
+        public Boolean processSelenese(Selenium_Test_Trinome testCommand, int testCmdCnt )
         {
+            
             DateTime startTime = System.DateTime.UtcNow;
             DateTime stopTime = System.DateTime.UtcNow;
 
@@ -996,13 +997,20 @@ namespace Continuum_Windows_Testing_Agent
 
 
                 String message = "Working...";
-                this.updateCommandStatus(testCommand.getId(), -1, startTime, stopTime, message);
 
+                this.updateCommandStatus(testCommand.getId(), -1, startTime, stopTime, message);
+               
                 try
                 {
+                    DateTime s1 = System.DateTime.UtcNow;
                     cmd.Apply(this.webDriver, args);
+                    DateTime s2 = System.DateTime.UtcNow;
+
                     stopTime = System.DateTime.UtcNow;
                     this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
+
+                    this.waitForNextCommandTarget(testCommand, testCmdCnt, startTime, stopTime );
+                    
                     return true;
                 }
                 catch (Exception e)
@@ -1072,22 +1080,19 @@ namespace Continuum_Windows_Testing_Agent
 
                     // Run the commands.
 
-                    int testCmdCnt = 0;
-
-                    foreach (Selenium_Test_Trinome testCommand in this.testCommands)
-                    {
+                   for( int testCmdCnt = 0; testCmdCnt < this.testCommands.Count; testCmdCnt++ ) {
+                       Selenium_Test_Trinome testCommand = (Selenium_Test_Trinome) this.testCommands[testCmdCnt];
 
                         this.testLocker.WaitOne();
 
-                        Boolean selReturn = this.processSelenese(testCommand);
+                        Boolean selReturn = this.processSelenese(testCommand, testCmdCnt);
 
+                        
 
                         if (this.haltOnError == true && selReturn == false)
                         {
                             this.toggleTestState();
                         }
-
-                        testCmdCnt++;
 
                     }
 
@@ -1105,5 +1110,77 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
+        private void waitForNextCommandTarget(Selenium_Test_Trinome testCommand, int testCmdCnt, DateTime startTime, DateTime stopTime )
+        {
+           if (testCommand.getCommand() == "click" ||
+                testCommand.getCommand() == "clickAndWait" ||
+                testCommand.getCommand() == "open")
+            {
+                // Find the next valid command.
+                Selenium_Test_Trinome nextCommand = this.findNextTestCommand(testCmdCnt);
+
+                int tout = 60;
+
+                // JEO: Pretty sure we need to limit this here to type and other commands
+                if (nextCommand != null && nextCommand.getCommand() != "open")
+                {
+                    for (int i = 0; i < tout; i++)
+                    {
+
+                        stopTime = System.DateTime.UtcNow;
+                        this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "Waiting for next target..");
+
+                        try
+                            {
+                                IWebElement elem = this.elementFinder.FindElement(this.webDriver, nextCommand.getTarget());
+                                if (elem != null)
+                                {
+
+                                    stopTime = System.DateTime.UtcNow;
+                                    this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
+                                    return;
+                                }
+                                else
+                                {
+                                    System.Threading.Thread.Sleep(1000);
+                                }
+                            }
+                            catch
+                            {
+                                // It's okay if this fails we won't do anyting with it anyways.
+                            }
+                        
+                    }
+
+                    stopTime = System.DateTime.UtcNow;
+                    this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, "Failed to find the next element within " + tout + " seconds");
+                    this.testHadError = true;
+                    return;
+
+                } // Skinning the cat differntly by avoiding the use of waiter()
+
+ 
+           }
+
+
+           return;
+        }
+
+        private Selenium_Test_Trinome findNextTestCommand(int offset)
+        {
+            offset = offset + 1;
+
+            for (int i = offset; i < this.testCommands.Count; i++)
+            {
+                Selenium_Test_Trinome command = (Selenium_Test_Trinome)this.testCommands[i];
+                if (command.getCommand() != ":comment:" &&
+                    command.getCommand() != "store" &&
+                    command.getCommand() != "pause" )
+                {
+                    return command;
+                }
+            }
+            return null;
+        }
     }
 }

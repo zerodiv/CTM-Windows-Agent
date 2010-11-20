@@ -55,6 +55,19 @@ namespace Selenium.Internal.SeleniumEmulation
                 strategyName = m.Groups[1].Value;
             }
 
+            // JEO: Pulling this up and out of the implicit strategy finder, reduces object creation.
+            if (strategyName == "implicit")
+            {
+                if (locator.StartsWith("document.", StringComparison.Ordinal))
+                {
+                    strategyName = "dom";
+                }
+                if (locator.StartsWith("//", StringComparison.Ordinal))
+                {
+                    strategyName = "xpath";
+                }
+            }
+
             ILookupStrategy strategy;
             if (!lookupStrategies.TryGetValue(strategyName, out strategy))
             {

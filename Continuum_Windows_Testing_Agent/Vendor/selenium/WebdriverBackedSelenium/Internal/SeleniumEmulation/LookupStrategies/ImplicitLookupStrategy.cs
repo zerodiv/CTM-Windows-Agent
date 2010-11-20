@@ -8,23 +8,14 @@ namespace Selenium
     {
         public IWebElement Find(IWebDriver driver, string use)
         {
-            if (use.StartsWith("document.", StringComparison.Ordinal))
+            // JEO - we need to lookup by name, then id to support selenese 1.x editors
+            try
             {
-                return new DomTraversalLookupStrategy().Find(driver, use);
+                return new NameLookupStrategy().Find(driver, use);
             }
-            else if (use.StartsWith("//", StringComparison.Ordinal))
+            catch
             {
-                return new XPathLookupStrategy().Find(driver, use);
-            }
-            else
-            {
-                // JEO - we need to lookup by name, then id to support selenese 1.x editors
-                try
-                {
-                    return new NameLookupStrategy().Find(driver, use);
-                } catch { 
-                    return new IdentifierLookupStrategy().Find(driver, use);
-                }
+                return new IdentifierLookupStrategy().Find(driver, use);
             }
         }
     }

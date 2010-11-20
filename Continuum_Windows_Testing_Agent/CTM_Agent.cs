@@ -102,7 +102,7 @@ namespace Continuum_Windows_Testing_Agent
                 this.guid = key.GetValue("guid").ToString();
             }
 
-            if (this.guid == "")
+            if (this.guid == "" || this.guid == null )
             {
                 this.guid = System.Guid.NewGuid().ToString();
                 key.SetValue("guid", this.guid);
@@ -347,12 +347,9 @@ namespace Continuum_Windows_Testing_Agent
         private void regenerateGuidBtn_Click(object sender, EventArgs e)
         {
            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
-           if (key.GetValue("guid") != null)
-           {
-               key.DeleteValue("guid");
-           }
-           this.guid = null;
+           this.guid = System.Guid.NewGuid().ToString(); ;
            this.guidBox.Text = this.guid;
+           key.SetValue("guid", this.guid);
         }
 
         private void forcePollBtn_Click(object sender, EventArgs e)
