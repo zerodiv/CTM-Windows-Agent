@@ -33,6 +33,12 @@
             this.label7 = new System.Windows.Forms.Label();
             this.haltOnErrorBox = new System.Windows.Forms.CheckBox();
             this.browserGrid = new System.Windows.Forms.DataGridView();
+            this.isAvailable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.browserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.browserVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hostname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.port = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.internalName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.forcePollBtn = new System.Windows.Forms.Button();
             this.regenerateGuidBtn = new System.Windows.Forms.Button();
             this.guidBox = new System.Windows.Forms.TextBox();
@@ -52,12 +58,6 @@
             this.lastRunLogBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.agentBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.isAvailable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.browserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.browserVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hostname = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.port = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.internalName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.browserGrid)).BeginInit();
             this.ctmStatusBar.SuspendLayout();
@@ -124,6 +124,44 @@
             this.browserGrid.Name = "browserGrid";
             this.browserGrid.Size = new System.Drawing.Size(718, 150);
             this.browserGrid.TabIndex = 19;
+            // 
+            // isAvailable
+            // 
+            this.isAvailable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.isAvailable.HeaderText = "Available";
+            this.isAvailable.Name = "isAvailable";
+            // 
+            // browserName
+            // 
+            this.browserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.browserName.HeaderText = "Browser";
+            this.browserName.Name = "browserName";
+            this.browserName.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.browserName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // browserVersion
+            // 
+            this.browserVersion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.browserVersion.HeaderText = "Version";
+            this.browserVersion.Name = "browserVersion";
+            // 
+            // hostname
+            // 
+            this.hostname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.hostname.HeaderText = "Host";
+            this.hostname.Name = "hostname";
+            // 
+            // port
+            // 
+            this.port.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.port.HeaderText = "Port";
+            this.port.Name = "port";
+            // 
+            // internalName
+            // 
+            this.internalName.HeaderText = "Internal Name";
+            this.internalName.Name = "internalName";
+            this.internalName.Visible = false;
             // 
             // forcePollBtn
             // 
@@ -277,43 +315,9 @@
             this.label8.TabIndex = 5;
             this.label8.Text = "Last Test Log:";
             // 
-            // isAvailable
+            // agentBackgroundWorker
             // 
-            this.isAvailable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.isAvailable.HeaderText = "Available";
-            this.isAvailable.Name = "isAvailable";
-            // 
-            // browserName
-            // 
-            this.browserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.browserName.HeaderText = "Browser";
-            this.browserName.Name = "browserName";
-            this.browserName.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.browserName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // browserVersion
-            // 
-            this.browserVersion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.browserVersion.HeaderText = "Version";
-            this.browserVersion.Name = "browserVersion";
-            // 
-            // hostname
-            // 
-            this.hostname.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.hostname.HeaderText = "Host";
-            this.hostname.Name = "hostname";
-            // 
-            // port
-            // 
-            this.port.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.port.HeaderText = "Port";
-            this.port.Name = "port";
-            // 
-            // internalName
-            // 
-            this.internalName.HeaderText = "Internal Name";
-            this.internalName.Name = "internalName";
-            this.internalName.Visible = false;
+            this.agentBackgroundWorker.WorkerSupportsCancellation = true;
             // 
             // CTM_Agent
             // 

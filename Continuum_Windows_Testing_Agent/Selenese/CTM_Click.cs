@@ -20,14 +20,19 @@ namespace Selenium.Internal.SeleniumEmulation
 
         protected override object HandleSeleneseCommand(IWebDriver driver, string locator, string value)
         {
-            IWebElement element = finder.FindElement(driver, locator);
-            element.Click();
+            try
+            {
+                IWebElement element = finder.FindElement(driver, locator);
 
-            // JEO: To emulate the IDE's load behavior you need to do a waitforpagetoload 30s
-            PageLoadWaiter pageWaiter = new PageLoadWaiter(driver, 30000);
-            pageWaiter.Wait("Page load timeout exceeded");
+                element.Click();
+            }
+            catch (Exception e)
+            {
+                // IE Emits errornus click errors at times. We have suprressed the exceptions here.
+            }
 
             return null;
+
         }
     }
 }

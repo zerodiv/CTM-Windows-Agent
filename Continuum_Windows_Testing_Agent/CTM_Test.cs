@@ -653,29 +653,36 @@ namespace Continuum_Windows_Testing_Agent
             }
 
             // start up the requested browser.
-            switch (this.testBrowser.getInternalName())
+            try
             {
-                case "chrome":
-                    this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
-                    break;
-                case "firefox":
-                    this.webDriver = new OpenQA.Selenium.Firefox.FirefoxDriver();
-                    break;
-                case "googlechrome":
-                    this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
-                    break;
-                case "iexplore":
-                    this.webDriver = new OpenQA.Selenium.IE.InternetExplorerDriver();
-                    break;
-                case "iphone":
-                    DesiredCapabilities remoteCap = new DesiredCapabilities(); 
-                    this.webDriver = new RemoteWebDriver(
-                        new Uri("http://" + this.testBrowser.getHostname() + ":" + this.testBrowser.getPort() + "/hub/" ),
-                        remoteCap
-                    );
-                    break;
-                default:
-                    return false;
+
+                switch (this.testBrowser.getInternalName())
+                {
+                    case "chrome":
+                        this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                        break;
+                    case "firefox":
+                        this.webDriver = new OpenQA.Selenium.Firefox.FirefoxDriver();
+                        break;
+                    case "googlechrome":
+                        this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                        break;
+                    case "iexplore":
+                        this.webDriver = new OpenQA.Selenium.IE.InternetExplorerDriver();
+                        break;
+                    case "iphone":
+                        DesiredCapabilities remoteCap = new DesiredCapabilities();
+                        this.webDriver = new RemoteWebDriver(
+                            new Uri("http://" + this.testBrowser.getHostname() + ":" + this.testBrowser.getPort() + "/hub/"),
+                            remoteCap
+                        );
+                        break;
+                    default:
+                        return false;
+                }
+            }
+            catch (Exception e)
+            {
             }
 
             // TODO: We should pull this up to the top level init, but the log() requirement 
@@ -757,7 +764,10 @@ namespace Continuum_Windows_Testing_Agent
             {
                 File.Delete(this.tempZipFile);
             }
-            this.webDriver.Quit();
+            if (this.webDriver != null)
+            {
+                this.webDriver.Quit();
+            }
             this.Dispose();
         }
 
@@ -1145,7 +1155,7 @@ namespace Continuum_Windows_Testing_Agent
                                     System.Threading.Thread.Sleep(1000);
                                 }
                             }
-                            catch
+                            catch (Exception e)
                             {
                                 // It's okay if this fails we won't do anyting with it anyways.
                             }

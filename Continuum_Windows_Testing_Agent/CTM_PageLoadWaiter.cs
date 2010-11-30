@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenQA.Selenium;
+using Selenium.Internal.SeleniumEmulation;
 
 namespace Continuum_Windows_Testing_Agent
 {
-    public class PageLoadWaiter : Waiter
+    internal class CTM_PageLoadWaiter : Waiter
     {
         private IWebDriver driver;
         private int timeToWaitAfterPageLoad;
         private DateTime started = DateTime.Now;
 
-        public PageLoadWaiter(IWebDriver driver, int timeToWaitAfterPageLoad)
+        public CTM_PageLoadWaiter(IWebDriver driver, int timeToWaitAfterPageLoad)
             : base()
         {
             this.driver = driver;

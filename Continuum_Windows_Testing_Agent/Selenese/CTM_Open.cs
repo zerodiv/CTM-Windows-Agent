@@ -27,11 +27,16 @@ namespace Selenium.Internal.SeleniumEmulation
             String uUrl = this.createUrl(url);
 
             this.currentUrl = uUrl;
-            driver.Navigate().GoToUrl(uUrl);
-             
-            // JEO: To emulate the IDE's load behavior you need to do a waitforpagetoload 30s
-            // PageLoadWaiter pageWaiter = new PageLoadWaiter(driver, 30000);
-            // pageWaiter.Wait("Page load timeout exceeded");
+
+            try
+            {
+                driver.Navigate().GoToUrl(uUrl);
+            }
+            catch
+            {
+                // Want to see if we can handle page load errors since IE likes to toss them for no
+                // good reason.
+            }
 
             return null;
         }

@@ -22,32 +22,13 @@ namespace Selenium.Internal.SeleniumEmulation
 
         protected override object HandleSeleneseCommand(IWebDriver driver, string locator, string value)
         {
+
             IWebElement element = finder.FindElement(driver, locator);
 
             element.Click();
 
-            // JEO: To emulate the IDE's load behavior you need to do a waitforpagetoload 30s
-            /*
-            int sleepTime = 30000;
-
-            try
-            {
-                if (value != null)
-                {
-                    System.Int32.Parse(value);
-                }
-            }
-            catch
-            {
-                sleepTime = 30000;
-            }
-
-            Thread.Sleep(TimeSpan.FromMilliseconds(sleepTime));
-            */
-            
-            // JEO: This is just me making sure this waits for the page to be fully loaded.
-            PageLoadWaiter pageWaiter = new PageLoadWaiter(driver, 30000);
-            pageWaiter.Wait("Page load timeout exceeded");
+            CTM_PageLoadWaiter pageLoad = new CTM_PageLoadWaiter(driver, 30000);
+            pageLoad.Wait("Page load timeout: 30s exceeded");
 
             return null;
         }

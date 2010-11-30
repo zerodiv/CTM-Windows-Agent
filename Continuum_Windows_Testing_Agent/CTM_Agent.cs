@@ -355,6 +355,7 @@ namespace Continuum_Windows_Testing_Agent
         private void forcePollBtn_Click(object sender, EventArgs e)
         {
             this.callHomeTimer.Interval = 1;
+            // this.agentBackgroundWorker.CancelAsync();
         }
 
         private void haltOnErrorBox_CheckedChanged(object sender, EventArgs e)

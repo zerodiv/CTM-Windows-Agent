@@ -24,7 +24,8 @@ namespace Selenium.Internal.SeleniumEmulation
                 throw new SeleniumException("You may only remove a selection to a select that supports multiple selections");
             }
 
-            selector.Select(driver, locator, value, false, false);
+            // JEO - Changing the target to singlular.
+            selector.Select(driver, locator, value, false, true);
 
             return null;
         }

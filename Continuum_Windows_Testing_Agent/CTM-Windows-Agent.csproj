@@ -38,7 +38,7 @@
     <SuiteName>Continuum Testing Manager</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>30</ApplicationRevision>
+    <ApplicationRevision>33</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -108,7 +108,7 @@
       <DependentUpon>CTM_Test.cs</DependentUpon>
     </Compile>
     <Compile Include="CTM_WebBrowser_Factory.cs" />
-    <Compile Include="PageLoadWaiter.cs" />
+    <Compile Include="CTM_PageLoadWaiter.cs" />
     <Compile Include="Selenese\CTM_ClickAndWait.cs" />
     <Compile Include="Selenese\CTM_Open.cs" />
     <Compile Include="Selenese\CTM_Store.cs" />
@@ -251,7 +251,6 @@
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowFocus.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowMaximize.cs" />
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowSelector.cs" />
-    <Compile Include="Waiter.cs" />
     <EmbeddedResource Include="CTM_Agent.resx">
       <DependentUpon>CTM_Agent.cs</DependentUpon>
     </EmbeddedResource>
