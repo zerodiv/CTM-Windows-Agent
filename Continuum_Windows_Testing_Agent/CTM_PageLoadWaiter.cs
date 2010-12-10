@@ -17,6 +17,8 @@ namespace Continuum_Windows_Testing_Agent
             : base()
         {
             this.driver = driver;
+
+            
             this.timeToWaitAfterPageLoad = timeToWaitAfterPageLoad;
         }
 

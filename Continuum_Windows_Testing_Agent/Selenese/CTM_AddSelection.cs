@@ -30,7 +30,7 @@ namespace Selenium.Internal.SeleniumEmulation
                 IWebElement option = driver.FindElement(By.XPath(xByNamePath));
                 return option;
             }
-            catch (Exception ex )
+            catch
             {
                 return null;
             }

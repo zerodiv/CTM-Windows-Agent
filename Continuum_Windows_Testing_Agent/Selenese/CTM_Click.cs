@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium;
+using OpenQA.Selenium.IE;
 using Continuum_Windows_Testing_Agent;
 
 namespace Selenium.Internal.SeleniumEmulation
@@ -25,8 +26,14 @@ namespace Selenium.Internal.SeleniumEmulation
                 IWebElement element = finder.FindElement(driver, locator);
 
                 element.Click();
+
+                if (driver.GetType().Name == "InternetExplorerDriver")
+                {
+                    ((InternetExplorerDriver)driver).WaitForLoadToComplete();
+                }
+
             }
-            catch (Exception e)
+            catch
             {
                 // IE Emits errornus click errors at times. We have suprressed the exceptions here.
             }

@@ -170,7 +170,7 @@ namespace Continuum_Windows_Testing_Agent
 
                 // new OpenQA.Selenium.Remote.RemoteWebDriver
             }
-            catch (Exception e )
+            catch
             {
                 this.setIsAvailable(false);
             }

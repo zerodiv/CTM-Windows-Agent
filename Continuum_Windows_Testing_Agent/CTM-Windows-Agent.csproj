@@ -62,8 +62,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL" />
-    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>Vendor\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>Vendor\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Vendor\json-net-3.5r6\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -83,9 +87,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ThoughtWorks.Selenium.Core">
-      <HintPath>Vendor\selenium-dotnet-2.0a6\ThoughtWorks.Selenium.Core.dll</HintPath>
-    </Reference>
     <Reference Include="WebDriver.Chrome, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Chrome.dll</HintPath>
@@ -93,10 +94,6 @@
     <Reference Include="WebDriver.Firefox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Firefox.dll</HintPath>
-    </Reference>
-    <Reference Include="WebDriver.IE, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.IE.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -327,6 +324,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Vendor\jobbie\src\csharp\webdriver-ie\WebDriver.IE.csproj">
+      <Project>{388643B5-2270-4E89-99CC-DA761E4E4AC1}</Project>
+      <Name>WebDriver.IE</Name>
+    </ProjectReference>
     <ProjectReference Include="Vendor\webdriver-common\WebDriver.Common.csproj">
       <Project>{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}</Project>
       <Name>WebDriver.Common</Name>

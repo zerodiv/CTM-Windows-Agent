@@ -681,7 +681,7 @@ namespace Continuum_Windows_Testing_Agent
                         return false;
                 }
             }
-            catch (Exception e)
+            catch
             {
             }
 
@@ -1155,7 +1155,7 @@ namespace Continuum_Windows_Testing_Agent
                                     System.Threading.Thread.Sleep(1000);
                                 }
                             }
-                            catch (Exception e)
+                            catch
                             {
                                 // It's okay if this fails we won't do anyting with it anyways.
                             }
