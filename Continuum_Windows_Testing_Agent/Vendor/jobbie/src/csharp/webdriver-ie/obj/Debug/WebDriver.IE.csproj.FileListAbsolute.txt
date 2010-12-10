@@ -1,0 +1,5 @@
+C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\build\cli\Debug\WebDriver.IE.dll
+C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\build\cli\Debug\WebDriver.IE.pdb
+C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\jobbie\src\csharp\webdriver-ie\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\jobbie\src\csharp\webdriver-ie\obj\Debug\WebDriver.IE.dll
+C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\jobbie\src\csharp\webdriver-ie\obj\Debug\WebDriver.IE.pdb

@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/10600/trunk/jobbie/src/csharp/webdriver-ie/IE
+END
+ResultHandler.cs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/9264/trunk/jobbie/src/csharp/webdriver-ie/IE/ResultHandler.cs
+END
+SafeWebElementCollectionHandle.cs
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/SafeWebElementCollectionHandle.cs
+END
+SafeScriptResultHandle.cs
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/SafeScriptResultHandle.cs
+END
+InternetExplorerWebElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/InternetExplorerWebElement.cs
+END
+SafeStringWrapperHandle.cs
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/SafeStringWrapperHandle.cs
+END
+StringCollection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/StringCollection.cs
+END
+InternetExplorerDriver.cs
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/10600/trunk/jobbie/src/csharp/webdriver-ie/IE/InternetExplorerDriver.cs
+END
+NativeDriverLibrary.cs
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/8754/trunk/jobbie/src/csharp/webdriver-ie/IE/NativeDriverLibrary.cs
+END
+SafeScriptArgsHandle.cs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/SafeScriptArgsHandle.cs
+END
+SafeInternetExplorerWebElementHandle.cs
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/SafeInternetExplorerWebElementHandle.cs
+END
+SafeStringCollectionHandle.cs
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/SafeStringCollectionHandle.cs
+END
+InternetExplorerWebElementCollection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/InternetExplorerWebElementCollection.cs
+END
+SafeInternetExplorerDriverHandle.cs
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/SafeInternetExplorerDriverHandle.cs
+END
+StringWrapper.cs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/StringWrapper.cs
+END
+Finder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/Finder.cs
+END
+NativeMethods.cs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/8481/trunk/jobbie/src/csharp/webdriver-ie/IE/NativeMethods.cs
+END

@@ -1,0 +1,15 @@
+K 10
+svn:ignore
+V 8
+obj
+bin
+
+K 13
+svn:mergeinfo
+V 282
+/selenium-core/trunk/jobbie/test/csharp:7680-7758
+/trunk/jobbie/test/csharp:1086-1138
+/webdriver/branches/chrome_extension/jobbie/test/csharp:6938-7155
+/webdriver/branches/dotnet_bindings/jobbie/test/csharp:5048-7482,7488-7790
+/webdriver/trunk/jobbie/test/csharp:7685-7747,7749-7804
+END

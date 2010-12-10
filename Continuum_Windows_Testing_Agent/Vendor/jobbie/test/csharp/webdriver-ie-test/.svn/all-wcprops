@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/10294/trunk/jobbie/test/csharp/webdriver-ie-test
+END
+webdriver-ie-test.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/10285/trunk/jobbie/test/csharp/webdriver-ie-test/webdriver-ie-test.csproj
+END
+webdriver-ie-test.config
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/8041/trunk/jobbie/test/csharp/webdriver-ie-test/webdriver-ie-test.config
+END
+AssemblyTeardown.cs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/10294/trunk/jobbie/test/csharp/webdriver-ie-test/AssemblyTeardown.cs
+END
+IeSpecificTests.cs
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/7835/trunk/jobbie/test/csharp/webdriver-ie-test/IeSpecificTests.cs
+END
+webdriver-ie-test.nunit
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/7835/trunk/jobbie/test/csharp/webdriver-ie-test/webdriver-ie-test.nunit
+END

@@ -1,5 +1,5 @@
-C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-remote-client\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\jorcutt\Documents\build\cli\Debug\WebDriver.Remote.dll
 C:\Users\jorcutt\Documents\build\cli\Debug\WebDriver.Remote.pdb
+C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-remote-client\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-remote-client\obj\Debug\WebDriver.Remote.dll
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-remote-client\obj\Debug\WebDriver.Remote.pdb

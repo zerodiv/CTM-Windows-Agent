@@ -1,0 +1,6 @@
+K 13
+svn:mergeinfo
+V 186
+/webdriver/trunk/jobbie/src/java/org/openqa/selenium/ie/ElementCollection.java:3752-6311
+/webdriver/trunk/jobbie/src/java/org/openqa/selenium/ie/StringCollection.java:7685-7747,7749-7804
+END

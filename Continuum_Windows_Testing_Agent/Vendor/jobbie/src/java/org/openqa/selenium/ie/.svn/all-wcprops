@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/10557/trunk/jobbie/src/java/org/openqa/selenium/ie
+END
+JavascriptResultCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/8475/trunk/jobbie/src/java/org/openqa/selenium/ie/JavascriptResultCollection.java
+END
+StringCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/7806/trunk/jobbie/src/java/org/openqa/selenium/ie/StringCollection.java
+END
+IeReturnTypes.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/10557/trunk/jobbie/src/java/org/openqa/selenium/ie/IeReturnTypes.java
+END
+InternetExplorerElement.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/10332/trunk/jobbie/src/java/org/openqa/selenium/ie/InternetExplorerElement.java
+END
+InternetExplorerDriver.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/10557/trunk/jobbie/src/java/org/openqa/selenium/ie/InternetExplorerDriver.java
+END
+ElementCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/7806/trunk/jobbie/src/java/org/openqa/selenium/ie/ElementCollection.java
+END
+StringWrapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/7806/trunk/jobbie/src/java/org/openqa/selenium/ie/StringWrapper.java
+END
+Finder.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/9681/trunk/jobbie/src/java/org/openqa/selenium/ie/Finder.java
+END
+ErrorHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/9264/trunk/jobbie/src/java/org/openqa/selenium/ie/ErrorHandler.java
+END
+TimedOutException.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/7806/trunk/jobbie/src/java/org/openqa/selenium/ie/TimedOutException.java
+END
+InternetExplorerKeyboard.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/10332/trunk/jobbie/src/java/org/openqa/selenium/ie/InternetExplorerKeyboard.java
+END
+ExportedWebDriverFunctions.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/10332/trunk/jobbie/src/java/org/openqa/selenium/ie/ExportedWebDriverFunctions.java
+END
+UnexpectedJavascriptExecutionException.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/7806/trunk/jobbie/src/java/org/openqa/selenium/ie/UnexpectedJavascriptExecutionException.java
+END

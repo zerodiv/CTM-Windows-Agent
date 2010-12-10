@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/10487/trunk/common/src/cpp/webdriver-interactions
+END
+stdafx.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/7806/trunk/common/src/cpp/webdriver-interactions/stdafx.h
+END
+translate_keycode_linux.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/7806/trunk/common/src/cpp/webdriver-interactions/translate_keycode_linux.cpp
+END
+interaction_utils.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/7806/trunk/common/src/cpp/webdriver-interactions/interaction_utils.cpp
+END
+interactions_linux.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/9977/trunk/common/src/cpp/webdriver-interactions/interactions_linux.cpp
+END
+interactions.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/10332/trunk/common/src/cpp/webdriver-interactions/interactions.cpp
+END
+translate_keycode_linux.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/7806/trunk/common/src/cpp/webdriver-interactions/translate_keycode_linux.h
+END
+interaction_utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/7806/trunk/common/src/cpp/webdriver-interactions/interaction_utils.h
+END
+interactions_linux.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/9977/trunk/common/src/cpp/webdriver-interactions/interactions_linux.h
+END
+interactions.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/10332/trunk/common/src/cpp/webdriver-interactions/interactions.h
+END
+interactions_linux_mouse.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/9977/trunk/common/src/cpp/webdriver-interactions/interactions_linux_mouse.cpp
+END
+interactions_linux_common.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/9977/trunk/common/src/cpp/webdriver-interactions/interactions_linux_common.cpp
+END
+webdriver-interactions.vcproj
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/7806/trunk/common/src/cpp/webdriver-interactions/webdriver-interactions.vcproj
+END
+logging.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/7806/trunk/common/src/cpp/webdriver-interactions/logging.h
+END
+errorcodes.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/10487/trunk/common/src/cpp/webdriver-interactions/errorcodes.h
+END

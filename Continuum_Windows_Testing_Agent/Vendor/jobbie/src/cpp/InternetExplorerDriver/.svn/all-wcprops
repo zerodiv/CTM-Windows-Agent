@@ -1,0 +1,221 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/10567/trunk/jobbie/src/cpp/InternetExplorerDriver
+END
+webdriver.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/10332/trunk/jobbie/src/cpp/InternetExplorerDriver/webdriver.h
+END
+IEThreadElement.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/10332/trunk/jobbie/src/cpp/InternetExplorerDriver/IEThreadElement.cpp
+END
+ElementWrapper.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/10332/trunk/jobbie/src/cpp/InternetExplorerDriver/ElementWrapper.h
+END
+ScreenshotCapture.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/8352/trunk/jobbie/src/cpp/InternetExplorerDriver/ScreenshotCapture.cpp
+END
+utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/8460/trunk/jobbie/src/cpp/InternetExplorerDriver/utils.h
+END
+InternetExplorerDriver.vcproj
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/9681/trunk/jobbie/src/cpp/InternetExplorerDriver/InternetExplorerDriver.vcproj
+END
+IEThreadExplorer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/9844/trunk/jobbie/src/cpp/InternetExplorerDriver/IEThreadExplorer.cpp
+END
+finder.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/9844/trunk/jobbie/src/cpp/InternetExplorerDriver/finder.cpp
+END
+EventReleaser.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/EventReleaser.h
+END
+ScopeTracer.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/ScopeTracer.h
+END
+IEThreadData.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/IEThreadData.cpp
+END
+windowHandling.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/8826/trunk/jobbie/src/cpp/InternetExplorerDriver/windowHandling.h
+END
+InternalCustomMessage.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/10332/trunk/jobbie/src/cpp/InternetExplorerDriver/InternalCustomMessage.h
+END
+IEThread.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/10332/trunk/jobbie/src/cpp/InternetExplorerDriver/IEThread.cpp
+END
+sizzle.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/10297/trunk/jobbie/src/cpp/InternetExplorerDriver/sizzle.h
+END
+InternetExplorerDriver.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/8461/trunk/jobbie/src/cpp/InternetExplorerDriver/InternetExplorerDriver.cpp
+END
+IEReturnTypes.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/8900/trunk/jobbie/src/cpp/InternetExplorerDriver/IEReturnTypes.h
+END
+IeSink.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/IeSink.h
+END
+atoms.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/10389/trunk/jobbie/src/cpp/InternetExplorerDriver/atoms.h
+END
+stdafx.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/stdafx.cpp
+END
+DataMarshaller.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/8461/trunk/jobbie/src/cpp/InternetExplorerDriver/DataMarshaller.h
+END
+webdriver.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/10567/trunk/jobbie/src/cpp/InternetExplorerDriver/webdriver.cpp
+END
+ElementWrapper.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/10332/trunk/jobbie/src/cpp/InternetExplorerDriver/ElementWrapper.cpp
+END
+utils.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/7946/trunk/jobbie/src/cpp/InternetExplorerDriver/utils.cpp
+END
+cookies.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/8353/trunk/jobbie/src/cpp/InternetExplorerDriver/cookies.h
+END
+EventReleaser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/EventReleaser.cpp
+END
+ScreenshotCapture.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/8352/trunk/jobbie/src/cpp/InternetExplorerDriver/ScreenshotCapture.h
+END
+ScopeTracer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/ScopeTracer.cpp
+END
+finder.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/finder.h
+END
+windowHandling.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/8826/trunk/jobbie/src/cpp/InternetExplorerDriver/windowHandling.cpp
+END
+IeSink.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/IeSink.cpp
+END
+DataMarshaller.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/8461/trunk/jobbie/src/cpp/InternetExplorerDriver/DataMarshaller.cpp
+END
+IEThreadData.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/7806/trunk/jobbie/src/cpp/InternetExplorerDriver/IEThreadData.h
+END
+jsxpath.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/10401/trunk/jobbie/src/cpp/InternetExplorerDriver/jsxpath.h
+END
+InternetExplorerDriver.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/8461/trunk/jobbie/src/cpp/InternetExplorerDriver/InternetExplorerDriver.h
+END
+IEThread.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/10332/trunk/jobbie/src/cpp/InternetExplorerDriver/IEThread.h
+END

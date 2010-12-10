@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/10401/trunk/jobbie/prebuilt/Win32/Release
+END
+InternetExplorerDriver.dll
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/10401/trunk/jobbie/prebuilt/Win32/Release/InternetExplorerDriver.dll
+END
+WebDriver.IE.dll
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/8703/trunk/jobbie/prebuilt/Win32/Release/WebDriver.IE.dll
+END
+webdriver-ie-test.dll
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/8703/trunk/jobbie/prebuilt/Win32/Release/webdriver-ie-test.dll
+END
