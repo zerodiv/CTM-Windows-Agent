@@ -15,8 +15,30 @@ namespace Selenium
             }
             catch
             {
+            }
+
+            try
+            {
                 return new IdentifierLookupStrategy().Find(driver, use);
             }
+            catch
+            {
+            }
+
+            // JEO: If neither of these match up, try a wild card matcher against both methods, but do it sanely via xpath.
+            try
+            {
+                String byNameXpath = "//*[contains(@name,'" + use + "')]";
+                return new XPathLookupStrategy().Find(driver, byNameXpath);
+            }
+            catch
+            {
+            }
+
+            // Finally try it by id.
+            String byIdXpath = "//*[contains(@id,'" + use + "')]";
+            return new XPathLookupStrategy().Find(driver, byIdXpath);
+
         }
     }
 }

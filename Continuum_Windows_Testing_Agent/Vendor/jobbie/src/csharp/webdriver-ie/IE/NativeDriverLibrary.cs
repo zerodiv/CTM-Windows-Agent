@@ -1480,7 +1480,16 @@ namespace OpenQA.Selenium.IE
                 currentDirectory = uri.LocalPath;
             }
 
+            // JEO - We use a local library named returned from GetNativeLibraryResourceName()
+            string ctmLibraryPath = Path.Combine(Path.GetDirectoryName(currentDirectory), GetNativeLibraryResourceName());
+
+            if (File.Exists(ctmLibraryPath))
+            {
+                return ctmLibraryPath;
+            }
+
             string nativeLibraryPath = Path.Combine(Path.GetDirectoryName(currentDirectory), LibraryName);
+
             if (!File.Exists(nativeLibraryPath))
             {
                 string resourceName = GetNativeLibraryResourceName();

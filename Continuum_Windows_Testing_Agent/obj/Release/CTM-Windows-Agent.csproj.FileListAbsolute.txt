@@ -11,3 +11,5 @@ C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\C
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Release\Continuum_Windows_Testing_Agent.application
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\Continuum_Windows_Testing_Agent.exe.manifest
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2008\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\Continuum_Windows_Testing_Agent.application
+C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\Continuum_Windows_Testing_Agent.exe
+C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Release\Continuum_Windows_Testing_Agent.pdb
