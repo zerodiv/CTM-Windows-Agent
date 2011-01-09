@@ -38,7 +38,7 @@
     <SuiteName>Continuum Testing Manager</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>40</ApplicationRevision>
+    <ApplicationRevision>42</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -98,13 +98,17 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebDriver.Chrome, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Chrome.dll</HintPath>
+      <HintPath>Vendor\selenium-2.0b1\WebDriver.Common.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Firefox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver.Remote, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\selenium-dotnet-2.0a6\WebDriver.Firefox.dll</HintPath>
+      <HintPath>Vendor\selenium-2.0b1\WebDriver.Remote.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Remote.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Vendor\selenium-2.0b1\WebDriver.Remote.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -333,30 +337,9 @@
     <Content Include="injectableSelenium.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebDriver.InternetExplorerDriver.x64.dll">
+    <Content Include="selenium-server-standalone-2.0b1.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebDriver.InternetExplorerDriver.x86.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Vendor\jobbie\src\csharp\webdriver-ie\WebDriver.IE.csproj">
-      <Project>{388643B5-2270-4E89-99CC-DA761E4E4AC1}</Project>
-      <Name>WebDriver.IE</Name>
-    </ProjectReference>
-    <ProjectReference Include="Vendor\webdriver-common\WebDriver.Common.csproj">
-      <Project>{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}</Project>
-      <Name>WebDriver.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="Vendor\webdriver-remote-client\WebDriver.Remote.csproj">
-      <Project>{32122F8D-CD64-495A-B9B0-5516FF67C79F}</Project>
-      <Name>WebDriver.Remote</Name>
-    </ProjectReference>
-    <ProjectReference Include="Vendor\webdriver-remote-common\WebDriver.Remote.Common.csproj">
-      <Project>{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}</Project>
-      <Name>WebDriver.Remote.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

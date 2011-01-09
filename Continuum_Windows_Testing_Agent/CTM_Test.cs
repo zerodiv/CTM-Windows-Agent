@@ -659,22 +659,22 @@ namespace Continuum_Windows_Testing_Agent
                 switch (this.testBrowser.getInternalName())
                 {
                     case "chrome":
-                        this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                        this.webDriver = new RemoteWebDriver(DesiredCapabilities.Chrome());
                         break;
                     case "firefox":
-                        this.webDriver = new OpenQA.Selenium.Firefox.FirefoxDriver();
+                        this.webDriver = new RemoteWebDriver(DesiredCapabilities.Firefox());
                         break;
                     case "googlechrome":
-                        this.webDriver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                        this.webDriver = new RemoteWebDriver(DesiredCapabilities.Chrome());
                         break;
                     case "iexplore":
-                        this.webDriver = new OpenQA.Selenium.IE.InternetExplorerDriver();
+                        this.webDriver = new RemoteWebDriver(DesiredCapabilities.InternetExplorer());
                         break;
                     case "iphone":
                         DesiredCapabilities remoteCap = new DesiredCapabilities();
                         this.webDriver = new RemoteWebDriver(
                             new Uri("http://" + this.testBrowser.getHostname() + ":" + this.testBrowser.getPort() + "/hub/"),
-                            remoteCap
+                            DesiredCapabilities.IPhone()
                         );
                         break;
                     default:
@@ -770,7 +770,6 @@ namespace Continuum_Windows_Testing_Agent
             }
             this.Dispose();
         }
-
 
         private void initSeleneseCommands()
         {

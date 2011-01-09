@@ -1,19 +1,11 @@
-﻿Build started 12/15/2010 4:08:34 PM.
-     1>Project "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions.vcxproj" on node 3 (rebuild target(s)).
-     1>PrepareForBuild:
-         Creating directory "C:\Users\jorcutt\Documents\CTM-Windows-Agent\x64\Debug\".
-       InitializeBuildStatus:
+﻿Build started 1/6/2011 10:30:28 AM.
+     1>Project "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions.vcxproj" on node 3 (build target(s)).
+     1>InitializeBuildStatus:
          Creating "x64\Debug\WebDriver.Interactions.x64.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /I"..\..\..\..\common\src\cpp\webdriver-interactions" /Zi /nologo /W3 /WX- /Od /D _UNICODE /D UNICODE /D _ATL_STATIC_REGISTRY /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc100.pdb" /Gd /TP /errorReport:prompt interaction_utils.cpp interactions.cpp
-         interactions.cpp
-     1>interactions.cpp(713): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>interactions.cpp(714): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-         interaction_utils.cpp
-         Generating Code...
+         All outputs are up-to-date.
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\jorcutt\Documents\CTM-Windows-Agent\x64\Debug\WebDriver.Interactions.x64.lib" /NOLOGO x64\Debug\interaction_utils.obj
-         x64\Debug\interactions.obj
+         All outputs are up-to-date.
          webdriver-interactions.vcxproj -> C:\Users\jorcutt\Documents\CTM-Windows-Agent\x64\Debug\WebDriver.Interactions.x64.lib
        PostBuildEvent:
          copy /Y "C:\Users\jorcutt\Documents\CTM-Windows-Agent\x64\Debug\WebDriver.Interactions.x64.lib" "C:\Users\jorcutt\Documents\CTM-Windows-Agent\x64\Debug\..\.."
@@ -22,8 +14,8 @@
        FinalizeBuildStatus:
          Deleting file "x64\Debug\WebDriver.Interactions.x64.unsuccessfulbuild".
          Touching "x64\Debug\WebDriver.Interactions.x64.lastbuildstate".
-     1>Done Building Project "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions.vcxproj" (rebuild target(s)).
+     1>Done Building Project "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:07.38
+Time Elapsed 00:00:00.74

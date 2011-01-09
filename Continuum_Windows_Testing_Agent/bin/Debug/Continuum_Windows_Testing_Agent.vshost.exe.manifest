@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1">
-  <asmv1:assemblyIdentity name="Continuum_Windows_Testing_Agent.exe" version="1.0.0.39" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
+  <asmv1:assemblyIdentity name="Continuum_Windows_Testing_Agent.exe" version="1.0.0.42" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.4001.42200" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.4024.29715" language="neutral" processorArchitecture="msil" />
     <commandLine file="Continuum_Windows_Testing_Agent.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Continuum_Windows_Testing_Agent.exe" size="119296">
-      <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.4001.42200" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Continuum_Windows_Testing_Agent.exe" size="120320">
+      <assemblyIdentity name="Continuum_Windows_Testing_Agent" version="1.0.4024.29715" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>/clZIsEbKhtTEqbhZJdL7sVffdM=</dsig:DigestValue>
+        <dsig:DigestValue>D6ynq9+6owwtYtgEbngQG2BZob0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -78,18 +78,6 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Ionic.Zip.Reduced.dll" size="197120">
-      <assemblyIdentity name="Ionic.Zip.Reduced" version="1.9.1.1" publicKeyToken="EDBE51AD942A3F5C" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ay9y6ifEf7Rl5QNokyGO7ArRFhw=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="319488">
       <assemblyIdentity name="Newtonsoft.Json" version="3.5.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -102,74 +90,38 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Chrome.dll" size="155648">
-      <assemblyIdentity name="WebDriver.Chrome" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>DwgXsQOvXOqy1+NGXupFDryWbZg=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Common.dll" size="26624">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Common.dll" size="31232">
       <assemblyIdentity name="WebDriver.Common" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>rTQQMNY6WJvDH6qkKjGpI3XfzDw=</dsig:DigestValue>
+        <dsig:DigestValue>DDu6Cd05uVTrz2iknMOzOg8yEHQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Firefox.dll" size="507904">
-      <assemblyIdentity name="WebDriver.Firefox" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>kBosOGdqPKny/itO53w5WuwT7u8=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.IE.dll" size="64000">
-      <assemblyIdentity name="WebDriver.IE" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>XWjjrZUpHuZ3YSjfO+6ODUxTZo8=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Remote.dll" size="24064">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Remote.dll" size="23552">
       <assemblyIdentity name="WebDriver.Remote" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>A7/hQDzaT3LEkF797IKQ29Dd7eU=</dsig:DigestValue>
+        <dsig:DigestValue>DP7i/cs1L5UWByfTs0lUb/fKvm0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Remote.Common.dll" size="24064">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebDriver.Remote.Common.dll" size="23040">
       <assemblyIdentity name="WebDriver.Remote.Common" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>5fl4g41/dNxA17+F7qiXm+fO4Us=</dsig:DigestValue>
+        <dsig:DigestValue>uQbMGxS0SJmCQASTqvvLeSw9w1U=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -191,22 +143,13 @@
       <dsig:DigestValue>oWxHxZEZu2KSGsUbj6p7JfacKn4=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="WebDriver.InternetExplorerDriver.x64.dll" size="1990144">
+  <file name="selenium-server-standalone-2.0b1.jar" size="19421486">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>lCxIKEFtk0LLphagau4Qd4E+KOw=</dsig:DigestValue>
-    </hash>
-  </file>
-  <file name="WebDriver.InternetExplorerDriver.x86.dll" size="1587200">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>0KFtIl0DZY5FvJUZBJHU4vi1RdM=</dsig:DigestValue>
+      <dsig:DigestValue>+n+qH3uhDgDJs4fUmoMUnjIGa2g=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

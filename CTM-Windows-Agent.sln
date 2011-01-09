@@ -2,12 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTM-Windows-Agent", "Continuum_Windows_Testing_Agent\CTM-Windows-Agent.csproj", "{EEE80527-F194-4E7B-84F5-5F4AA83A4288}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0BC72326-88BE-4369-9077-74AA7B2BE15D} = {0BC72326-88BE-4369-9077-74AA7B2BE15D}
-		{ABB9B87F-FEEA-410E-ACBF-26479B8C72B0} = {ABB9B87F-FEEA-410E-ACBF-26479B8C72B0}
-		{32122F8D-CD64-495A-B9B0-5516FF67C79F} = {32122F8D-CD64-495A-B9B0-5516FF67C79F}
-		{C2A1DAE4-BB20-4367-8ADC-D32EEA392D17} = {C2A1DAE4-BB20-4367-8ADC-D32EEA392D17}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDriver.Remote", "Continuum_Windows_Testing_Agent\Vendor\webdriver-remote-client\WebDriver.Remote.csproj", "{32122F8D-CD64-495A-B9B0-5516FF67C79F}"
 EndProject
@@ -21,16 +15,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDriver.IE", "Continuum_W
 		{E6752484-5E6F-46CC-9C33-82140E18EB0B} = {E6752484-5E6F-46CC-9C33-82140E18EB0B}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InternetExplorerDriver.x64", "Continuum_Windows_Testing_Agent\Vendor\jobbie\src\cpp\InternetExplorerDriver\InternetExplorerDriver.vcxproj", "{0BC72326-88BE-4369-9077-74AA7B2BE15D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebDriver.InternetExplorerDriver.x64", "Continuum_Windows_Testing_Agent\Vendor\jobbie\src\cpp\InternetExplorerDriver\InternetExplorerDriver.vcxproj", "{0BC72326-88BE-4369-9077-74AA7B2BE15D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{87FA39A1-958E-478A-8AB9-6D5E5AAA3886} = {87FA39A1-958E-478A-8AB9-6D5E5AAA3886}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webdriver-interactions.x64", "Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions.vcxproj", "{87FA39A1-958E-478A-8AB9-6D5E5AAA3886}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebDriver.Interactions.x64", "Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions.vcxproj", "{87FA39A1-958E-478A-8AB9-6D5E5AAA3886}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webdriver-interactions.x86", "Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions-x86.vcxproj", "{99248A7F-FBD7-46D1-AB1B-43944855469B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebDriver.Interactions.x86", "Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions-x86.vcxproj", "{99248A7F-FBD7-46D1-AB1B-43944855469B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InternetExplorerDriver.x86", "Continuum_Windows_Testing_Agent\Vendor\jobbie\src\cpp\InternetExplorerDriver\InternetExplorerDriver-x86.vcxproj", "{E6752484-5E6F-46CC-9C33-82140E18EB0B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebDriver.InternetExplorerDriver.x86", "Continuum_Windows_Testing_Agent\Vendor\jobbie\src\cpp\InternetExplorerDriver\InternetExplorerDriver-x86.vcxproj", "{E6752484-5E6F-46CC-9C33-82140E18EB0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

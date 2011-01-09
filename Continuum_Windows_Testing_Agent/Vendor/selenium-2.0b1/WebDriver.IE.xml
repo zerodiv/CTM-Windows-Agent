@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebDriver.IE</name>
+    </assembly>
+    <members>
+        <member name="T:OpenQA.Selenium.IE.InternetExplorerDriver">
+            <summary>
+            Provides a way to access Internet Explorer to run your tests by creating a InternetExplorerDriver instance
+            </summary>
+            <remarks>
+            When the WebDriver object has been instantiated the browser will load. The test can then navigate to the URL under test and 
+            start your test.
+            </remarks>
+            <example>
+            <code>
+            [TestFixture]
+            public class Testing
+            {
+                private IWebDriver driver;
+                <para></para>
+                [SetUp]
+                public void SetUp()
+                {
+                    driver = new InternetExplorerDriver();
+                }
+                <para></para>
+                [Test]
+                public void TestGoogle()
+                {
+                    driver.Navigate().GoToUrl("http://www.google.co.uk");
+                    /*
+                    *   Rest of the test
+                    */
+                }
+                <para></para>
+                [TearDown]
+                public void TearDown()
+                {
+                    driver.Quit();
+                    driver.Dispose();
+                } 
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerDriver.#ctor">
+            <summary>
+            Initializes a new instance of the InternetExplorerDriver class.
+            </summary>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerDriver.StartClient">
+            <summary>
+            Starts the command executor, enabling communication with the browser.
+            </summary>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerDriver.StopClient">
+            <summary>
+            Stops the command executor, ending further communication with the browser.
+            </summary>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerDriver.FindElementByCssSelector(System.String)">
+            <summary>
+            Finds the first element matching the specified CSS selector.
+            </summary>
+            <param name="cssSelector">The CSS selector to match.</param>
+            <returns>The first <see cref="T:OpenQA.Selenium.IWebElement"/> matching the criteria.</returns>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerDriver.FindElementsByCssSelector(System.String)">
+            <summary>
+            Finds all elements matching the specified CSS selector.
+            </summary>
+            <param name="cssSelector">The CSS selector to match.</param>
+            <returns>A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1"/> containing all
+            <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> matching the criteria.</returns>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerDriver.CreateElement(System.String)">
+            <summary>
+            Creates a <see cref="T:OpenQA.Selenium.Remote.RemoteWebElement"/> with the specified ID.
+            </summary>
+            <param name="elementId">The ID of this element.</param>
+            <returns>A <see cref="T:OpenQA.Selenium.Remote.RemoteWebElement"/> with the specified ID. For the InternetExplorerDriver this will be an <see cref="T:OpenQA.Selenium.IE.InternetExplorerWebElement"/>.</returns>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerDriver.GetScreenshot">
+            <summary>
+            Gets a <see cref="T:OpenQA.Selenium.Screenshot"/> object representing the image of the page on the screen.
+            </summary>
+            <returns>A <see cref="T:OpenQA.Selenium.Screenshot"/> object containing the image.</returns>
+        </member>
+        <member name="T:OpenQA.Selenium.IE.InternetExplorerWebElement">
+            <summary>
+            InternetExplorerWebElement allows you to have access to specific items that are found on the page.
+            </summary>
+            <seealso cref="T:OpenQA.Selenium.IRenderedWebElement"/>
+            <seealso cref="T:OpenQA.Selenium.ILocatable"/>
+            <example>
+            <code>
+            [Test]
+            public void TestGoogle()
+            {
+                driver = new InternetExplorerDriver();
+                InternetExplorerWebElement elem = driver.FindElement(By.Name("q"));
+                elem.SendKeys("Cheese please!");
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerWebElement.#ctor(OpenQA.Selenium.IE.InternetExplorerDriver,System.String)">
+            <summary>
+            Initializes a new instance of the InternetExplorerWebElement class.
+            </summary>
+            <param name="parent">Driver in use.</param>
+            <param name="id">ID of the element.</param>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerWebElement.FindElementByCssSelector(System.String)">
+            <summary>
+            Finds the first child element matching the specified CSS selector.
+            </summary>
+            <param name="cssSelector">The CSS selector to match.</param>
+            <returns>The first child <see cref="T:OpenQA.Selenium.IWebElement"/> matching the criteria.</returns>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.InternetExplorerWebElement.FindElementsByCssSelector(System.String)">
+            <summary>
+            Finds all child elements matching the specified CSS selector.
+            </summary>
+            <param name="cssSelector">The CSS selector to match.</param>
+            <returns>A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1"/> containing all child
+            <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> matching the criteria.</returns>
+        </member>
+        <member name="T:OpenQA.Selenium.IE.NativeDriverLibrary">
+            <summary>
+            Provides a wrapper for the native-code Internet Explorer driver library.
+            </summary>
+        </member>
+        <member name="M:OpenQA.Selenium.IE.NativeDriverLibrary.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:OpenQA.Selenium.IE.NativeDriverLibrary"/> class from being created.
+            </summary>
+            <remarks>This is a singleton class, so it does not require instantiation by consumers. They
+            should use the Instance property instead.</remarks>
+        </member>
+        <member name="P:OpenQA.Selenium.IE.NativeDriverLibrary.Instance">
+            <summary>
+            Gets the singleton instance of the <see cref="T:OpenQA.Selenium.IE.NativeDriverLibrary"/> class.
+            </summary>
+        </member>
+        <member name="T:OpenQA.Selenium.IE.NativeMethods">
+            <summary>
+            Provides entry points into needed unmanaged APIs.
+            </summary>
+        </member>
+    </members>
+</doc>

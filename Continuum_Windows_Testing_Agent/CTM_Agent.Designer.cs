@@ -330,6 +330,7 @@
             this.Controls.Add(this.groupBox2);
             this.Name = "CTM_Agent";
             this.Text = "Continuum Windows Testing Agent";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CTM_Agent_FormClosing);
             this.Load += new System.EventHandler(this.CTM_Agent_Load_1);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();

@@ -1,8 +1,6 @@
-﻿Build started 12/15/2010 4:08:33 PM.
-     1>Project "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions-x86.vcxproj" on node 2 (rebuild target(s)).
-     1>PrepareForBuild:
-         Creating directory "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Debug\".
-       InitializeBuildStatus:
+﻿Build started 1/6/2011 10:30:28 AM.
+     1>Project "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions-x86.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
          Creating "Debug\WebDriver.Interactions.x86.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"..\..\..\..\common\src\cpp\webdriver-interactions" /ZI /nologo /W3 /WX- /Od /Oy- /D _UNICODE /D UNICODE /D _ATL_STATIC_REGISTRY /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt interaction_utils.cpp interactions.cpp
@@ -22,8 +20,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\WebDriver.Interactions.x86.unsuccessfulbuild".
          Touching "Debug\WebDriver.Interactions.x86.lastbuildstate".
-     1>Done Building Project "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions-x86.vcxproj" (rebuild target(s)).
+     1>Done Building Project "C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\Vendor\webdriver-common-cpp\webdriver-interactions\webdriver-interactions-x86.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:05.90
+Time Elapsed 00:00:10.71

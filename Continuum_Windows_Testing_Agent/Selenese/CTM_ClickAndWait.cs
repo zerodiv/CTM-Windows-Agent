@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium;
 using Continuum_Windows_Testing_Agent;
-using OpenQA.Selenium.IE;
+// using OpenQA.Selenium.IE;
 using System.Threading;
 
 // JEO: ClickAndWait support via our own code.
@@ -28,10 +28,13 @@ namespace Selenium.Internal.SeleniumEmulation
 
             element.Click();
 
+            // TODO: Upgraded to the remote caller interface, might need to deprecate this.
+            /*
             if (driver.GetType().Name == "InternetExplorerDriver")
             {
                 ((InternetExplorerDriver)driver).WaitForLoadToComplete();
             }
+            */
 
             /*
             // This is a IE specific hack to help with the page waiting issues we've been battling.

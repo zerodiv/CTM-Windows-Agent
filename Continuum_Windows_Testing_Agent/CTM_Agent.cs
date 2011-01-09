@@ -10,6 +10,7 @@ using System.Net;
 using System.Collections.Specialized;
 using System.Xml;
 using OpenQA.Selenium;
+using System.Diagnostics;
 
 namespace Continuum_Windows_Testing_Agent
 {
@@ -32,6 +33,8 @@ namespace Continuum_Windows_Testing_Agent
         private Dictionary<string, CTM_WebBrowser> webBrowsers;
   
         private CTM_Test currentTest;
+
+        private Process javaServerContainer;
 
         #endregion Private Variables
 
@@ -81,6 +84,9 @@ namespace Continuum_Windows_Testing_Agent
 
             InitializeComponent();
 
+            // Start the java serverlet
+            this.startJavaServer();
+
             this.ctmClient = new WebClient();
             this.ctmClient.UploadValuesCompleted += new UploadValuesCompletedEventHandler(requestWork_Completed);
 
@@ -89,6 +95,35 @@ namespace Continuum_Windows_Testing_Agent
             
             
         }
+
+        private void startJavaServer() {
+
+            try
+            {
+                ProcessStartInfo jsServerInfo = new ProcessStartInfo();
+
+                jsServerInfo.FileName = "java";
+                jsServerInfo.Arguments = "-jar \"" + Application.StartupPath + "\\selenium-server-standalone-2.0b1.jar\" -trustAllSSLCertificates";
+
+                this.log.message("java backend command: " + jsServerInfo.FileName + jsServerInfo.Arguments);
+
+                // jsSeverInfo.CreateNoWindow = true;
+                // jsSeverInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+                this.javaServerContainer = new Process();
+                this.javaServerContainer.StartInfo = jsServerInfo;
+                this.javaServerContainer.Start();
+
+            }
+            catch (Exception ex)
+            {
+                this.log.message("Failed to startup your java based server all services will not work: " + ex.Message);
+            }
+
+            this.updateLastRunLogBox(this.log.getLastLogLines());
+
+        }
+
         #endregion Constructor
 
         #region Registry Settings
@@ -656,6 +691,14 @@ namespace Continuum_Windows_Testing_Agent
             String pollUrl = "http://" + this.ctmHostname + "/agent/poll/";
             ctmClient.UploadValuesAsync(new Uri(pollUrl), postValues);
 
+        }
+
+        private void CTM_Agent_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.javaServerContainer != null)
+            {
+                this.javaServerContainer.Kill();
+            }
         }
 
         

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium;
-using OpenQA.Selenium.IE;
+// using OpenQA.Selenium.IE;
 using Continuum_Windows_Testing_Agent;
 
 namespace Selenium.Internal.SeleniumEmulation
@@ -27,10 +27,13 @@ namespace Selenium.Internal.SeleniumEmulation
 
                 element.Click();
 
+                // TODO: Upgraded to the remote caller interface, might need to deprecate this.
+                /*
                 if (driver.GetType().Name == "InternetExplorerDriver")
                 {
                     ((InternetExplorerDriver)driver).WaitForLoadToComplete();
                 }
+                */
 
             }
             catch
