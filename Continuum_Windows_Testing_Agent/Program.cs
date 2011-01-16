@@ -28,7 +28,10 @@ namespace Continuum_Windows_Testing_Agent
         {
             try
             {
-                MessageBox.Show("Whoops, your configuration for CTM is causing a exception to fire. This is generally due to either loss of network connectivity or lack of disk space. Error message: " + ((Exception)e.ExceptionObject).Message,
+                MessageBox.Show(
+                    "Whoops, your configuration for CTM is causing a exception to fire. " +
+                    "This is generally due to either loss of network connectivity or lack of disk space. " +
+                    "Error message: " + ((Exception)e.ExceptionObject).Message,
                     "Hard Error", 
                     MessageBoxButtons.OK);
             }

@@ -18,6 +18,7 @@ using Selenium.Internal.SeleniumEmulation;
 using Continuum_Windows_Testing_Agent.Selenese;
 using System.Text.RegularExpressions;
 using OpenQA.Selenium.Remote;
+using System.Diagnostics;
 
 namespace Continuum_Windows_Testing_Agent
 {
@@ -56,6 +57,8 @@ namespace Continuum_Windows_Testing_Agent
         private ArrayList testCommands;
 
         private IJavaScriptExecutor jsExecutor;
+
+        private CTM_Java_Server javaServer;
 
         #endregion Private Variables
 
@@ -264,7 +267,7 @@ namespace Continuum_Windows_Testing_Agent
                         int nextRow = rowId + 1;
 
                         this.activeTestGrid.Rows[rowId].Selected = false;
-                         
+
                         if (nextRow <= this.activeTestGrid.RowCount)
                         {
                             this.activeTestGrid.Rows[nextRow].Selected = true;
@@ -645,17 +648,118 @@ namespace Continuum_Windows_Testing_Agent
         }
         #endregion Test File Manipulation
 
+        private void reapRunningBrowsers()
+        {
+            while (this.isBrowserStillRunning())
+            {
+                Process[] processList = Process.GetProcesses();
+
+                String browserName = this.testBrowser.getProcessName();
+                Regex browserReg = new Regex(browserName, RegexOptions.IgnoreCase);
+                foreach (Process p in processList)
+                {
+
+                    if (browserReg.IsMatch(p.ProcessName))
+                    {
+                        try
+                        {
+                            p.Kill();
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
+                System.Threading.Thread.Sleep(5000);
+            }
+        }
+
+        private Boolean isBrowserStillRunning()
+        {
+            Process[] processList = Process.GetProcesses();
+
+            String browserName = this.testBrowser.getProcessName();
+            Regex browserReg = new Regex(browserName, RegexOptions.IgnoreCase);
+            Boolean stillRunning = false;
+            foreach (Process p in processList)
+            {
+
+                if (browserReg.IsMatch(p.ProcessName))
+                {
+                    // Browser is still running... 
+                    stillRunning = true;
+                }
+
+            }
+            return stillRunning;
+        }
+
+        public string getJavaServerLog()
+        {
+            // Quit any running webdrivers.
+            // If the java service is still up call quit.
+
+            if (this.webDriver != null)
+            {
+                try
+                {
+                    this.webDriver.Quit();
+                }
+                catch
+                {
+                }
+                this.webDriver = null;
+            }
+
+            
+                try
+                {
+             
+                    // We want to watch for the local driver to exit
+                    Boolean browserRunning = true;
+                    int browserRunningTimeout = 0;
+
+                    while (browserRunning == true && browserRunningTimeout < 60)
+                    {
+                        browserRunning = this.isBrowserStillRunning();
+
+                        if (browserRunning == true)
+                        {
+                            System.Threading.Thread.Sleep(1000);
+                            browserRunningTimeout++;
+                        }
+
+                    }
+
+                    if (browserRunning == true)
+                    {
+                        this.reapRunningBrowsers();
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            
+            this.webDriver = null;
+
+
+            return this.javaServer.getLog();
+        }
+
         private Boolean initWebDriver()
         {
+
             if (this.webDriver != null)
             {
                 return true;
             }
 
-            // start up the requested browser.
             try
             {
+                // Start the java instance up.
+                this.javaServer = new CTM_Java_Server(Application.StartupPath, false);
 
+                // start up the requested browser.
                 switch (this.testBrowser.getInternalName())
                 {
                     case "chrome":
@@ -681,14 +785,19 @@ namespace Continuum_Windows_Testing_Agent
                         return false;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                this.log.insertTestComment("Failed to startup web browser session: " + ex.Message);
             }
 
             // TODO: We should pull this up to the top level init, but the log() requirement 
             // prevents this right now.
             this.initSeleneseCommands();
 
+            /*
+            // 01/12/2011
+            // JEO: Disabling this resizer as of selenium release 2.0b1 they already load a start page 
+            // and resize the window fully.
             // JEO: This is a ghetto hack to help prevent issues where IE does not allow you to 
             // click on non-visibile elements. This can crop up pretty often and hopefully will
             // be fixed in later versions of Web Driver.
@@ -696,7 +805,7 @@ namespace Continuum_Windows_Testing_Agent
 
             OpenQA.Selenium.IJavaScriptExecutor jsExecutor = (OpenQA.Selenium.IJavaScriptExecutor)webDriver;
             jsExecutor.ExecuteScript("if(window.screen){window.moveTo(0,0);window.resizeTo(window.screen.availWidth, window.screen.availHeight);};");
-
+            */
             return true;
 
         }
@@ -760,14 +869,12 @@ namespace Continuum_Windows_Testing_Agent
             {
                 Directory.Delete(this.tempTestDir, true);
             }
+
             if (File.Exists(this.tempZipFile) == true)
             {
                 File.Delete(this.tempZipFile);
             }
-            if (this.webDriver != null)
-            {
-                this.webDriver.Quit();
-            }
+
             this.Dispose();
         }
 
@@ -905,7 +1012,7 @@ namespace Continuum_Windows_Testing_Agent
             }
 
             MatchCollection matches = Regex.Matches(javascriptValue, @"javascript{(.*?)}");
-            
+
             if (matches.Count == 0)
             {
                 return javascriptValue;
@@ -919,7 +1026,7 @@ namespace Continuum_Windows_Testing_Agent
             foreach (Match match in matches)
             {
                 String js = match.Groups[1].Value;
-                
+
                 // quick fix for people forgetting to do a return.
                 if (js.Contains("return") == false)
                 {
@@ -933,7 +1040,7 @@ namespace Continuum_Windows_Testing_Agent
 
                 if (this.jsExecutor.IsJavaScriptEnabled == true)
                 {
-                   String val = this.jsExecutor.ExecuteScript(js).ToString();
+                    String val = this.jsExecutor.ExecuteScript(js).ToString();
                     javascriptValue = javascriptValue.Replace(
                         "javascript{" + match.Groups[1].ToString() + "}",
                         val
@@ -961,9 +1068,9 @@ namespace Continuum_Windows_Testing_Agent
             return testCommand;
         }
 
-        public Boolean processSelenese(Selenium_Test_Trinome testCommand, int testCmdCnt )
+        public Boolean processSelenese(Selenium_Test_Trinome testCommand, int testCmdCnt)
         {
-            
+
             DateTime startTime = System.DateTime.UtcNow;
             DateTime stopTime = System.DateTime.UtcNow;
 
@@ -1008,7 +1115,7 @@ namespace Continuum_Windows_Testing_Agent
                 String message = "Working...";
 
                 this.updateCommandStatus(testCommand.getId(), -1, startTime, stopTime, message);
-               
+
                 try
                 {
                     DateTime s1 = System.DateTime.UtcNow;
@@ -1018,8 +1125,8 @@ namespace Continuum_Windows_Testing_Agent
                     stopTime = System.DateTime.UtcNow;
                     this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
 
-                    this.waitForNextCommandTarget(testCommand, testCmdCnt, startTime, stopTime );
-                    
+                    this.waitForNextCommandTarget(testCommand, testCmdCnt, startTime, stopTime);
+
                     return true;
                 }
                 catch (Exception e)
@@ -1089,14 +1196,15 @@ namespace Continuum_Windows_Testing_Agent
 
                     // Run the commands.
 
-                   for( int testCmdCnt = 0; testCmdCnt < this.testCommands.Count; testCmdCnt++ ) {
-                       Selenium_Test_Trinome testCommand = (Selenium_Test_Trinome) this.testCommands[testCmdCnt];
+                    for (int testCmdCnt = 0; testCmdCnt < this.testCommands.Count; testCmdCnt++)
+                    {
+                        Selenium_Test_Trinome testCommand = (Selenium_Test_Trinome)this.testCommands[testCmdCnt];
 
                         this.testLocker.WaitOne();
 
                         Boolean selReturn = this.processSelenese(testCommand, testCmdCnt);
 
-                        
+
 
                         if (this.haltOnError == true && selReturn == false)
                         {
@@ -1119,19 +1227,29 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
-        private void waitForNextCommandTarget(Selenium_Test_Trinome testCommand, int testCmdCnt, DateTime startTime, DateTime stopTime )
+        private void waitForNextCommandTarget(Selenium_Test_Trinome testCommand, int testCmdCnt, DateTime startTime, DateTime stopTime)
         {
-           if (testCommand.getCommand() == "click" ||
-                testCommand.getCommand() == "clickAndWait" ||
-                testCommand.getCommand() == "open")
+            ArrayList blockingCommands = new ArrayList();
+            blockingCommands.Add("click");
+            blockingCommands.Add("clickAndWait");
+            blockingCommands.Add("open");
+
+            ArrayList nextCommandLimiters = new ArrayList();
+            nextCommandLimiters.Add("open");
+            nextCommandLimiters.Add("verifyTextPresent");
+            nextCommandLimiters.Add("assertTextPresent");
+            nextCommandLimiters.Add("waitForPageToLoad"); // This is somewhat implicit with our new design.
+
+            if (blockingCommands.Contains(testCommand.getCommand()))
             {
+
                 // Find the next valid command.
                 Selenium_Test_Trinome nextCommand = this.findNextTestCommand(testCmdCnt);
 
                 int tout = 60;
 
                 // JEO: Pretty sure we need to limit this here to type and other commands
-                if (nextCommand != null && nextCommand.getCommand() != "open")
+                if (nextCommand != null && nextCommandLimiters.Contains(nextCommand.getCommand()) == false)
                 {
                     for (int i = 0; i < tout; i++)
                     {
@@ -1140,39 +1258,39 @@ namespace Continuum_Windows_Testing_Agent
                         this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "Waiting for next target..");
 
                         try
+                        {
+                            IWebElement elem = this.elementFinder.FindElement(this.webDriver, nextCommand.getTarget());
+                            if (elem != null)
                             {
-                                IWebElement elem = this.elementFinder.FindElement(this.webDriver, nextCommand.getTarget());
-                                if (elem != null)
-                                {
 
-                                    stopTime = System.DateTime.UtcNow;
-                                    this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
-                                    return;
-                                }
-                                else
-                                {
-                                    System.Threading.Thread.Sleep(1000);
-                                }
+                                stopTime = System.DateTime.UtcNow;
+                                this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
+                                return;
                             }
-                            catch
+                            else
                             {
-                                // It's okay if this fails we won't do anyting with it anyways.
+                                System.Threading.Thread.Sleep(1000);
                             }
-                        
+                        }
+                        catch
+                        {
+                            // It's okay if this fails we won't do anyting with it anyways.
+                        }
+
                     }
 
                     stopTime = System.DateTime.UtcNow;
-                    this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, "Failed to find the next element within " + tout + " seconds");
+                    this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, "Failed to find the next element within " + tout + " seconds nextCommand.Target: " + nextCommand.getTarget());
                     this.testHadError = true;
                     return;
 
                 } // Skinning the cat differntly by avoiding the use of waiter()
 
- 
-           }
+
+            }
 
 
-           return;
+            return;
         }
 
         private Selenium_Test_Trinome findNextTestCommand(int offset)
@@ -1184,7 +1302,7 @@ namespace Continuum_Windows_Testing_Agent
                 Selenium_Test_Trinome command = (Selenium_Test_Trinome)this.testCommands[i];
                 if (command.getCommand() != ":comment:" &&
                     command.getCommand() != "store" &&
-                    command.getCommand() != "pause" )
+                    command.getCommand() != "pause")
                 {
                     return command;
                 }

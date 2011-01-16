@@ -39,6 +39,7 @@ namespace Continuum_Windows_Testing_Agent
             browser.setIsRemote(true);
             browser.setInternalName("android");
             browser.setPrettyName("Google Android");
+            //browser.setProcessName("");
             return browser;
         }
 
@@ -140,6 +141,7 @@ namespace Continuum_Windows_Testing_Agent
             CTM_WebBrowser browser = new CTM_WebBrowser();
             browser.setInternalName("firefox");
             browser.setPrettyName("Mozilla Firefox");
+            browser.setProcessName("firefox");
 
             String versionData = null;
 
@@ -179,6 +181,7 @@ namespace Continuum_Windows_Testing_Agent
             CTM_WebBrowser browser = new CTM_WebBrowser();
             browser.setInternalName("iexplore");
             browser.setPrettyName("Internet Explorer");
+            browser.setProcessName("iexplore");
 
             RegistryKey dkey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Internet Explorer");
             if (dkey != null)

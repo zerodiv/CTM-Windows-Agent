@@ -34,8 +34,6 @@ namespace Continuum_Windows_Testing_Agent
   
         private CTM_Test currentTest;
 
-        private Process javaServerContainer;
-
         #endregion Private Variables
 
         #region Constructor
@@ -98,27 +96,6 @@ namespace Continuum_Windows_Testing_Agent
 
         private void startJavaServer() {
 
-            try
-            {
-                ProcessStartInfo jsServerInfo = new ProcessStartInfo();
-
-                jsServerInfo.FileName = "java";
-                jsServerInfo.Arguments = "-jar \"" + Application.StartupPath + "\\selenium-server-standalone-2.0b1.jar\" -trustAllSSLCertificates";
-
-                this.log.message("java backend command: " + jsServerInfo.FileName + jsServerInfo.Arguments);
-
-                // jsSeverInfo.CreateNoWindow = true;
-                // jsSeverInfo.WindowStyle = ProcessWindowStyle.Hidden;
-
-                this.javaServerContainer = new Process();
-                this.javaServerContainer.StartInfo = jsServerInfo;
-                this.javaServerContainer.Start();
-
-            }
-            catch (Exception ex)
-            {
-                this.log.message("Failed to startup your java based server all services will not work: " + ex.Message);
-            }
 
             this.updateLastRunLogBox(this.log.getLastLogLines());
 
@@ -506,7 +483,7 @@ namespace Continuum_Windows_Testing_Agent
                 // TODO: jeo - we need to make a better timeElapsed tracker.
                 // resultPostValues.Add("testDuration", workRunnerObj.timeElapsed.ToString());
                 resultPostValues.Add("testStatus", this.currentTest.getTestHadError().ToString());
-                resultPostValues.Add("runLog", "");
+                resultPostValues.Add("runLog", this.currentTest.getJavaServerLog());
                 resultPostValues.Add("seleniumLog", this.currentTest.getSeleniumTestLog().getLogContents());
 
                 String logUrl = "http://" + this.ctmHostname + "/et/log/";
@@ -695,10 +672,12 @@ namespace Continuum_Windows_Testing_Agent
 
         private void CTM_Agent_FormClosing(object sender, FormClosingEventArgs e)
         {
+            /*
             if (this.javaServerContainer != null)
             {
                 this.javaServerContainer.Kill();
             }
+            */
         }
 
         

@@ -21,6 +21,7 @@ namespace Continuum_Windows_Testing_Agent
         private string hostname;
         private int port;
         private int gridRowId;
+        private string processName;
 
         public CTM_WebBrowser()
         {
@@ -34,7 +35,7 @@ namespace Continuum_Windows_Testing_Agent
             this.hostname = "";
             this.port = 8080;
             this.gridRowId = -1;
-
+            this.processName = "foo.exe";
         }
 
         public Boolean getIsRemote()
@@ -133,6 +134,16 @@ namespace Continuum_Windows_Testing_Agent
         public void setGridRowId(int rowId)
         {
             this.gridRowId = rowId;
+        }
+
+        public void setProcessName(string processName)
+        {
+            this.processName = processName;
+        }
+
+        public string getProcessName()
+        {
+            return this.processName;
         }
 
         public void verify()

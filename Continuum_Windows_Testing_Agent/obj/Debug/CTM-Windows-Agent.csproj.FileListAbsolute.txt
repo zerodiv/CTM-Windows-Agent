@@ -62,8 +62,6 @@ C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2010\Projects\C
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2010\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj\Debug\Continuum_Windows_Testing_Agent.application
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2010\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\htmlutils.js
 C:\Documents and Settings\adicioadmin\My Documents\Visual Studio 2010\Projects\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\injectableSelenium.js
-C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\htmlutils.js
-C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\injectableSelenium.js
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.exe.manifest
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.application
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\Continuum_Windows_Testing_Agent.exe
