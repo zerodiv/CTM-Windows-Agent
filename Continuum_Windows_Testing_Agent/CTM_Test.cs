@@ -892,6 +892,8 @@ namespace Continuum_Windows_Testing_Agent
             this.seleneseMethods.Add("isTextPresent", new CTM_IsTextPresent());
             this.seleneseMethods.Add("open", new CTM_Open());                                                   // Modified functionality to support param carry over and pageload wait.
             this.seleneseMethods.Add("pause", new CTM_Pause());                                                 // New (Might not be thread safe)
+            // this.seleneseMethods.Add("select", new SelectOption(this.select));
+            this.seleneseMethods.Add("select", new CTM_AddSelection(this.elementFinder));
             this.seleneseMethods.Add("store", new CTM_Store(this.testVariables));                               // New our version of store has to talk to the local testVariables stack.
             this.seleneseMethods.Add("type", new CTM_Type(elementFinder, this.keyState));                       // Removed the javascript based replacement. 
             this.seleneseMethods.Add("verifyTextPresent", new CTM_IsTextPresent());                             // reused from mainline code.
@@ -976,7 +978,6 @@ namespace Continuum_Windows_Testing_Agent
             this.seleneseMethods.Add("removeAllSelections", new RemoveAllSelections(this.elementFinder));
             this.seleneseMethods.Add("removeSelection", new RemoveSelection(this.elementFinder, this.select));
             //seleneseMethods.Add("runScript", new RunScript());
-            this.seleneseMethods.Add("select", new SelectOption(this.select));
             //seleneseMethods.Add("selectFrame", new SelectFrame(windows));
             //seleneseMethods.Add("selectWindow", new SelectWindow(windows));
             //seleneseMethods.Add("setBrowserLogLevel", new NoOp(null));
