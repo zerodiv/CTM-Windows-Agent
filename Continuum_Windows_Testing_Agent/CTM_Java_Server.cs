@@ -15,9 +15,16 @@ namespace Continuum_Windows_Testing_Agent
         private Boolean isDisplayed;
         private String logFile;
         private Process javaServerContainer;
+        private String jarFile;
 
         public CTM_Java_Server(String appPath, Boolean isDisplayed)
         {
+            // Current release.
+            // this.jarFile = "selenium-server-standalone-2.0b1.jar";
+            
+            // CTM Release
+            this.jarFile = "selenium-server-CTM-20110125.jar";
+
             this.appPath = appPath;
             this.isDisplayed = isDisplayed;
 
@@ -44,7 +51,7 @@ namespace Continuum_Windows_Testing_Agent
             this.logFile = System.IO.Path.GetTempFileName();
 
             StringBuilder commandLineParams = new StringBuilder();
-            commandLineParams.Append(" -jar \"" + this.appPath + "\\selenium-server-standalone-2.0b1.jar\"");
+            commandLineParams.Append(" -jar \"" + this.appPath + "\\" + this.jarFile + "\"");
             commandLineParams.Append(" -trustAllSSLCertificates");
             commandLineParams.Append(" -log \"" + this.logFile + "\"" );
             // commandLineParams.Append(" -debug");
@@ -98,7 +105,7 @@ namespace Continuum_Windows_Testing_Agent
                             startTimeout++;
                         }
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         System.Threading.Thread.Sleep(1000);
                         startTimeout++;

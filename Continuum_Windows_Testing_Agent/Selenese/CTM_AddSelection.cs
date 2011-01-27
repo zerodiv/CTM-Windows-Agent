@@ -2,105 +2,116 @@
 using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium;
+using System.Collections;
 
 namespace Selenium.Internal.SeleniumEmulation
 {
-    
+
+    internal class CTM_FoundSelection
+    {
+        public IWebElement selectBox;
+        public IWebElement option;
+
+        public CTM_FoundSelection()
+        {
+            this.selectBox = null;
+            this.option = null;
+        }
+
+    }
+
     /// <summary>
     /// Defines the command for the addSelection keyword.
     /// </summary>
     internal class CTM_AddSelection : SeleneseCommand
     {
-        private ElementFinder finder;
 
-        public CTM_AddSelection(ElementFinder finder)
+        public CTM_AddSelection()
         {
-            this.finder = finder;
         }
 
-        private IWebElement findOptimized(IWebDriver driver, String locator, String value)
+        private CTM_FoundSelection findOptimized(IWebDriver driver, String locator, String value)
         {
-            try
-            {
-                if (value.StartsWith("label="))
-                {
-                    value = value.Replace("label=", "");
-                }
-                String xByNamePath = "//select[@id='" + locator + "' or @name='" + locator + "']/option[normalize-space(.)='" + value + "']";
-                IWebElement option = driver.FindElement(By.XPath(xByNamePath));
-                return option;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+            CTM_FoundSelection found = new CTM_FoundSelection();
 
-        private IWebElement findByLabel(IWebDriver driver, String locator, String value)
-        {
             try
             {
+
                 if (value.StartsWith("label="))
                 {
                     value = value.Replace("label=", "");
                 }
 
-                String xByNamePath = "//select[@name='" + locator + "']/option[normalize-space(.)='" + value + "']";
-                IWebElement option = driver.FindElement(By.XPath(xByNamePath));
-                return option;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private IWebElement findById(IWebDriver driver, String locator, String value)
-        {
-            try
-            {
-                if (value.StartsWith("id="))
+                if (locator.StartsWith("name="))
                 {
-                    value = value.Replace("id=", "");
+                    locator = locator.Replace("name=", "");
                 }
 
-                String xByNamePath = "//select[@id='" + locator + "']/option[normalize-space(.)='" + value + "']";
-                IWebElement option = driver.FindElement(By.XPath(xByNamePath));
-                return option;
+                // Orig:
+                // String xByNamePath = "//select[@id='" + locator + "' or @name='" + locator + "']/option[normalize-space(.)='" + value + "']";
+
+                String xSelectPath = "//select[@id='" + locator + "' or @name='" + locator + "']";
+                String xOptionPath = "//option[normalize-space(.)='" + value + "']";
+
+                found.selectBox = driver.FindElement(By.XPath(xSelectPath));
+
+                if (found.selectBox != null)
+                {
+                    found.option = found.selectBox.FindElement(By.XPath(xOptionPath));
+                }
+
             }
             catch
             {
-                return null;
             }
+
+            return found;
+
         }
 
         protected override object HandleSeleneseCommand(IWebDriver driver, string locator, string value)
         {
-            IWebElement option = null;
-
-            if (option == null)
+            CTM_FoundSelection found = this.findOptimized(driver, locator, value);
+            
+            if (found.selectBox == null)
             {
-                option = this.findOptimized(driver, locator, value);
+                throw new Exception("Failed to find selectbox");
             }
 
-            /*
-            if (option == null)
-            {
-                option = this.findByLabel(driver, locator, value);
-            }
-
-            if (option == null)
-            {
-                option = this.findById(driver, locator, value);
-            }
-            */
-
-            if (option == null)
+            if (found.option == null)
             {
                 throw new Exception("Failed to find selectbox option");
             }
 
-            option.Select();
+            found.option.Select();
+
+
+            OpenQA.Selenium.IJavaScriptExecutor jsExecutor = (OpenQA.Selenium.IJavaScriptExecutor)driver;
+
+            StringBuilder ctmOnChangeJs = new StringBuilder();
+            ctmOnChangeJs.AppendLine("if ( typeof jQuery == 'function' ) {");
+            ctmOnChangeJs.AppendLine("   var ctmjQuery = jQuery.noConflict();");
+            ctmOnChangeJs.AppendLine("   ctmjQuery('#" + found.selectBox.GetAttribute("id") + "').trigger('change');");
+            ctmOnChangeJs.AppendLine("} else {");
+            ctmOnChangeJs.AppendLine("   var ctmElem = document.getElementById('" + found.selectBox.GetAttribute("id") + "');");
+            ctmOnChangeJs.AppendLine("   if (ctmElem.onchange != null ) {");
+            ctmOnChangeJs.AppendLine("       ctmElem.onchange();");
+            ctmOnChangeJs.AppendLine("   }");
+            ctmOnChangeJs.AppendLine("}");
+
+            try
+            {
+                jsExecutor.ExecuteScript(ctmOnChangeJs.ToString());
+            }
+            catch
+            {
+            }
+            /*
+            String jsChangeCall = 
+                "ctmElem = document.getElementById('" + found.selectBox.GetAttribute("id") + "'); " +
+                "if (ctmElem.onchange != null ) { ctmElem.onchange(); }";
+            jsExecutor.ExecuteScript(jsChangeCall);
+            */
 
             return null;
         }

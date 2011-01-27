@@ -736,7 +736,7 @@ namespace Continuum_Windows_Testing_Agent
                         this.reapRunningBrowsers();
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                 }
             
@@ -884,7 +884,7 @@ namespace Continuum_Windows_Testing_Agent
             // this.seleneseCommands.Add("waitForPageToLoad", new SeleneseWaitForPageToLoad(this.log, this.webDriver)); - might need to jiggle this, don't know yet.
 
             // Code we have added or modified
-            this.seleneseMethods.Add("addSelection", new CTM_AddSelection(this.elementFinder));                 // Vendor provided version had performance issues, replaced with simpler version.
+            this.seleneseMethods.Add("addSelection", new CTM_AddSelection());                 // Vendor provided version had performance issues, replaced with simpler version.
             this.seleneseMethods.Add("assertElementPresent", new IsElementPresent(this.elementFinder));         // reused from mainline code.
             this.seleneseMethods.Add("assertTextPresent", new CTM_IsTextPresent());                             // reused from mainline code.
             this.seleneseMethods.Add("click", new CTM_Click(this.elementFinder));                               // Modified to include teh pageload wait.
@@ -893,10 +893,11 @@ namespace Continuum_Windows_Testing_Agent
             this.seleneseMethods.Add("open", new CTM_Open());                                                   // Modified functionality to support param carry over and pageload wait.
             this.seleneseMethods.Add("pause", new CTM_Pause());                                                 // New (Might not be thread safe)
             // this.seleneseMethods.Add("select", new SelectOption(this.select));
-            this.seleneseMethods.Add("select", new CTM_AddSelection(this.elementFinder));
+            this.seleneseMethods.Add("select", new CTM_AddSelection());
             this.seleneseMethods.Add("store", new CTM_Store(this.testVariables));                               // New our version of store has to talk to the local testVariables stack.
             this.seleneseMethods.Add("type", new CTM_Type(elementFinder, this.keyState));                       // Removed the javascript based replacement. 
             this.seleneseMethods.Add("verifyTextPresent", new CTM_IsTextPresent());                             // reused from mainline code.
+            this.seleneseMethods.Add("verifySelectedLabel", new CTM_verifySelectedLabel());
 
             // Vendor provided code we haven't modified.
             // Note the we use the names used by the CommandProcessor
@@ -1132,7 +1133,7 @@ namespace Continuum_Windows_Testing_Agent
                 }
                 catch (Exception e)
                 {
-                    message = "failed: " + e.Message;
+                    message = "failed: " + e.Message + " stacktrace: " + e.StackTrace.ToString();
                     stopTime = System.DateTime.UtcNow;
                     this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, message);
                     this.testHadError = true;
@@ -1228,6 +1229,12 @@ namespace Continuum_Windows_Testing_Agent
             }
         }
 
+        private double waitedSeconds(DateTime startTime, DateTime endTime)
+        {
+            TimeSpan elap = endTime.Subtract(startTime);
+            return elap.TotalSeconds;
+        }
+
         private void waitForNextCommandTarget(Selenium_Test_Trinome testCommand, int testCmdCnt, DateTime startTime, DateTime stopTime)
         {
             ArrayList blockingCommands = new ArrayList();
@@ -1237,8 +1244,9 @@ namespace Continuum_Windows_Testing_Agent
 
             ArrayList nextCommandLimiters = new ArrayList();
             nextCommandLimiters.Add("open");
-            nextCommandLimiters.Add("verifyTextPresent");
-            nextCommandLimiters.Add("assertTextPresent");
+            nextCommandLimiters.Add("verifySelectedLabel");
+            // nextCommandLimiters.Add("verifyTextPresent");
+            // nextCommandLimiters.Add("assertTextPresent");
             nextCommandLimiters.Add("waitForPageToLoad"); // This is somewhat implicit with our new design.
 
             if (blockingCommands.Contains(testCommand.getCommand()))
@@ -1247,31 +1255,53 @@ namespace Continuum_Windows_Testing_Agent
                 // Find the next valid command.
                 Selenium_Test_Trinome nextCommand = this.findNextTestCommand(testCmdCnt);
 
-                int tout = 60;
-
+                // Set the wait timeout limit to 300s which is the default selenium timeout too.
+                int waitTimeout = 300;
+                
                 // JEO: Pretty sure we need to limit this here to type and other commands
                 if (nextCommand != null && nextCommandLimiters.Contains(nextCommand.getCommand()) == false)
                 {
-                    for (int i = 0; i < tout; i++)
-                    {
+                     
+                    double waitedSeconds = this.waitedSeconds(startTime, stopTime);
+
+                    while( waitedSeconds < waitTimeout ) {
 
                         stopTime = System.DateTime.UtcNow;
+                        waitedSeconds = this.waitedSeconds(startTime, stopTime);
+                                               
                         this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "Waiting for next target..");
 
                         try
                         {
-                            IWebElement elem = this.elementFinder.FindElement(this.webDriver, nextCommand.getTarget());
-                            if (elem != null)
+                            if (nextCommand.getCommand() == "verifyTextPresent" || nextCommand.getCommand() == "assertTextPresent")
                             {
+                                String[] args = new String[2];
+                                args[0] = nextCommand.getTarget();
+                                args[1] = "";
 
-                                stopTime = System.DateTime.UtcNow;
-                                this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
-                                return;
+                                CTM_IsTextPresent textPresentCmd = new CTM_IsTextPresent();
+                                
+                                if ( (bool) textPresentCmd.Apply(this.webDriver, args) == true ) {
+                                    stopTime = System.DateTime.UtcNow;
+                                    this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
+                                    return;
+                                }                                
+                                
                             }
                             else
                             {
-                                System.Threading.Thread.Sleep(1000);
+                                IWebElement elem = this.elementFinder.FindElement(this.webDriver, nextCommand.getTarget());
+                                if (elem != null)
+                                {
+
+                                    stopTime = System.DateTime.UtcNow;
+                                    this.updateCommandStatus(testCommand.getId(), 1, startTime, stopTime, "");
+                                    return;
+                                }
                             }
+
+                            System.Threading.Thread.Sleep(1000);
+                            
                         }
                         catch
                         {
@@ -1280,8 +1310,8 @@ namespace Continuum_Windows_Testing_Agent
 
                     }
 
-                    stopTime = System.DateTime.UtcNow;
-                    this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, "Failed to find the next element within " + tout + " seconds nextCommand.Target: " + nextCommand.getTarget());
+                    stopTime = System.DateTime.UtcNow;                    
+                    this.updateCommandStatus(testCommand.getId(), 0, startTime, stopTime, "Failed to find the next element within a acceptable time period. We waited " + waitedSeconds + "  seconds for nextCommand.Target: " + nextCommand.getTarget());
                     this.testHadError = true;
                     return;
 

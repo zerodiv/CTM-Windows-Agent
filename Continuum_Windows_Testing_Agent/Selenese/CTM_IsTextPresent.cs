@@ -11,12 +11,11 @@ namespace Selenium.Internal.SeleniumEmulation
     {
         private Regex TextMatchingStrategyAndValueRegex;
         private Dictionary<String,ITextMatchingStrategy> textMatchingStrategies;
-        
+
         public CTM_IsTextPresent()
         {
             this.TextMatchingStrategyAndValueRegex = new Regex("^([glob|regexp|exact]):(.*)");
             this.textMatchingStrategies = new Dictionary<String,ITextMatchingStrategy>();
-
             this.SetUpTextMatchingStrategies();
         }
 
@@ -25,18 +24,6 @@ namespace Selenium.Internal.SeleniumEmulation
             string text = string.Empty;
             IWebElement body = driver.FindElement(By.XPath("/html/body"));
             
-            // JEO not 100pct sure but we think this part is causing performance issues.
-            /*
-            IJavaScriptExecutor executor = driver as IJavaScriptExecutor;
-            if (executor == null)
-            {
-                text = body.Text;
-            }
-            else
-            {
-                text = JavaScriptLibrary.CallEmbeddedHtmlUtils(driver, "getTextContent", body).ToString();
-            }
-            */
             text = body.Text;
             
             text = text.Trim();

@@ -38,7 +38,7 @@
     <SuiteName>Continuum Testing Manager</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>50</ApplicationRevision>
+    <ApplicationRevision>56</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="CTM_WebBrowser_Factory.cs" />
     <Compile Include="CTM_PageLoadWaiter.cs" />
+    <Compile Include="Selenese\CTM_verifySelectedLabel.cs" />
     <Compile Include="Selenese\CTM_ClickAndWait.cs" />
     <Compile Include="Selenese\CTM_Open.cs" />
     <Compile Include="Selenese\CTM_Store.cs" />
@@ -332,6 +333,9 @@
     <Folder Include="Vendor\selenium\WebdriverBackedSelenium\Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="selenium-server-CTM-20110125.jar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="selenium-server-standalone-2.0b1.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

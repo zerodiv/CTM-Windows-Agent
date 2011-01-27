@@ -262,7 +262,7 @@ namespace Continuum_Windows_Testing_Agent
             this.bodyFh.WriteLine("<td>" + startTime + "</td>");
             this.bodyFh.WriteLine("<td>" + stopTime + "</td>");
             this.bodyFh.WriteLine("<td>" + elapsed + "</td>");
-            this.bodyFh.WriteLine("<td>" + System.Web.HttpUtility.HtmlEncode(message) + "</td>");
+            this.bodyFh.WriteLine("<td>><pre>" + System.Web.HttpUtility.HtmlEncode(message) + "</pre></td>");
             this.bodyFh.WriteLine("</tr>");
             this.bodyFh.Flush();
 
