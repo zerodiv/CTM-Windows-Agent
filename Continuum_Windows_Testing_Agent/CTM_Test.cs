@@ -1237,6 +1237,9 @@ namespace Continuum_Windows_Testing_Agent
 
         private void waitForNextCommandTarget(Selenium_Test_Trinome testCommand, int testCmdCnt, DateTime startTime, DateTime stopTime)
         {
+
+            CTM_PageLoadWaiter pageLoad = new CTM_PageLoadWaiter(this.webDriver, 30000);
+           
             ArrayList blockingCommands = new ArrayList();
             blockingCommands.Add("click");
             blockingCommands.Add("clickAndWait");

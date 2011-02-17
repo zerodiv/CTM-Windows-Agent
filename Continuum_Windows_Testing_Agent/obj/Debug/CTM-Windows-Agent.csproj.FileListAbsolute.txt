@@ -88,5 +88,4 @@ C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\obj
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\WebDriver.Common.xml
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\WebDriver.Remote.xml
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\WebDriver.Remote.Common.xml
-C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\selenium-server-standalone-2.0b1.jar
 C:\Users\jorcutt\Documents\CTM-Windows-Agent\Continuum_Windows_Testing_Agent\bin\Debug\selenium-server-CTM-20110125.jar

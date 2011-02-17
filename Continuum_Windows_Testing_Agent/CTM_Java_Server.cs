@@ -20,10 +20,10 @@ namespace Continuum_Windows_Testing_Agent
         public CTM_Java_Server(String appPath, Boolean isDisplayed)
         {
             // Current release.
-            // this.jarFile = "selenium-server-standalone-2.0b1.jar";
+            this.jarFile = "selenium-server-standalone-2.0b2.jar";
             
             // CTM Release
-            this.jarFile = "selenium-server-CTM-20110125.jar";
+            //this.jarFile = "selenium-server-CTM-20110125.jar";
 
             this.appPath = appPath;
             this.isDisplayed = isDisplayed;

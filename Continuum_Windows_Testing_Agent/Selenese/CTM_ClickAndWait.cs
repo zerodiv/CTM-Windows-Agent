@@ -28,20 +28,6 @@ namespace Selenium.Internal.SeleniumEmulation
 
             element.Click();
 
-            // TODO: Upgraded to the remote caller interface, might need to deprecate this.
-            /*
-            if (driver.GetType().Name == "InternetExplorerDriver")
-            {
-                ((InternetExplorerDriver)driver).WaitForLoadToComplete();
-            }
-            */
-
-            /*
-            // This is a IE specific hack to help with the page waiting issues we've been battling.
-            CTM_PageLoadWaiter pageLoad = new CTM_PageLoadWaiter(driver, 30000);
-            pageLoad.Wait("Page load timeout: 30s exceeded");
-            */
-
             return null;
         }
     }

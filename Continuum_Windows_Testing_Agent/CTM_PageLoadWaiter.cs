@@ -7,46 +7,144 @@ using Selenium.Internal.SeleniumEmulation;
 
 namespace Continuum_Windows_Testing_Agent
 {
-    internal class CTM_PageLoadWaiter : Waiter
+    internal class CTM_PageLoadWaiter
     {
         private IWebDriver driver;
-        private int timeToWaitAfterPageLoad;
+        private int waitTimeout;
         private DateTime started = DateTime.Now;
+        private Boolean findjQueryRan;
+        private Boolean hasjQuery;
 
-        public CTM_PageLoadWaiter(IWebDriver driver, int timeToWaitAfterPageLoad)
-            : base()
+        public CTM_PageLoadWaiter(IWebDriver driver, int waitTimeout)
         {
             this.driver = driver;
+            this.findjQueryRan = false;
+            this.hasjQuery = false;
+            this.waitTimeout = waitTimeout;
 
-            
-            this.timeToWaitAfterPageLoad = timeToWaitAfterPageLoad;
+            this.waitForLoad();
+
         }
 
-        public override bool Until()
+        private double waitedSeconds(DateTime startTime, DateTime endTime)
         {
-            try
+            TimeSpan elap = endTime.Subtract(startTime);
+            return elap.TotalSeconds;
+        }
+
+        private Boolean findjQuery()
+        {
+
+            if (this.findjQueryRan == true)
             {
-                object result = ((IJavaScriptExecutor)driver).ExecuteScript("return document['readyState'] ? 'complete' == document.readyState : true");
+                return false;
+            }
 
-                DateTime now = DateTime.Now;
+            this.findjQueryRan = true;
 
-                // JEO: The logic here is odd if the page is loaded return true since it's done otherwise wait until the 
-                // return happens.
-                if (result != null && result is bool && (bool)result) {
-                    double foo = now.Subtract(started).TotalMilliseconds;
-                    if ((bool) result == true)
-                    {
-                        return true;
-                    }
-                    if (now.Subtract(started).TotalMilliseconds > timeToWaitAfterPageLoad)
-                    {
-                        return true;
-                    }
+            this.hasjQuery = false;
+
+            object result = ((IJavaScriptExecutor)driver).ExecuteScript("if (typeof jQuery == 'function') { return true; } else { return false; }");
+
+            if (result != null && result is bool && (bool)result)
+            {
+                this.hasjQuery = true;
+            }
+
+            return true;
+
+        }
+
+        private void waitForLoad()
+        {
+            DateTime startTime = DateTime.Now;
+            DateTime stopTime = DateTime.Now;
+
+            double waitedSeconds = this.waitedSeconds(startTime, stopTime);
+
+            while (waitedSeconds < waitTimeout)
+            {
+
+                stopTime = System.DateTime.UtcNow;
+                waitedSeconds = this.waitedSeconds(startTime, stopTime);
+
+                if (this.isPageLoaded() == true)
+                {
+                    return;
                 }
                 else
                 {
-                    started = now;
+                    System.Threading.Thread.Sleep(1000);
                 }
+
+            }
+
+            throw new Exception("Page failed to load within: " + this.waitTimeout + " waited: " + waitedSeconds);
+
+        }
+
+        private bool isPageLoaded()
+        {
+
+            try
+            {
+
+                if (this.findjQuery() == true)
+                {
+
+                    StringBuilder ctmJs = new StringBuilder();
+                    ctmJs.AppendLine("window.ctmPageLoaded = false;");
+
+                    // Okay this is our first pass and if we have jquery we need to bind a on load event
+                    if (this.hasjQuery == true)
+                    {
+                        ctmJs.AppendLine("var ctmjQuery = jQuery.noConflict();");
+                        ctmJs.AppendLine("ctmjQuery(document).ready(function() {");
+                        ctmJs.AppendLine("   window.ctmPageLoaded = true;");
+                        ctmJs.AppendLine("});");
+
+                    }
+                    else
+                    {
+
+                    }
+
+                    String js = ctmJs.ToString();
+
+                    ((IJavaScriptExecutor)driver).ExecuteScript(js);
+                }
+            }
+            catch
+            {
+            }
+
+            try
+            {
+
+                if (this.hasjQuery == false)
+                {
+                    // We don't have jquery so every time this loops the determiniation code is ran (boo).
+                    StringBuilder ctmJs = new StringBuilder();
+                    ctmJs.AppendLine("if ( document['readyState'] == 'complete' ) {");
+                    ctmJs.AppendLine("   window.ctmPageLoaded = true;");
+                    ctmJs.AppendLine("}");
+
+                    ctmJs.AppendLine("if ( document.readyState == 'complete' ) {");
+                    ctmJs.AppendLine("   window.ctmPageLoaded = true;");
+                    ctmJs.AppendLine("}");
+
+                    ((IJavaScriptExecutor)driver).ExecuteScript(ctmJs.ToString());
+                }
+
+                // object result = ((IJavaScriptExecutor)driver).ExecuteScript("return document['readyState'] ? 'complete' == document.readyState : true");
+                object result = ((IJavaScriptExecutor)driver).ExecuteScript("return window.ctmPageLoaded;");
+
+                // return happens.
+                if (result != null && result is bool && (bool)result == true)
+                {
+                    return true;
+                }
+
             }
             catch (Exception)
             {

@@ -27,14 +27,6 @@ namespace Selenium.Internal.SeleniumEmulation
 
                 element.Click();
 
-                // TODO: Upgraded to the remote caller interface, might need to deprecate this.
-                /*
-                if (driver.GetType().Name == "InternetExplorerDriver")
-                {
-                    ((InternetExplorerDriver)driver).WaitForLoadToComplete();
-                }
-                */
-
             }
             catch
             {
