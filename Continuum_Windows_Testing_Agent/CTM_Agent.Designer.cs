@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.ctmServerUrlBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.haltOnErrorBox = new System.Windows.Forms.CheckBox();
             this.browserGrid = new System.Windows.Forms.DataGridView();
@@ -41,16 +42,15 @@
             this.internalName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.forcePollBtn = new System.Windows.Forms.Button();
             this.regenerateGuidBtn = new System.Windows.Forms.Button();
-            this.guidBox = new System.Windows.Forms.TextBox();
+            this.ctmGuidBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.machineNameBox = new System.Windows.Forms.TextBox();
+            this.ctmMachineNameBox = new System.Windows.Forms.TextBox();
             this.configSaveSettingsBtn = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.localIpBox = new System.Windows.Forms.TextBox();
+            this.ctmLocalIpBox = new System.Windows.Forms.TextBox();
             this.osVersionBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.ctmHostnameBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.ctmStatusBar = new System.Windows.Forms.StatusStrip();
             this.ctmStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -65,21 +65,21 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.ctmServerUrlBox);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.haltOnErrorBox);
             this.groupBox2.Controls.Add(this.browserGrid);
             this.groupBox2.Controls.Add(this.forcePollBtn);
             this.groupBox2.Controls.Add(this.regenerateGuidBtn);
-            this.groupBox2.Controls.Add(this.guidBox);
+            this.groupBox2.Controls.Add(this.ctmGuidBox);
             this.groupBox2.Controls.Add(this.label10);
-            this.groupBox2.Controls.Add(this.machineNameBox);
+            this.groupBox2.Controls.Add(this.ctmMachineNameBox);
             this.groupBox2.Controls.Add(this.configSaveSettingsBtn);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.localIpBox);
+            this.groupBox2.Controls.Add(this.ctmLocalIpBox);
             this.groupBox2.Controls.Add(this.osVersionBox);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.ctmHostnameBox);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
@@ -87,6 +87,13 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Config";
+            // 
+            // ctmServerUrlBox
+            // 
+            this.ctmServerUrlBox.Location = new System.Drawing.Point(92, 22);
+            this.ctmServerUrlBox.Name = "ctmServerUrlBox";
+            this.ctmServerUrlBox.Size = new System.Drawing.Size(365, 20);
+            this.ctmServerUrlBox.TabIndex = 6;
             // 
             // label7
             // 
@@ -183,13 +190,13 @@
             this.regenerateGuidBtn.UseVisualStyleBackColor = true;
             this.regenerateGuidBtn.Click += new System.EventHandler(this.regenerateGuidBtn_Click);
             // 
-            // guidBox
+            // ctmGuidBox
             // 
-            this.guidBox.Location = new System.Drawing.Point(54, 80);
-            this.guidBox.Name = "guidBox";
-            this.guidBox.ReadOnly = true;
-            this.guidBox.Size = new System.Drawing.Size(221, 20);
-            this.guidBox.TabIndex = 11;
+            this.ctmGuidBox.Location = new System.Drawing.Point(54, 80);
+            this.ctmGuidBox.Name = "ctmGuidBox";
+            this.ctmGuidBox.ReadOnly = true;
+            this.ctmGuidBox.Size = new System.Drawing.Size(221, 20);
+            this.ctmGuidBox.TabIndex = 11;
             // 
             // label10
             // 
@@ -200,12 +207,12 @@
             this.label10.TabIndex = 10;
             this.label10.Text = "GUID:";
             // 
-            // machineNameBox
+            // ctmMachineNameBox
             // 
-            this.machineNameBox.Location = new System.Drawing.Point(92, 48);
-            this.machineNameBox.Name = "machineNameBox";
-            this.machineNameBox.Size = new System.Drawing.Size(147, 20);
-            this.machineNameBox.TabIndex = 8;
+            this.ctmMachineNameBox.Location = new System.Drawing.Point(92, 48);
+            this.ctmMachineNameBox.Name = "ctmMachineNameBox";
+            this.ctmMachineNameBox.Size = new System.Drawing.Size(147, 20);
+            this.ctmMachineNameBox.TabIndex = 8;
             // 
             // configSaveSettingsBtn
             // 
@@ -235,12 +242,12 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Os:";
             // 
-            // localIpBox
+            // ctmLocalIpBox
             // 
-            this.localIpBox.Location = new System.Drawing.Point(294, 22);
-            this.localIpBox.Name = "localIpBox";
-            this.localIpBox.Size = new System.Drawing.Size(147, 20);
-            this.localIpBox.TabIndex = 4;
+            this.ctmLocalIpBox.Location = new System.Drawing.Point(294, 48);
+            this.ctmLocalIpBox.Name = "ctmLocalIpBox";
+            this.ctmLocalIpBox.Size = new System.Drawing.Size(163, 20);
+            this.ctmLocalIpBox.TabIndex = 4;
             // 
             // osVersionBox
             // 
@@ -253,27 +260,20 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(251, 25);
+            this.label3.Location = new System.Drawing.Point(251, 48);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(37, 13);
             this.label3.TabIndex = 3;
             this.label3.Text = "My IP:";
-            // 
-            // ctmHostnameBox
-            // 
-            this.ctmHostnameBox.Location = new System.Drawing.Point(92, 22);
-            this.ctmHostnameBox.Name = "ctmHostnameBox";
-            this.ctmHostnameBox.Size = new System.Drawing.Size(147, 20);
-            this.ctmHostnameBox.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 25);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.Size = new System.Drawing.Size(66, 13);
             this.label2.TabIndex = 0;
-            this.label2.Text = "CTM Server:";
+            this.label2.Text = "Server URL:";
             // 
             // ctmStatusBar
             // 
@@ -330,7 +330,6 @@
             this.Controls.Add(this.groupBox2);
             this.Name = "CTM_Agent";
             this.Text = "Continuum Windows Testing Agent";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CTM_Agent_FormClosing);
             this.Load += new System.EventHandler(this.CTM_Agent_Load_1);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -346,9 +345,8 @@
 
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button configSaveSettingsBtn;
-        private System.Windows.Forms.TextBox ctmHostnameBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox localIpBox;
+        private System.Windows.Forms.TextBox ctmLocalIpBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.StatusStrip ctmStatusBar;
         private System.Windows.Forms.ToolStripStatusLabel ctmStatusLabel;
@@ -357,9 +355,9 @@
         private System.Windows.Forms.Timer callHomeTimer;
         private System.Windows.Forms.TextBox lastRunLogBox;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox machineNameBox;
+        private System.Windows.Forms.TextBox ctmMachineNameBox;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox guidBox;
+        private System.Windows.Forms.TextBox ctmGuidBox;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button regenerateGuidBtn;
         private System.Windows.Forms.Button forcePollBtn;
@@ -373,6 +371,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn hostname;
         private System.Windows.Forms.DataGridViewTextBoxColumn port;
         private System.Windows.Forms.DataGridViewTextBoxColumn internalName;
+        private System.Windows.Forms.TextBox ctmServerUrlBox;
     }
 }
 

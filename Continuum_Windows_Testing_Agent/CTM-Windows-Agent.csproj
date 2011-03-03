@@ -38,7 +38,7 @@
     <SuiteName>Continuum Testing Manager</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>58</ApplicationRevision>
+    <ApplicationRevision>59</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="CTM_WebBrowser_Factory.cs" />
     <Compile Include="CTM_PageLoadWaiter.cs" />
+    <Compile Include="Selenese\CTM_verifyTextNotPresent.cs" />
     <Compile Include="Selenese\CTM_verifySelectedLabel.cs" />
     <Compile Include="Selenese\CTM_ClickAndWait.cs" />
     <Compile Include="Selenese\CTM_Open.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="Vendor\selenium\WebdriverBackedSelenium\Internal\SeleniumEmulation\WindowSelector.cs" />
     <EmbeddedResource Include="CTM_Agent.resx">
       <DependentUpon>CTM_Agent.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CTM_Test.resx">
       <DependentUpon>CTM_Test.cs</DependentUpon>
@@ -336,7 +338,9 @@
     <Content Include="selenium-server-CTM-20110125.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="selenium-server-standalone-2.0b2.jar" />
+    <Content Include="selenium-server-standalone-2.0b2.jar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

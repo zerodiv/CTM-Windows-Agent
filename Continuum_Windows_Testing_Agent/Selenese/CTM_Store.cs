@@ -9,9 +9,9 @@ namespace Continuum_Windows_Testing_Agent.Selenese
 {
     class CTM_Store : SeleneseCommand
     {
-        private Selenium_Test_Suite_Variables testVariables;
+        private ISeleniumTestSuiteVariables testVariables;
 
-        public CTM_Store(Selenium_Test_Suite_Variables testVariables )
+        public CTM_Store(ISeleniumTestSuiteVariables testVariables )
         {
             this.testVariables = testVariables;
         }
@@ -19,7 +19,7 @@ namespace Continuum_Windows_Testing_Agent.Selenese
         protected override object HandleSeleneseCommand(IWebDriver driver, string locator, string value)
         {
             this.testVariables.consumeCommand(value, locator);
-            return null;
+            return true;
         }
 
     }

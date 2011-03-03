@@ -37,6 +37,7 @@ namespace Continuum_Windows_Testing_Agent
         private UInt64 testRunId;
         private UInt64 testRunBrowserId;
         private String testDownloadUrl;
+        private String ctmServerUrl;
         private CTM_WebBrowser testBrowser;
         private Boolean haltOnError;
 
@@ -46,7 +47,7 @@ namespace Continuum_Windows_Testing_Agent
 
         public Boolean testHadError;
         private IWebDriver webDriver;
-        private Selenium_Test_Suite_Variables testVariables;
+        private ISeleniumTestSuiteVariables testVariables;
         private Selenium_Test_Log log;
         private Dictionary<String, SeleneseCommand> seleneseMethods;
         private ElementFinder elementFinder;
@@ -55,8 +56,6 @@ namespace Continuum_Windows_Testing_Agent
 
         private ArrayList tests;
         private ArrayList testCommands;
-
-        private IJavaScriptExecutor jsExecutor;
 
         private CTM_Java_Server javaServer;
 
@@ -93,6 +92,11 @@ namespace Continuum_Windows_Testing_Agent
         #endregion Constructor
 
         #region Getter / Setters
+        public void setCtmServerUrl(String url)
+        {
+            this.ctmServerUrl = url;
+        }
+
         public UInt64 getTestRunId()
         {
             return this.testRunId;
@@ -429,9 +433,8 @@ namespace Continuum_Windows_Testing_Agent
 
         private Boolean initLogFiles()
         {
-
             String seleniumLogFile = Environment.GetEnvironmentVariable("TEMP") + "\\selenium_" + this.testRunId + ".html";
-            this.log = new Selenium_Test_Log(seleniumLogFile);
+            this.log = new Selenium_Test_Log(seleniumLogFile, this.ctmServerUrl);
             return true;
         }
         #endregion Init Testing
@@ -881,6 +884,8 @@ namespace Continuum_Windows_Testing_Agent
         private void initSeleneseCommands()
         {
 
+            WindowSelector windows = new WindowSelector(this.webDriver);
+
             // this.seleneseCommands.Add("waitForPageToLoad", new SeleneseWaitForPageToLoad(this.log, this.webDriver)); - might need to jiggle this, don't know yet.
 
             // Code we have added or modified
@@ -898,6 +903,7 @@ namespace Continuum_Windows_Testing_Agent
             this.seleneseMethods.Add("type", new CTM_Type(elementFinder, this.keyState));                       // Removed the javascript based replacement. 
             this.seleneseMethods.Add("verifyTextPresent", new CTM_IsTextPresent());                             // reused from mainline code.
             this.seleneseMethods.Add("verifySelectedLabel", new CTM_verifySelectedLabel());
+            this.seleneseMethods.Add("verifyTextNotPresent", new CTM_verifyTextNotPresent());
 
             // Vendor provided code we haven't modified.
             // Note the we use the names used by the CommandProcessor
@@ -980,7 +986,7 @@ namespace Continuum_Windows_Testing_Agent
             this.seleneseMethods.Add("removeSelection", new RemoveSelection(this.elementFinder, this.select));
             //seleneseMethods.Add("runScript", new RunScript());
             //seleneseMethods.Add("selectFrame", new SelectFrame(windows));
-            //seleneseMethods.Add("selectWindow", new SelectWindow(windows));
+            this.seleneseMethods.Add("selectWindow", new SelectWindow(windows));
             //seleneseMethods.Add("setBrowserLogLevel", new NoOp(null));
             //seleneseMethods.Add("setContext", new NoOp(null));
             //seleneseMethods.Add("setSpeed", new NoOp(null));
@@ -1000,75 +1006,9 @@ namespace Continuum_Windows_Testing_Agent
 
         }
 
-        protected String runJavascriptValue(String javascriptValue)
-        {
 
-            if (javascriptValue.Length == 0)
-            {
-                return javascriptValue;
-            }
 
-            if (javascriptValue.Contains("javascript") == false)
-            {
-                return javascriptValue;
-            }
 
-            MatchCollection matches = Regex.Matches(javascriptValue, @"javascript{(.*?)}");
-
-            if (matches.Count == 0)
-            {
-                return javascriptValue;
-            }
-
-            if (this.jsExecutor == null)
-            {
-                this.jsExecutor = (IJavaScriptExecutor)this.webDriver;
-            }
-
-            foreach (Match match in matches)
-            {
-                String js = match.Groups[1].Value;
-
-                // quick fix for people forgetting to do a return.
-                if (js.Contains("return") == false)
-                {
-                    js = "return " + js;
-                }
-
-                if (!js.EndsWith(";"))
-                {
-                    js = js + ";";
-                }
-
-                if (this.jsExecutor.IsJavaScriptEnabled == true)
-                {
-                    String val = this.jsExecutor.ExecuteScript(js).ToString();
-                    javascriptValue = javascriptValue.Replace(
-                        "javascript{" + match.Groups[1].ToString() + "}",
-                        val
-                    );
-                }
-
-            }
-
-            return javascriptValue;
-
-        }
-
-        public Selenium_Test_Trinome interpolateSeleneseVariables(Selenium_Test_Trinome testCommand)
-        {
-            // Special exception for cleaning up / interpolating the testCommand into the new values.
-            if (testCommand.getCommand() != "store" && testCommand.getCommand() != ":comment:")
-            {
-                testCommand.setTarget(this.testVariables.replaceVariables(testCommand.getTarget()));
-                testCommand.setValue(this.testVariables.replaceVariables(testCommand.getValue()));
-            }
-
-            // If the value contains javascript run it and replace the value.
-            testCommand.setValue(this.runJavascriptValue(testCommand.getValue()));
-
-            return testCommand;
-        }
 
         public Boolean processSelenese(Selenium_Test_Trinome testCommand, int testCmdCnt)
         {
@@ -1092,7 +1032,7 @@ namespace Continuum_Windows_Testing_Agent
             {
                 SeleneseCommand cmd = (SeleneseCommand)this.seleneseMethods[testCommand.getCommand()];
 
-                testCommand = this.interpolateSeleneseVariables(testCommand);
+                testCommand.interpolateSeleneseVariables(this.webDriver, this.testVariables);
 
                 // Found the command in the vendor commands.
                 String[] args;
@@ -1248,8 +1188,6 @@ namespace Continuum_Windows_Testing_Agent
             ArrayList nextCommandLimiters = new ArrayList();
             nextCommandLimiters.Add("open");
             nextCommandLimiters.Add("verifySelectedLabel");
-            // nextCommandLimiters.Add("verifyTextPresent");
-            // nextCommandLimiters.Add("assertTextPresent");
             nextCommandLimiters.Add("waitForPageToLoad"); // This is somewhat implicit with our new design.
 
             if (blockingCommands.Contains(testCommand.getCommand()))
@@ -1258,16 +1196,34 @@ namespace Continuum_Windows_Testing_Agent
                 // Find the next valid command.
                 Selenium_Test_Trinome nextCommand = this.findNextTestCommand(testCmdCnt);
 
+                
                 // Set the wait timeout limit to 300s which is the default selenium timeout too.
                 int waitTimeout = 300;
                 
                 // JEO: Pretty sure we need to limit this here to type and other commands
                 if (nextCommand != null && nextCommandLimiters.Contains(nextCommand.getCommand()) == false)
                 {
-                     
+                    nextCommand.interpolateSeleneseVariables(this.webDriver,this.testVariables);
+
+                    if (nextCommand.getTarget().Contains("${") == true || nextCommand.getValue().Contains("${") == true)
+                    {
+                        // Okay we're most likely in a logic loop here where a store command happenes before
+                        // a use of the variable. 
+                        return;
+                    }
+
+                    if (nextCommand.getCommand() == "store" ) {
+                        return;
+                    }
+
                     double waitedSeconds = this.waitedSeconds(startTime, stopTime);
 
                     while( waitedSeconds < waitTimeout ) {
+
+                        if (waitedSeconds > 60)
+                        {
+
+                        }
 
                         stopTime = System.DateTime.UtcNow;
                         waitedSeconds = this.waitedSeconds(startTime, stopTime);
@@ -1334,9 +1290,7 @@ namespace Continuum_Windows_Testing_Agent
             for (int i = offset; i < this.testCommands.Count; i++)
             {
                 Selenium_Test_Trinome command = (Selenium_Test_Trinome)this.testCommands[i];
-                if (command.getCommand() != ":comment:" &&
-                    command.getCommand() != "store" &&
-                    command.getCommand() != "pause")
+                if (command.getCommand() != ":comment:" && command.getCommand() != "pause")
                 {
                     return command;
                 }

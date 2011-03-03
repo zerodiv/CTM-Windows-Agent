@@ -18,10 +18,11 @@ namespace Continuum_Windows_Testing_Agent
         private long totalCommands;
         private long totalSuccessfulCommands;
         private long totalFailedCommands;
+        private String ctmServerUrl;
         private SortedDictionary<String,TimeSpan> totalTimeByCommand;
         private Dictionary<String, ulong> totalCommandCount;
 
-        public Selenium_Test_Log(String logFile ) {
+        public Selenium_Test_Log(String logFile, String serverUrl) {
             try
             {
                 this.logFile = logFile;
@@ -43,7 +44,7 @@ namespace Continuum_Windows_Testing_Agent
 
                 this.totalTimeByCommand = new SortedDictionary<String,TimeSpan>();
                 this.totalCommandCount = new Dictionary<string,ulong>();
-
+                this.ctmServerUrl = serverUrl;
                 this.initLogFile();
                 
             }
@@ -77,7 +78,7 @@ namespace Continuum_Windows_Testing_Agent
                 }
 
                 // write header 
-                String cssFile = "http://jorcutt-desktop/css/common.css";
+                String cssFile = this.ctmServerUrl + "/css/common.css";
 
                 this.fh.WriteLine("<html>");
                 this.fh.WriteLine("<head>");
@@ -262,7 +263,7 @@ namespace Continuum_Windows_Testing_Agent
             this.bodyFh.WriteLine("<td>" + startTime + "</td>");
             this.bodyFh.WriteLine("<td>" + stopTime + "</td>");
             this.bodyFh.WriteLine("<td>" + elapsed + "</td>");
-            this.bodyFh.WriteLine("<td>><pre>" + System.Web.HttpUtility.HtmlEncode(message) + "</pre></td>");
+            this.bodyFh.WriteLine("<td><pre>" + System.Web.HttpUtility.HtmlEncode(message) + "</pre></td>");
             this.bodyFh.WriteLine("</tr>");
             this.bodyFh.Flush();
 

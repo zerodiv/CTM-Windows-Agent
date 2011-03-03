@@ -6,8 +6,13 @@ using System.Text;
 
 namespace Continuum_Windows_Testing_Agent
 {
+    public interface ISeleniumTestSuiteVariables
+    {
+        void consumeCommand(String value, String target);
+        String replaceVariables(String target);
+    }
 
-    class Selenium_Test_Suite_Variables
+    public class Selenium_Test_Suite_Variables : ISeleniumTestSuiteVariables
     {
         private Dictionary<String,String> vars;
 
@@ -30,6 +35,11 @@ namespace Continuum_Windows_Testing_Agent
 
         public String replaceVariables(String target)
         {
+            // Does it even contain a variable?
+            if (target.Contains("${") != true)
+            {
+                return target;
+            }
             foreach (String key in this.vars.Keys)
             {
                 target = target.Replace("${" + key + "}", this.vars[key].ToString());

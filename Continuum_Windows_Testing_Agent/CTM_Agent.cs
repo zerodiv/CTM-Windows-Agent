@@ -22,10 +22,6 @@ namespace Continuum_Windows_Testing_Agent
         delegate void ctmTestExecuteCallback();
 
         private CTM_Agent_Log log;
-        private String guid;
-        private String ctmHostname;
-        private String localIp;
-        private String machineName;
         private Boolean isRegistered;
         private WebClient ctmClient;
         private Boolean haltOnError;
@@ -40,10 +36,6 @@ namespace Continuum_Windows_Testing_Agent
         public CTM_Agent()
         {
 
-            this.guid = null;
-            this.ctmHostname = "";
-            this.localIp = "";
-            this.machineName = "";
             this.isRegistered = false;
             this.haltOnError = false;
 
@@ -65,9 +57,7 @@ namespace Continuum_Windows_Testing_Agent
             
             this.webBrowsers.Add("iphone", CTM_WebBrowser_Factory.factory("iphone"));
 
-            this.loadRegistryKeys();
-            
-            // attempt to connect to the settings if we have any.
+           // attempt to connect to the settings if we have any.
             // if (this.webBrowsers["android"].getHostname().Length > 0)
             //{
             //    this.webBrowsers["android"].verify();
@@ -82,23 +72,14 @@ namespace Continuum_Windows_Testing_Agent
 
             InitializeComponent();
 
-            // Start the java serverlet
-            this.startJavaServer();
+            this.loadRegistryKeys();
 
             this.ctmClient = new WebClient();
             this.ctmClient.UploadValuesCompleted += new UploadValuesCompletedEventHandler(requestWork_Completed);
-
             this.agentBackgroundWorker.DoWork += new DoWorkEventHandler(ctmAgentBackgroundWorker_DoWork);
 
             
             
-        }
-
-        private void startJavaServer() {
-
-
-            this.updateLastRunLogBox(this.log.getLastLogLines());
-
         }
 
         #endregion Constructor
@@ -111,26 +92,40 @@ namespace Continuum_Windows_Testing_Agent
 
             if (key.GetValue("guid") != null)
             {
-                this.guid = key.GetValue("guid").ToString();
+                this.ctmGuidBox.Text = key.GetValue("guid").ToString();
             }
 
-            if (this.guid == "" || this.guid == null )
+            if (this.ctmGuidBox.Text == "" || this.ctmGuidBox.Text == null )
             {
-                this.guid = System.Guid.NewGuid().ToString();
-                key.SetValue("guid", this.guid);
+                this.ctmGuidBox.Text = System.Guid.NewGuid().ToString();
+                key.SetValue("guid", this.ctmGuidBox.Text);
             }
             
             if (key.GetValue("ctmHostname") != null)
             {
-                this.ctmHostname = key.GetValue("ctmHostname").ToString();
+                this.ctmServerUrlBox.Text = "http://" + key.GetValue("ctmHostname").ToString();
+                if (this.ctmServerUrlBox.Text.EndsWith("/") != true)
+                {
+                    this.ctmServerUrlBox.Text = this.ctmServerUrlBox.Text + "/";
+                }
+
+                key.SetValue("ctmServerUrl", this.ctmServerUrlBox.Text);
+                // TODO: jorcutt enable this when we're happy with the url construction
+                // We remove the hostname REG Key after this inital load.
+                // key.DeleteValue("ctmHostname");
+            }
+
+            if (key.GetValue("ctmServerUrl") != null)
+            {
+                this.ctmServerUrlBox.Text = key.GetValue("ctmServerUrl").ToString();
             }
 
             if (key.GetValue("localIp") != null)
             {
-                this.localIp = key.GetValue("localIp").ToString();
+                this.ctmLocalIpBox.Text = key.GetValue("localIp").ToString();
             }
 
-            if (this.localIp == "")
+            if (this.ctmLocalIpBox.Text == "")
             {
                 String ip = "";
 
@@ -146,23 +141,23 @@ namespace Continuum_Windows_Testing_Agent
 
                 if (ip.Length > 0)
                 {
-                    this.localIp = ip;
-                    key.SetValue("localIp", this.localIp);
+                    this.ctmLocalIpBox.Text = ip;
+                    key.SetValue("localIp", this.ctmLocalIpBox);
                 }
             }
 
             if (key.GetValue("machineName") != null )
             {
-                this.machineName = key.GetValue("machineName").ToString();
+                this.ctmMachineNameBox.Text = key.GetValue("machineName").ToString();
             }
 
-            if (this.machineName == "")
+            if (this.ctmMachineNameBox.Text == "")
             {
-                this.machineName = Environment.MachineName;
+                this.ctmMachineNameBox.Text = Environment.MachineName;
 
-                if (machineName.Length > 0)
+                if (this.ctmMachineNameBox.Text.Length > 0)
                 {
-                    key.SetValue("machineName", this.machineName);
+                    key.SetValue("machineName", this.ctmMachineNameBox.Text);
                 }
             }
 
@@ -185,11 +180,11 @@ namespace Continuum_Windows_Testing_Agent
         public void saveRegistryKeys()
         {
             Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
-            key.SetValue("guid", this.guid);
-            key.SetValue("ctmHostname", this.ctmHostname);
-            key.SetValue("localIp", this.localIp);
-            key.SetValue("machineName", this.machineName);
-            
+            key.SetValue("guid", this.ctmGuidBox.Text);
+            key.SetValue("localIp", this.ctmLocalIpBox.Text);
+            key.SetValue("machineName", this.ctmMachineNameBox.Text);
+            key.SetValue("ctmServerUrl", this.ctmServerUrlBox.Text);
+
             // iphone 
             key.SetValue("iphoneHostname", this.webBrowsers["iphone"].getHostname());
             key.SetValue("iphonePort", this.webBrowsers["iphone"].getPort());
@@ -232,12 +227,7 @@ namespace Continuum_Windows_Testing_Agent
         private void CTM_Agent_Load_1(object sender, EventArgs e)
         {
 
-            this.localIpBox.Text = this.localIp;
-            this.ctmHostnameBox.Text = this.ctmHostname;
-            this.guidBox.Text = this.guid;
-            this.machineNameBox.Text = this.machineName;
-            
-            this.Text = "Continuum Testing Agent - " + this.getCTMBuild();
+           this.Text = "Continuum Testing Agent - " + this.getCTMBuild();
 
             this.osVersionBox.Text = this.determineWindowsVersion();
 
@@ -312,10 +302,6 @@ namespace Continuum_Windows_Testing_Agent
         private void configSaveSettingsBtn_Click(object sender, EventArgs e)
         {
 
-            this.ctmHostname = this.ctmHostnameBox.Text;
-            this.localIp = this.localIpBox.Text;
-            this.machineName = this.machineNameBox.Text;
-
             // set the entries for the iphone and android browsers.
             foreach (string browserName in this.webBrowsers.Keys)
             {
@@ -359,9 +345,8 @@ namespace Continuum_Windows_Testing_Agent
         private void regenerateGuidBtn_Click(object sender, EventArgs e)
         {
            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\CTM");
-           this.guid = System.Guid.NewGuid().ToString(); ;
-           this.guidBox.Text = this.guid;
-           key.SetValue("guid", this.guid);
+           this.ctmGuidBox.Text = System.Guid.NewGuid().ToString(); ;
+           key.SetValue("guid", this.ctmGuidBox.Text);
         }
 
         private void forcePollBtn_Click(object sender, EventArgs e)
@@ -382,25 +367,31 @@ namespace Continuum_Windows_Testing_Agent
             String message = "";
             Boolean isReady = true;
 
-            if (this.guid.Length == 0 && isReady == true )
+            if (this.ctmGuidBox.Text.Length == 0 && isReady == true )
             {
                 message = "Missing guid, please click on regenerate.";
                 isReady = false;
             }
 
-            if (this.ctmHostname.Length == 0 && isReady == true)
+            if (this.ctmServerUrlBox.Text.Length == 0 && isReady == true)
             {
-                message = "Please provide a CTM server name.";
+                message = "Please provide a CTM Server URL";
                 isReady = false;
             }
 
-            if (localIp.Length == 0 && isReady == true)
+            if (Uri.IsWellFormedUriString(this.ctmServerUrlBox.Text, UriKind.Absolute) != true)
+            {
+                message = "Please provide a well formed CTM Server URL";
+                isReady = false;
+            }
+
+            if (this.ctmLocalIpBox.Text.Length == 0 && isReady == true)
             {
                 message = "Unable to determin our local IP.";
                 isReady = false;
             }
 
-            if (machineName.Length == 0 && isReady == true)
+            if (this.ctmMachineNameBox.Text.Length == 0 && isReady == true)
             {
                 message = "Please provide a name for this host.";
                 isReady = false;
@@ -486,7 +477,7 @@ namespace Continuum_Windows_Testing_Agent
                 resultPostValues.Add("runLog", this.currentTest.getJavaServerLog());
                 resultPostValues.Add("seleniumLog", this.currentTest.getSeleniumTestLog().getLogContents());
 
-                String logUrl = "http://" + this.ctmHostname + "/et/log/";
+                String logUrl = this.ctmServerUrlBox.Text + "/et/log/";
                 WebClient resultClient = new WebClient();
                 resultClient.UploadValues(logUrl, resultPostValues);
 
@@ -563,8 +554,9 @@ namespace Continuum_Windows_Testing_Agent
                                 this.currentTest.setTestBrowser(this.webBrowsers[ctmTestBrowser.SelectSingleNode("name").InnerText]);
 
                                 // create the download url.
-                                this.currentTest.setTestDownloadUrl( "http://" + this.ctmHostname + "/test/run/download/?id=" + this.currentTest.getTestRunId() );
-                                
+                                this.currentTest.setTestDownloadUrl( this.ctmServerUrlBox.Text + "/test/run/download/?id=" + this.currentTest.getTestRunId() );
+                                this.currentTest.setCtmServerUrl(this.ctmServerUrlBox.Text);
+
                                 this.currentTest.setHaltOnError( this.haltOnError );
 
                                 this.log.message(" testRunId: " + this.currentTest.getTestRunId());
@@ -647,13 +639,13 @@ namespace Continuum_Windows_Testing_Agent
            
             NameValueCollection postValues = new NameValueCollection();
 
-            postValues.Add("guid", this.guid);
+            postValues.Add("guid", this.ctmGuidBox.Text);
 
-            postValues.Add("ip", this.localIp);
+            postValues.Add("ip", this.ctmLocalIpBox.Text);
 
             postValues.Add("os", this.determineWindowsVersion());
 
-            postValues.Add("machine_name", this.machineName);
+            postValues.Add("machine_name", this.ctmMachineNameBox.Text);
 
             // add the browsers into our post params
             foreach (string browserName in this.webBrowsers.Keys)
@@ -665,22 +657,10 @@ namespace Continuum_Windows_Testing_Agent
                 }
             }
 
-            String pollUrl = "http://" + this.ctmHostname + "/agent/poll/";
+            String pollUrl = this.ctmServerUrlBox.Text + "/agent/poll/";
             ctmClient.UploadValuesAsync(new Uri(pollUrl), postValues);
 
-        }
-
-        private void CTM_Agent_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            /*
-            if (this.javaServerContainer != null)
-            {
-                this.javaServerContainer.Kill();
-            }
-            */
-        }
-
-        
+        }  
 
     }
 }
